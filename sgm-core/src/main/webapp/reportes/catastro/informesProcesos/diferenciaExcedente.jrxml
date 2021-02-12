@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="diferecniaExcedente" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="40" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e8fddbb8-229b-4598-bbd0-f7e37233011a">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="223"/>
+	<style name="arial" fontName="Arial" pdfFontName="Courier"/>
+	<parameter name="LOGO2" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[java.lang.System.getProperty("user.home") + "\\Desktop\\PROYECTO_SAN-MIGUEL\\sgm\\src\\main\\webapp\\css\\smb\\logomunicipal.png"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[java.lang.System.getProperty("user.home") + "\\Desktop\\PROYECTO_SAN-MIGUEL\\sgm\\src\\main\\webapp\\css\\homeIconsImages\\logo.jpg"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR_TITLE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\SUPERGOLD\\Documents\\NetBeansProjects\\main-reportes\\trunk\\src\\main\\resources\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NUM_TRAMITE" class="java.lang.String"/>
+	<parameter name="TIPO" class="java.lang.String"/>
+	<parameter name="NOMBRE_USUARIO" class="java.lang.String"/>
+	<field name="claveCat" class="java.lang.String"/>
+	<field name="predialant" class="java.lang.String"/>
+	<field name="nombrePropietarios" class="java.lang.String"/>
+	<field name="catPredioS4.areaMejora" class="java.math.BigDecimal"/>
+	<field name="catPredioS4.areaCalculada" class="java.math.BigDecimal"/>
+	<field name="areaSolar" class="java.math.BigDecimal"/>
+	<field name="catPredioS4.superfice" class="java.math.BigDecimal"/>
+	<field name="catPredioS4.frenteTotal" class="java.math.BigDecimal"/>
+	<field name="avaluoSolar" class="java.math.BigDecimal"/>
+	<variable name="areaSobranteEscritura" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[($F{catPredioS4.areaMejora}.subtract( $F{catPredioS4.areaCalculada} )).multiply(BigDecimal.valueOf(10000.00))]]></variableExpression>
+	</variable>
+	<variable name="areaPlanoM2" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{areaSolar}.multiply( java.math.BigDecimal.valueOf(10000) )]]></variableExpression>
+	</variable>
+	<variable name="valorM2" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{avaluoSolar}.divide( $V{areaPlanoM2}, 5, RoundingMode.HALF_UP )]]></variableExpression>
+	</variable>
+	<variable name="valorTipoDol" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{valorM2}.multiply( $F{catPredioS4.superfice}.multiply(BigDecimal.valueOf(10000.00)) )]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="71" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="535" height="71" uuid="cb0242a7-e5db-4358-9bc2-6b2b2f66f49f"/>
+				<subreportParameter name="LOGO">
+					<subreportParameterExpression><![CDATA[$P{LOGO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO_1">
+					<subreportParameterExpression><![CDATA[$P{LOGO2}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR_TITLE} + "titleReporte2.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="535" height="27" uuid="1b76b675-fba6-4a99-866d-b416b0f1ba25"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TIPO}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="47" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="arial" x="0" y="0" width="535" height="41" uuid="0fa76cb8-cbad-4522-953b-3cb865c394b6"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["La revisión predial esta elaborada con fines catastrales en base a la información y responsabilidad del propietario y profesional que realizó el levantamiento, esta Dirección no se responsabiliza por cualquier error o la mala información brindada por el interezado."]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="516" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="535" height="49" uuid="d150fbfb-2c55-4632-8b1a-713b8bcfd900"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["En atención al trámite No. " + $P{NUM_TRAMITE} + ", en el cual solicita la legalizacón de " + $P{TIPO} + " del área de terreno me permito informar que se ha revisado la documentación, implantando el plano de lenvantamiento planimétrico en la base gráfica del sistema de avalúos y catastros y realizada la inspección al predio, se ha podido determinar " + ($P{TIPO} == "excedente" ? ("un " + $P{TIPO}) : ("una " + $P{TIPO})) + " de área deacuerdo al siguiente detalle:"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="0" y="362" width="535" height="39" uuid="44009c9b-cd60-439d-a9f0-30726aa23006"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Por lo expuesto anteriormente, me permito solicitar se digne continuar con el pedido del interesado, para elaborar la resolución que regularice " + ($P{TIPO} == "excedente" ? ("el " + $P{TIPO}) : ("la " + $P{TIPO})) + " para su posterior protocolización e inscripción en el registro de la propiedad."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="87" width="168" height="20" uuid="f8a27590-755b-40da-8903-17e5a768b7be"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Catastrado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="107" width="168" height="20" uuid="33cb7866-f24d-4fd7-a031-89629e1fa31a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Clave Catastral:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="147" width="168" height="20" uuid="07ab6df5-730c-4922-94a4-51112ae580a2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área de Escritura (m2):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="167" width="168" height="20" uuid="f0c3542f-f62b-473e-8465-0b3e4cc8306f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área Vendida:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="187" width="168" height="20" uuid="e2cc3613-2582-41e0-9617-476a3de6c6cf"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área Sobrante Escritura:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="207" width="168" height="20" uuid="9e04d396-eab2-44c0-9c84-38c6e0316e1d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área de Plano (m2):]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="11" y="227" width="168" height="20" uuid="db4ed8c0-05a1-451a-90b3-a9c9e556b246"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Área " + $P{TIPO} + " (m2):"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="267" width="168" height="20" uuid="cd00136a-c6c2-4f98-8ab3-f0f5145b74f5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Avalúo Terreno (Dólares):]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="11" y="247" width="168" height="20" uuid="0d7924b7-59e7-4a70-bd6e-dbafb27638b9"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Porcentaje " + $P{TIPO} + " (%):"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="287" width="168" height="20" uuid="0c73746d-096b-4d7e-ab38-77311379fbe0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor m2 (Dólares):]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="11" y="307" width="168" height="20" uuid="8941ea29-db23-4b6c-ae61-6cf9e65c62ce"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Valor " + $P{TIPO} + ":"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="11" y="127" width="168" height="20" uuid="7695fc33-ccad-4143-9da3-d851c2272002"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Clave Catastral Anterior:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="107" width="342" height="20" uuid="c8c06c25-87fa-4f81-9902-edf3ea13c421"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{claveCat}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="127" width="342" height="20" uuid="9661101d-1810-43ec-8a29-84ac6a25d18e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{predialant}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="87" width="342" height="20" uuid="69f5d02a-2932-4ce2-b7d1-de5953131064"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombrePropietarios}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(-###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="147" width="342" height="20" uuid="0b32b15c-9135-4c5b-98f6-82d7c40fff24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{catPredioS4.areaMejora}.multiply(BigDecimal.valueOf(10000.00))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(-###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="167" width="342" height="20" uuid="50e96504-21b4-4bf2-8a9b-4004c755ad93"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{catPredioS4.areaCalculada}.multiply(BigDecimal.valueOf(10000.00))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(-###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="187" width="342" height="20" uuid="6462ab15-9147-4022-b58d-d7eee08b2c0e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{areaSobranteEscritura}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(-###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="207" width="342" height="20" uuid="e52ead1b-eb7e-46ab-bc07-52d5b7bd638f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{areaPlanoM2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="227" width="342" height="20" uuid="e2e9c914-9f1f-4be0-863a-fd890899b86a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{catPredioS4.superfice}.multiply(BigDecimal.valueOf(10000.00))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="247" width="342" height="20" uuid="1578e7ca-5a82-481a-8187-7e9bdf8a9889"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{catPredioS4.frenteTotal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(-###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="267" width="342" height="20" uuid="63cb72d3-45f6-4689-8dbe-7f958d7890f1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{avaluoSolar}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(-###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="287" width="342" height="20" uuid="eeea57e1-abeb-4d56-a19f-28c87f546a7b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valorM2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="179" y="307" width="342" height="20" uuid="432c4cff-cf2c-46d0-a690-588c6c2aa84c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valorTipoDol}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="11" y="477" width="288" height="20" uuid="1408e1a0-d8e9-4e72-80c8-dc2170853038"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USUARIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="11" y="496" width="288" height="20" uuid="f6b52d19-e3d2-4df4-911f-6cb32bfd06fc"/>
+				<textFieldExpression><![CDATA["Fecha Impresión: " + new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

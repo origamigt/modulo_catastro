@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="valorEdificacionPH" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c4dfc6ae-0dfb-47bb-a9e6-d89e2ffd7c79">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="timeBold" fontName="Times New Roman" fontSize="14" isBold="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Bold"/>
+	<style name="timeNormal" fontName="Times New Roman" fontSize="14" isBold="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman"/>
+	<subDataset name="dataset1" uuid="836bdcf9-e3f9-4076-b24f-85f09051aca9">
+		<field name="orientacion.valor" class="java.lang.String"/>
+		<field name="predioColindante.claveCat" class="java.lang.String"/>
+		<field name="colindante" class="java.lang.String"/>
+		<field name="predioColindante.areaSolar" class="java.math.BigDecimal"/>
+		<field name="predioColindante.nombrePropietarios" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="LOGO_FOOTER" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NOMBRE_CERTIFICADO" class="java.lang.String"/>
+	<parameter name="OBSERVACION" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["C:\\Users\\SUPERGOLD\\Documents\\NetBeansProjects\\main-reportes\\trunk\\src\\main\\resources\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FUNCIONARIO" class="java.lang.String"/>
+	<parameter name="ESCRITURA_PROPIET" class="java.lang.Object"/>
+	<parameter name="USUARIO" class="java.lang.String"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="LOGO_1" class="java.lang.String"/>
+	<parameter name="ANIO" class="java.lang.Integer"/>
+	<parameter name="CODIGO" class="java.lang.Long"/>
+	<parameter name="aFavor" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="escritura.predio.tipoPredio" class="java.lang.String"/>
+	<field name="escritura.predio.claveCat" class="java.lang.String"/>
+	<field name="escritura.predio.catParroquia" class="java.lang.Object"/>
+	<field name="escritura.predio.calle" class="java.lang.String"/>
+	<field name="escritura.predio.calleS" class="java.lang.String"/>
+	<field name="escritura.predio.areaSolar" class="java.math.BigDecimal"/>
+	<field name="escritura.predio.catParroquia.descripcion" class="java.lang.String"/>
+	<field name="escritura.canton.nombre" class="java.lang.String"/>
+	<field name="escritura.predio.alicuotaTerreno" class="java.math.BigDecimal"/>
+	<field name="escritura.predio.avaluoMunicipal" class="java.math.BigDecimal"/>
+	<field name="observaciones" class="java.lang.String"/>
+	<field name="escritura.predio.nombreEdificio" class="java.lang.String"/>
+	<field name="escritura.predio.ciudadela.nombre" class="java.lang.String"/>
+	<field name="escritura.precioCompra" class="java.math.BigDecimal"/>
+	<field name="escritura.predio.predioCollection" class="java.util.List"/>
+	<field name="escritura.notaria" class="java.lang.String"/>
+	<field name="escritura.extras.nombreNotario" class="java.lang.String"/>
+	<field name="escritura.predio.nombrePropietarios" class="java.lang.String"/>
+	<field name="propietario.ciuCedRuc" class="java.lang.String"/>
+	<field name="propietario.extras.nombresCompletos" class="java.lang.String"/>
+	<field name="escritura.fecEscritura" class="java.util.Date"/>
+	<field name="escritura.predio.formaAdquisicion.valor" class="java.lang.String"/>
+	<field name="formaAdquisicion.valor" class="java.lang.String"/>
+	<field name="escritura.numRepertorio" class="java.lang.Integer"/>
+	<field name="escritura.predio.propiedadHorizontal" class="java.lang.Boolean"/>
+	<field name="escritura.predio.areaDeclaradaConst" class="java.math.BigDecimal"/>
+	<field name="escritura.predio.predialant" class="java.lang.String"/>
+	<field name="escritura.predio.urbMz" class="java.lang.String"/>
+	<field name="escritura.predio.urbSolarnew" class="java.lang.String"/>
+	<field name="escritura.predio.piso" class="java.lang.Short"/>
+	<field name="escritura.predio.numDepartamento" class="java.lang.String"/>
+	<field name="escritura.predio.numeroVivienda" class="java.lang.String"/>
+	<field name="escritura.predio.areaAumentoCons" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="133" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="timeBold" x="2" y="100" width="553" height="20" uuid="1c675d4b-87c0-4624-9a81-cc5bb33f7d14"/>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_CERTIFICADO}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="86" uuid="caa90d2b-6b55-4ac9-a5f9-f35e148dd618"/>
+				<subreportParameter name="SUB_TITLE">
+					<subreportParameterExpression><![CDATA[$P{TITULO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO">
+					<subreportParameterExpression><![CDATA[$P{LOGO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO_1">
+					<subreportParameterExpression><![CDATA[$P{LOGO_1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "titleReporte2.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement style="timeBold" x="5" y="87" width="92" height="10" uuid="e40bf020-761d-492b-8382-200e5edc5ec1"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESPECIE VALORADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="timeBold" x="3" y="95" width="94" height="11" uuid="247a3185-1ca4-4a42-bb8a-4e7202c11f4c"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tasa por S.A. y Especie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="timeBold" x="12" y="102" width="63" height="12" uuid="2b240842-0f44-4339-8aac-1e22824a5339"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[USD. 2.00]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<image scaleImage="RealHeight" hAlign="Center" vAlign="Middle" onErrorType="Blank">
+				<reportElement x="3" y="0" width="552" height="40" uuid="5153c900-bc49-4823-9509-36e0684791b7"/>
+				<imageExpression><![CDATA[$P{LOGO_FOOTER}]]></imageExpression>
+			</image>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="564" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="0" width="244" height="15" uuid="bb1181ff-3c82-427c-813b-bcf7da7cccb9"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CÓDIGO CATASTRAL:</b> " + ($F{escritura.predio.claveCat} != null? $F{escritura.predio.claveCat} : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="0" width="244" height="15" uuid="de6eda7a-17d0-4582-be5b-eebd2db11ece"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>PARROQUIA:</b> " +($F{escritura.predio.catParroquia.descripcion} == null? "" : $F{escritura.predio.catParroquia.descripcion})
++ " <b>CANTÓN:</b> IBARRA"]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement positionType="FixRelativeToBottom" x="483" y="510" width="72" height="54" uuid="8266411d-dcbc-4521-97c8-207bf80cbdb8"/>
+				<jr:DataMatrix xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA["http://172.16.8.125:8144/sgmEE/verificarCertificado?idCertificado="+$P{CODIGO}]]></jr:codeExpression>
+				</jr:DataMatrix>
+			</componentElement>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="32" width="505" height="15" uuid="e902a77c-72fb-431e-a8a5-b32b4d13f2f8"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>OTORGADO:</b> " + ($F{escritura.predio.nombrePropietarios} == null? "" : $F{escritura.predio.nombrePropietarios})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="64" width="244" height="15" uuid="6012301f-96d3-406e-b5b0-7c671ae7a7bc"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>ÁREA:</b> " + ($F{escritura.predio.propiedadHorizontal} == true? $F{escritura.predio.areaDeclaradaConst} + " mts2" :
+    ($F{escritura.predio.areaSolar} != null?
+    ($F{escritura.predio.areaSolar} + ($F{escritura.predio.tipoPredio}.contains("U") || $F{escritura.predio.tipoPredio}.equalsIgnoreCase("U")? " mts2" : " ha")) : ""))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="48" width="254" height="15" uuid="80775970-a29c-4b43-ba69-e719b921c6da"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>A FAVOR DE:</b> " +  ($F{propietario.extras.nombresCompletos} == null ? "" : "<font size='1'>"+$F{propietario.extras.nombresCompletos}+"</font>")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="48" width="244" height="15" uuid="83124645-795c-407e-9350-0df1f9b499e2"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CÉDULA O RUC:</b> " + ($F{propietario.ciuCedRuc} == null ? "" : $F{propietario.ciuCedRuc})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="80" width="244" height="15" uuid="73ddf188-0674-4a8d-91cd-ade3bb4705be"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>ALICUOTA:</b> " + ($F{escritura.predio.alicuotaTerreno} == null? "" : $F{escritura.predio.alicuotaTerreno}) + " %"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="96" width="244" height="15" uuid="af34ace9-5214-48a1-a5e0-19adb0acecfe"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>NOMBRE DEL PREDIO:</b> " + ($F{escritura.predio.nombreEdificio} != null? $F{escritura.predio.nombreEdificio} : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="80" width="244" height="15" uuid="3854c024-6990-47b2-aece-b41866629377"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>AVALUO USD:</b> " + ($F{escritura.predio.avaluoMunicipal} != null? $F{escritura.predio.avaluoMunicipal}.setScale(2, java.math.RoundingMode.HALF_UP) : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="112" width="244" height="15" uuid="8edd94b5-7c99-4857-aeb6-78351fde2e98"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>BARRIO:</b> " + ($F{escritura.predio.ciudadela.nombre} == null? "" : $F{escritura.predio.ciudadela.nombre})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="127" width="244" height="15" uuid="7fa0b66a-993f-44ec-87e6-2aba543f7aeb"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>DIRECCIÓN:</b> " + ($F{escritura.predio.calle} == null? "" : ($F{escritura.predio.calle}.toUpperCase()) + " # " + ($F{escritura.predio.numeroVivienda} == null ? "" : $F{escritura.predio.numeroVivienda}))
++ ($F{escritura.predio.calleS} == null? "" : " Y " + $F{escritura.predio.calleS}.toUpperCase())]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="96" width="244" height="15" uuid="292f8768-6aac-4dc7-8ac5-46e1492c619c"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CUANTIA USD.:</b> " + ($F{escritura.precioCompra} == null? "" : $F{escritura.precioCompra})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="112" width="244" height="15" uuid="f7874c80-1073-4c09-afc5-56bc90de2076"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>TIPO DE PREDIO:</b> " + ($F{escritura.predio.tipoPredio}.equalsIgnoreCase("U") || $F{escritura.predio.tipoPredio}.contains("U")? "URBANO" : "RURAL")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="timeBold" x="32" y="195" width="505" height="20" uuid="a2415e0d-f66d-47d9-83c2-fb9b8c8ad296"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LINDEROS"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="32" y="237" width="505" height="40" uuid="df4514c3-c4b7-4225-8d1b-3c0cde067039"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>OBSERVACIONES:</b> " + ($F{observaciones} == null ? "" : $F{observaciones})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="32" y="282" width="244" height="15" uuid="2bb3fd0e-b63d-4fc6-8489-ca05843ed609"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>NOTARIA N°:</b> " + ($F{escritura.notaria} == null? "" : $F{escritura.notaria})
++ " <b>NOTARIO:</b> " + ($F{escritura.extras.nombreNotario} == null? "" : $F{escritura.extras.nombreNotario})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="293" y="282" width="244" height="15" uuid="3a5a3e53-6b39-4361-b3b4-1b3877cd5e7a"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>FECHA DE OTORGAMIENTO:</b> " + ($F{escritura.fecEscritura} == null ? "" : new SimpleDateFormat("yyyy-MM-dd").format($F{escritura.fecEscritura}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" x="293" y="469" width="244" height="20" uuid="18583c9b-9ade-4fcd-a93b-dae2de8df29a"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA INSCRIPCIÓN"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" x="32" y="469" width="244" height="20" uuid="290a5cc9-6d33-4f44-a384-4a127d26a7f4"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REGISTRADOR"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" x="293" y="362" width="244" height="20" uuid="6f1a1204-de0f-4fe4-b40d-3d4a97f483df"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA DE ELABORACIÓN "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" x="32" y="362" width="244" height="20" uuid="bcf6c9af-802c-4ce2-b1a2-aedeec05576d"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FUNCIONARIO GAD-I"]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement positionType="FixRelativeToBottom" x="293" y="347" width="244" height="15" uuid="38ffd84c-62d5-4bda-b926-7f7da12534db"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="32" y="347" width="244" height="15" uuid="db014ebf-5336-466f-8645-a3c2ecdcc3bb"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{FUNCIONARIO}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="32" y="220" width="505" height="16" uuid="bf67c2cc-fea7-4ada-9dcf-b9571c4027b6"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset1" uuid="98d2ac45-32d0-49d3-8cd0-4b00883b8d1e">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{escritura.predio.predioCollection})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="16" width="505">
+						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<reportElement x="0" y="1" width="80" height="15" uuid="3dc3bf59-91a3-4244-b93e-d109c518f1f4"/>
+							<textElement markup="html">
+								<font size="9" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{orientacion.valor}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<reportElement x="80" y="0" width="425" height="15" uuid="19ef438d-58f2-42a4-bee0-0fd555eb8cd8"/>
+							<textElement markup="html">
+								<font size="9" isBold="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{predioColindante.nombrePropietarios} == null ? $F{colindante} : $F{predioColindante.nombrePropietarios}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="142" width="244" height="15" uuid="39146d7c-5fdb-422e-9006-c31db34a0969"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>FORMA ADQUISICIÓN:</b> " + ($F{formaAdquisicion.valor} == null? "" : $F{formaAdquisicion.valor})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" x="32" y="549" width="244" height="15" uuid="1fe92913-411b-424c-8591-578ec70729ed"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>NUMERO DE AUTORIZACION:</b> " + ($F{escritura.numRepertorio} == null? "" : $F{escritura.numRepertorio})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="16" width="505" height="15" uuid="08e99307-dbf7-46bf-b77b-834e1aa47511"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CÓDIGO CATASTRAL ANT.:</b> " + ($F{escritura.predio.predialant} != null? $F{escritura.predio.predialant} : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="142" width="244" height="15" uuid="3b05f80c-0936-4b3b-9773-87488758400a"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>DESCRIPCIÓN:</b>" + ($F{escritura.predio.numDepartamento} == null? "" : $F{escritura.predio.numDepartamento})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="32" y="127" width="119" height="15" uuid="3a709a25-1dbc-42b4-9eb5-5782c7a152bb"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>LOTE:</b> " + ($F{escritura.predio.urbSolarnew} != null? $F{escritura.predio.urbSolarnew} : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="151" y="127" width="125" height="15" uuid="7dbb18a7-9f4c-4b3a-8708-f6aef5f047fe"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>MZ:</b> " + ($F{escritura.predio.urbMz} != null? $F{escritura.predio.urbMz} : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="64" width="244" height="15" uuid="2b882a05-420e-453c-b9f5-9abbd079aa09"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>AREA AMPLIACION CONST. (PH):</b>" + ($F{escritura.predio.areaAumentoCons} == null? "" : $F{escritura.predio.areaAumentoCons} + " mts2")]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

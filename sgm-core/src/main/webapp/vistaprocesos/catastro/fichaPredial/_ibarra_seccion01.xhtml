@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:dialog="http://xmlns.jcp.org/jsf/composite/dialog">
+
+    <h:form id="frmDatosPredio">
+        <div align="right">
+            <p:remoteCommand name="rc1" immediate="false" async="true" 
+                             actionListener="#{fichaPredial.guardarDatosPredio('ACTUALIZACION DE IDENTIFICACION Y UBICACION PREDIAL', fichaPredial.informante)}" 
+                             rendered="#{fichaPredial.editable}" update="labelClavaCat" />
+            <p:commandButton  id="btnS1" value="Guardar" rendered="#{fichaPredial.editable}"
+                              icon="ui-icon-disk" actionListener="#{fichaPredial.openDialog}"
+                              action="#{fichaPredial.setRemotteCommand('rc1')}" update="frmSubirDocumentosDialog"  />
+        </div>
+        <p:tabView id="tvUbicacion" style="width: 100%">
+            <p:tab id="tcodActual" title="Clave Catastral del Predio">
+                <p:panelGrid columns="#{userSession.isAdmin? '4' : '3'}" layout="grid" style="width: 100%" >
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Tipo de predio :" style="font-weight: bolder"  class="DispBlock Wid100"/>
+                        <p:selectOneMenu id="tipoPredio" value="#{fichaPredial.predio.tipoPredio}" disabled="#{(!userSession.isAdmin or !fichaPredial.esTarea) and !fichaPredial.editable}" style="width: 90%">
+                            <f:selectItem itemLabel="Urbano" itemValue="U"/>
+                            <f:selectItem itemLabel="Rural" itemValue="R"/>
+                            <f:selectItem itemLabel="Historico" itemValue="H"/> 
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:outputText value=" Estado Predio:" style="font-weight: bolder"  class="DispBlock Wid100" />
+                        <p:selectOneMenu id="estadoPredio" value="#{fichaPredial.predio.estado}" disabled="#{!userSession.isAdmin || !fichaPredial.editable}" effect="fade" >
+                            <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                            <f:selectItem itemLabel="Activo" itemValue="A"/>
+                            <f:selectItem itemLabel="Pendiente" itemValue="P"/>
+                            <f:selectItem itemLabel="Historico" itemValue="H"/>
+                            <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Es Ficha Madre:" style="font-weight: bolder"  class="DispBlock Wid100"/>
+                        <p:inputText id="fichaMad" value="#{fichaPredial.predio.fichaMadre ? 'SI' : 'NO'}" readonly="true" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" >
+                        <h:outputText value="Regimen de Propiedad:" style="font-weight: bolder"  class="DispBlock Wid100"/>
+                        <p:selectOneRadio id="console" value="#{fichaPredial.predio.propiedadHorizontal}" >
+                            <f:selectItem itemLabel="Unipropiedad" itemValue="#{false}" />
+                            <f:selectItem itemLabel="Propiedad Horizontal" itemValue="#{true}" />
+                            <p:ajax update="pngClaveCat" />
+                        </p:selectOneRadio>
+                    </h:panelGroup>
+                </p:panelGrid>
+                <div style="text-align: right">
+                    <p:selectBooleanButton value="#{fichaPredial.editarClave}" offLabel="Editar Clave" onLabel="Cancelar" offIcon="fa fa-edit white" onIcon="fa fa-close" rendered="#{fichaPredial.editable}"  >
+                        <p:ajax update="@form" process="tdatos:frmDatosPredio:tvUbicacion:tcodActual"/>
+                    </p:selectBooleanButton>
+                </div>
+                <p:panelGrid id="pngClaveCat" style="margin-top:20px" rendered="#{!fichaPredial.editarClave}">
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column>Provincia:    </p:column>
+                            <p:column>Cantón:      </p:column>
+                            <p:column>Parroquia:   </p:column>
+                            <p:column>Zona:        </p:column>
+                            <p:column>Sector:      </p:column>
+                            <p:column>Mz.:         </p:column>
+                            <p:column>Predio:        </p:column>
+                            <p:column rendered="#{fichaPredial.predio.propiedadHorizontal}">Bloque:      </p:column>
+                            <p:column rendered="#{fichaPredial.predio.propiedadHorizontal}">Piso:        </p:column>
+                            <p:column rendered="#{fichaPredial.predio.propiedadHorizontal}">Unidad:      </p:column>
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column><p:inputText id="prov"  placeholder="Provincia" title="Provincia : #{fichaPredial.completarCeros(fichaPredial.predio.provincia, 2)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.provincia, 2) == 99 ? fichaPredial.completarCeros(fichaPredial.codProvincia, 2) : fichaPredial.completarCeros(fichaPredial.predio.provincia, 2)}" readonly="true" style="width: 90%" maxlength="2"  /></p:column>
+                        <p:column><p:inputText id="cant"  placeholder="Canton"     title="Canton : #{fichaPredial.completarCeros(fichaPredial.predio.canton, 2)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.canton, 2)}"         readonly="true" style="width: 90%"  maxlength="2"/></p:column>
+                        <p:column><p:inputText id="parrq" placeholder="Parroquia" title="Parroquia :#{fichaPredial.completarCeros(fichaPredial.predio.parroquia, 2)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.parroquia, 2)}"  readonly="#{!fichaPredial.editarClave}" style="width: 90%" maxlength="2"/></p:column>
+                        <p:column><p:inputText id="zona"  placeholder="Zona" title="Zona : #{fichaPredial.completarCeros(fichaPredial.predio.zona, 1)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.zona, 1)}"                     readonly="#{!fichaPredial.editarClave}" style="width: 90%" maxlength="2"/></p:column>
+                        <p:column><p:inputText id="sect"  placeholder="Sector" title="Sector : #{fichaPredial.completarCeros(fichaPredial.predio.sector, 1)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.sector, 1)}"             readonly="#{!fichaPredial.editarClave}" style="width: 90%" maxlength="2"/></p:column>
+                        <p:column><p:inputText id="mz"    placeholder="Manzana" title="Manzana : #{fichaPredial.completarCeros(fichaPredial.predio.mz, 3)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.mz, 3)}"                   readonly="#{!fichaPredial.editarClave}" style="width: 90%" maxlength="3"/></p:column>
+                        <p:column><p:inputText id="lot"   placeholder="Predio" title="Predio : #{fichaPredial.completarCeros(fichaPredial.predio.solar, 3)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.solar, 3)}"                   readonly="#{!fichaPredial.editarClave}"  style="width: 90%" maxlength="3"/></p:column>
+                        <p:column rendered="#{fichaPredial.predio.propiedadHorizontal}"><p:inputText id="bloq"  placeholder="Bloque" title="Bloque : #{fichaPredial.completarCeros(fichaPredial.predio.bloque, 3)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.bloque, 3)}"             readonly="#{!fichaPredial.editarClave}" style="width: 90%" maxlength="3"/></p:column>
+                        <p:column rendered="#{fichaPredial.predio.propiedadHorizontal}"><p:inputText id="piso"  placeholder="Piso" title="Piso : #{fichaPredial.completarCeros(fichaPredial.predio.piso, 2)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.piso, 2)}"                     readonly="#{!fichaPredial.editarClave}" style="width: 90%" maxlength="2"/></p:column>
+                        <p:column rendered="#{fichaPredial.predio.propiedadHorizontal}"><p:inputText id="unid"  placeholder="Unidad" title="Unidad : #{fichaPredial.completarCeros(fichaPredial.predio.unidad, 3)}" value="#{fichaPredial.completarCeros(fichaPredial.predio.unidad, 3)}"             readonly="#{!fichaPredial.editarClave}" style="width: 90%" maxlength="3"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:panelGrid id="pngClaveEdit" columns="10" rendered="#{fichaPredial.editarClave}">
+                    <h:panelGroup layout="block"><p:outputLabel value="Provincia" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.provincia}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Cantón" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.canton}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Parroquia" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.parroquia}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Zona" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.zona}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Sector" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.sector}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Mz." class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.mz}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Predio" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.solar}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Bloque" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.bloque}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Piso" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.piso}" class="Wid100" /></h:panelGroup>
+                    <h:panelGroup layout="block"><p:outputLabel value="Unidad" class="Wid100 DispBlock FontBold"/>
+                        <p:inputText value="#{fichaPredial.predio.unidad}" class="Wid100" /></h:panelGroup>
+                </p:panelGrid>
+                <p:fieldset legend="Codigos Anteriores" toggleable="true">
+                    <p:panelGrid id="codPredioRaiz" layout="grid" columns="2" rendered="#{fichaPredial.predioRaiz.claveCat ne null}">
+                        <h:outputText value="Clave Catastral del Predio Matriz:" style="font-weight: bolder"/>
+                        <p:commandLink value="#{fichaPredial.predioRaiz.claveCat}" rendered="#{fichaPredial.predioRaiz.claveCat ne null}"
+                                       actionListener="#{fichaPredial.redirectFichaPredial(fichaPredial.predioRaiz)}"/>
+                    </p:panelGrid>
+                    <p:panelGrid id="codigosAnteriores" columns="5" layout="grid" style="width: 100%" >
+                        <h:outputText value="Clave Anterior 1:" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.predialant}" style="width: 100%" readonly="#{!fichaPredial.editarClave}"/>
+                        <p:spacer width="5"/>
+                        <h:outputText value="Clave Anterior 2:" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.predialantAnt}" style="width: 100%" readonly="true"/>
+                    </p:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="Ubicación Gráfica del predio o predio" toggleable="true">
+                    <!--<p:commandLink type="text/html" actionListener="#{fichaPredial.redirecGeoportal()}" immediate="true"  >-->
+                    <p:graphicImage alt="Ubicación Gráfica" value="#{appConfig.imagePredio}" width="868" height="550" >
+                        <f:param id="a" name="codigo" value="#{fichaPredial.predio.claveCat}" />
+                        <f:param id="b" name="esPh" value="#{fichaPredial.predio.propiedadHorizontal}" />
+                    </p:graphicImage>
+                    <!--</p:commandLink>-->
+                </p:fieldset>
+            </p:tab>
+            <p:tab id="tInfUrb" title="Localización del predio">
+                <p:fieldset legend="Calles" toggleable="true">
+                    <p:panelGrid id="pgCalles" columns="4" layout="grid" style="width: 100%">
+                        <h:outputText value="(*)Calle Principal :" style="font-weight: bolder"/>
+                        <p:selectOneMenu value="#{fichaPredial.predio.calle}" disabled="#{!fichaPredial.editable}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="#{null}"/>
+                            <f:selectItems value="#{fichaPredial.geoVias}" var="gv1"  itemLabel="#{gv1.nombre}" itemValue="#{gv1.nombre}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Calle Sec. :" style="font-weight: bolder"/>
+                        <p:selectOneMenu value="#{fichaPredial.predio.calleS}" disabled="#{!fichaPredial.editable}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="#{null}"/>
+                            <f:selectItems value="#{fichaPredial.geoVias}" var="gv2"  itemLabel="#{gv2.nombre}" itemValue="#{gv2.nombre}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Placa Domiciliaria :" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.numeroVivienda}" style="width: 40%" readonly="#{!fichaPredial.editable}"/>
+                    </p:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="Ubicación" toggleable="true">
+                    <p:panelGrid id="infoUrbanistica" columns="4" layout="grid" style="width: 100%">
+                        <h:outputText value="(*)Espacio Urbano / Rural:" style="font-weight: bolder"/>
+                        <p:selectOneMenu value="#{fichaPredial.predio.tipoConjunto}" effect="fade" converter="entityConverter" disabled="#{!fichaPredial.editable}">
+                            <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                            <f:selectItems value="#{serviceLists.tiposConjunto}" var="tconj" itemLabel="#{tconj.nombre}" itemValue="#{tconj}"/>
+                            <p:ajax update="tdatos:frmDatosPredio:tvUbicacion:nombEspUR" />
+                        </p:selectOneMenu>
+                        <h:outputText value="" style="font-weight: bolder"/>
+                        <h:outputText value="" style="font-weight: bolder"/>
+                        <h:outputText value="(*)Nombre del espacio urbano / rural :" style="font-weight: bolder; font-size: 12px;"/>
+                        <p:selectOneMenu id="nombEspUR" value="#{fichaPredial.predio.ciudadela}" effect="fade" converter="entityConverter" filter="true" filterMatchMode="contains" disabled="#{!fichaPredial.editable}">
+                            <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                            <f:selectItems value="#{serviceLists.getCiudadelas(fichaPredial.predio.tipoConjunto)}" var="cdla1" itemLabel="#{cdla1.nombre}" itemValue="#{cdla1}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Nombre del Predio o Edificación :" style="font-weight: bolder; "/>
+                        <p:inputText value="#{fichaPredial.predio.nombreEdificio}" readonly="#{!fichaPredial.editable}"/>
+                        <h:outputText value="(*) Sector de Valor :" style="font-weight: bolder"/>
+                        <p:selectOneMenu id="subsector" value="#{fichaPredial.predio.subsector}" disabled="true" required="false" var="sv" converter="entityConverter"
+                                         label="subsector" requiredMessage="El campo subsector es obligatorio" filter="true" filterMatchMode="contains"
+                                         panelStyle="width: 250px;" >
+                            <f:selectItem itemLabel="Elija un subsector" itemValue="#{null}"/>
+                            <f:selectItems var="sbs" value="#{fichaPredial.subsectores}" itemLabel="#{sbs.sector} - #{sbs.detalle}" itemValue="#{sbs}" itemDescription="#{sbs.detalle}" />
+                            <p:column style="width:20%">
+                                <h:outputText styleClass="#{sv.sector}" />
+                            </p:column>
+                            <p:column style="width:60%">
+                                <h:outputText value="#{sv.detalle}" title="#{sv.detalle}" />
+                            </p:column>
+                        </p:selectOneMenu>
+                        <h:outputText value="Mz (Plano Aprobado):" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.urbMz}" readonly="#{!fichaPredial.editable}"/>
+                        <h:outputText value="Eje de Valor :" style="font-weight: bolder"/>
+                        <p:selectOneMenu id="ejeValor" value="#{fichaPredial.predio.subsector}" disabled="true" required="false" var="sv" converter="entityConverter"
+                                         label="subsector" requiredMessage="El campo subsector es obligatorio" filter="true" filterMatchMode="contains"
+                                         panelStyle="width: 250px;" >
+                            <f:selectItem itemLabel="Elija un subsector" itemValue="#{null}"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Predio (Plano Aprobado):" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.urbSolarnew}" readonly="#{!fichaPredial.editable}"/>
+                        <!--                                    <h:outputText value="Division :" style="font-weight: bolder"/>
+                                                            <p:inputText value="#{fichaPredial.predio.divisionUrb}"/>-->
+                        <h:outputText value="Descripcion (PH):" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.numDepartamento}" style="width: 90%;" readonly="#{!fichaPredial.editable}"/>
+                        <h:outputText value="Planta (Piso PH):" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.piso}" readonly="#{!fichaPredial.editable}" onkeypress="validateIntegerValueAndFocusNext(event, null)" />
+                        <h:outputText value="Coordenadas X (Latitud) :" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.coordx}" title="Coordenadas geográficas" style="width: 80%" onkeypress="validateIntegerValueAndFocusNext(event, null)" readonly="#{!fichaPredial.editable}">
+                            <f:convertNumber pattern="##############.####" locale="us"/>
+                        </p:inputText>
+                        <h:outputText value="Coordenada Y (Longitud) :" style="font-weight: bolder"/>
+                        <p:inputText value="#{fichaPredial.predio.coordy}" title="Coordenadas geográficas" style="width: 80%" onkeypress="validateIntegerValueAndFocusNext(event, null)" readonly="#{!fichaPredial.editable}">
+                            <f:convertNumber pattern="##############.####" locale="us"/>
+                        </p:inputText>
+                        <p:outputLabel value=""/>
+                        <p:outputLabel value=""/>
+                    </p:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="(*) Uso del predio" toggleable="true">
+                    <p:selectManyCheckbox id="usoSolar" styleClass="noBorder" value="#{fichaPredial.usosA}" layout="responsive" columns="4" converter="entityConverter" style="display:block; border-collapse: separate;" disabled="#{!fichaPredial.editable}">
+                        <f:selectItems value="#{serviceLists.getListado('predio.uso_solar')}" var="uso1" itemLabel="#{uso1.valor}" itemValue="#{uso1}"/>
+                    </p:selectManyCheckbox>
+                </p:fieldset>
+            </p:tab>
+            <p:tab id="tavaluos" title="Areas y Avaluos">
+                <!-- MODF -->
+                <div align="right">
+                    <p:commandButton value="Anios Anteriores" actionListener="#{fichaPredial.aniosAnteriores()}" rendered="true"/>
+                </div>
+                <p:panelGrid layout="grid" columns="2">
+                    <p:fieldset id="fdsAreas" legend="Área Total" toggleable="true">
+                        <p:panelGrid columns="3" layout="grid" >
+                            <!--#{fichaPredial.esPredioRural()? 'HA' : 'M2'}-->
+                            <dialog:customImputNumber id="aEscritura"  label="Escritura :" value="#{fichaPredial.escritura.areaSolar}" readonly="true" /><!-- userSession.name_user ne 'MQuinde' or userSession.name_user ne 'RLozada' -->
+                            <dialog:customImputNumber id="asolar" label="Terreno :" value="#{fichaPredial.predio.areaSolar}" symbol="#{fichaPredial.esPredioRural()? 'HA' : 'M2'}"
+                                                      readonly="#{!(userSession.name_user == 'RLozada' or userSession.name_user == 'MQuinde' or userSession.name_user == 'JVega')}"/>
+                            <dialog:customImputNumber id="asac" label="Construcción :" value="#{fichaPredial.predio.areaDeclaradaConst}" readonly="true"/>
+                            <dialog:customImputNumber id="aobras" label="Obras Complementarias :" value="#{fichaPredial.predio.areaObras}" readonly="true"/>
+                            <dialog:customImputNumber id="acult" label="Cultivos :" value="#{fichaPredial.predio.areaCultivos}" readonly="true"/>
+                        </p:panelGrid>
+                    </p:fieldset>
+                    <p:fieldset id="fdsAvaluos" legend="Avalúo" toggleable="true" >
+                        <p:panelGrid id="pgAvaluos" columns="3" layout="grid">
+                            <dialog:customImputNumber label="Terreno :" id="avalSolar" value="#{fichaPredial.predio.avaluoSolar}" decimalPlaces="2" readonly="true"/>
+                            <dialog:customImputNumber label="Construcción :" value="#{fichaPredial.predio.avaluoConstruccion}" decimalPlaces="2"  readonly="true"/>
+                            <dialog:customImputNumber label="Obras Complementarias :" value="#{fichaPredial.predio.avaluoObraComplement}" decimalPlaces="2" readonly="true"/>
+                            <dialog:customImputNumber label="Cultivos :" value="#{fichaPredial.predio.avaluoCultivos}" decimalPlaces="2" readonly="true"/>
+                            <dialog:customImputNumber label="Valor de la Propiedad :" id="avalMunicipal" value="#{fichaPredial.predio.avaluoMunicipal}" decimalPlaces="2" readonly="true"/>
+                            <dialog:customImputNumber label="Base Imponible :" id="avalBaseImp" value="#{fichaPredial.predio.baseImponible}" decimalPlaces="2" readonly="true"/>
+                        </p:panelGrid>
+                    </p:fieldset>
+
+                    <p:fieldset legend="Avalúo Ley de Plusvalía" toggleable="true" >
+                        <p:panelGrid id="pgAvaluosPlusvalia" columns="3" layout="grid" style="width: 100%">
+                            <dialog:customImputNumber label="Terreno :" value="#{fichaPredial.predio.avaluoPlussolar}" decimalPlaces="2" readonly="true"/>
+                            <dialog:customImputNumber label="Construcción :" value="#{fichaPredial.predio.avaluoPlusconstruccion}" decimalPlaces="2"  readonly="true"/>
+                            <dialog:customImputNumber label="Obras Complementarias :" value="#{fichaPredial.predio.avaluoPluObraComplement}" decimalPlaces="2" readonly="true"/>
+                            <dialog:customImputNumber label="Cultivos :" value="#{fichaPredial.predio.avaluoPluscultivos}" decimalPlaces="2" readonly="true"/>
+                            <dialog:customImputNumber label="Base Imponible :" value="#{fichaPredial.predio.avaluoPlusmunicipal}" decimalPlaces="2" readonly="true"/>
+                        </p:panelGrid>
+                    </p:fieldset>
+                    <p:fieldset legend="Informacion adicional de areas y actualizacion" toggleable="true" rendered="#{fichaPredial.esProcesoActualizacionAreasLind()}" id="fieldSInfAdicc" >
+                        <p:panelGrid id="infAdcActAreasLinderos" columns="2" layout="grid" style="width: 100%">
+
+                            <dialog:customImputNumber id="actActAxcedenteDiferencia" label="Suma :" value="#{fichaPredial.sumaAreaPredioDesmenbraciones}" decimalPlaces="5"  readonly="true" tooltip="Suma de area de plano + area de desmenbaciones" />
+                            <dialog:customImputNumber id="difExcd" label="Diferencia o excedente :" value="#{fichaPredial.calcularExcedenteDiferencia}" decimalPlaces="5"  readonly="true" tooltip="Diferencia o excedente" />
+                            <dialog:customImputNumber id="difExcdPorc" label="Diferencia o excedente (%):" value="#{fichaPredial.porcentajeExcedenteDiferencia}" decimalPlaces="5"  readonly="true" tooltip="Porcentaje Diferencia o excedente" symbol="%" />
+                        </p:panelGrid>
+                    </p:fieldset>
+                    <h:outputLabel rendered="#{!fichaPredial.esProcesoActualizacionAreasLind()}" />
+                </p:panelGrid>
+            </p:tab>
+        </p:tabView>
+    </h:form>
+</html>

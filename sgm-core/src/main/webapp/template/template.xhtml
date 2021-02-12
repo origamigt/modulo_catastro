@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html
+    xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html" locale="es" encoding="UTF-8"/>
+    <f:event type="preRenderView" listener="#{userSession.redirectInvitado()}"/>
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+
+            <link rel="shortcut icon" href="#{appConfig.urlbase}resources/images/favicon.ico"/>
+            <link rel="apple-touch-icon" href="#{appConfig.urlbase}resources/images/icon57.png" sizes="57x57" />
+            <link rel="apple-touch-icon" href="#{appConfig.urlbase}resources/images/icon72.png" sizes="72x72" />
+            <link rel="apple-touch-icon" href="#{appConfig.urlbase}resources/images/icon76.png" sizes="76x76" />
+            <link rel="apple-touch-icon" href="#{appConfig.urlbase}resources/images/icon114.png" sizes="114x114" />
+            <link rel="apple-touch-icon" href="#{appConfig.urlbase}resources/images/icon120.png" sizes="120x120" />
+            <link rel="apple-touch-icon" href="#{appConfig.urlbase}resources/images/icon144.png" sizes="144x144" />
+            <link rel="apple-touch-icon" href="#{appConfig.urlbase}resources/images/icon152.png" sizes="152x152" />
+        </f:facet>
+        <title>ORIGAMIGT</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+        <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head" />
+        <h:outputScript name="app.js" library="js" />
+        <!--<script src="#{appConfig.urlbase}resources/js/app.js"></script>-->
+
+        <ui:insert name="head" />
+        <script src="#{appConfig.urlbase}resources/pfJs/columToggler.js"></script>
+        <script type="text/javascript">
+
+            PrimeFaces.locales['es'] = {
+                closeText: 'Cerrar',
+                prevText: 'Anterior',
+                nextText: 'Siguiente',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+                weekHeader: 'Semana',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Sólo hora',
+                timeText: 'Tiempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                currentText: 'Fecha actual',
+                ampm: false,
+                month: 'Mes',
+                week: 'Semana',
+                day: 'Día',
+                allDayText: 'Todo el día'
+            };
+
+            PrimeFaces.widget.Tooltip.prototype.alignUsing = function (position, feedback) {
+                this.jq.removeClass('ui-tooltip-left ui-tooltip-right ui-tooltip-top ui-tooltip-bottom');
+                switch (this.cfg.position) {
+                    case "right":
+                    case "left":
+                        this.jq.addClass('ui-tooltip-' + (feedback['horizontal'] == 'left' ? 'right' : 'left'));
+                        break;
+                    case "top":
+                    case "bottom":
+                        this.jq.addClass('ui-tooltip-' + (feedback['vertical'] == 'top' ? 'bottom' : 'top'));
+                        break;
+                }
+                this.jq.css({
+                    left: position['left'],
+                    top: position['top']
+                });
+            };
+
+            /*PrimeFaces.widget.Tooltip.prototype.align = function (align) {
+             return function () {
+             var that = this;
+             this.jq.css({
+             left: "",
+             top: "",
+             "z-index": ++PrimeFaces.zindex
+             });
+             if (this.cfg.trackMouse and this.mouseEvent) {
+             this.jq.position({
+             my: "left top+15",
+             at: "right bottom",
+             of: this.mouseEvent,
+             collision: "flipfit",
+             using: function (p, f) {
+             that.alignUsing.call(that, p, f);
+             }
+             });
+             this.mouseEvent = null
+             } else {
+             var a, b;
+             switch (this.cfg.position) {
+             case "right":
+             a = "left center";
+             b = "right center";
+             break;
+             case "left":
+             a = "right center";
+             b = "left center";
+             break;
+             case "top":
+             a = "center bottom";
+             b = "center top";
+             break;
+             case "bottom":
+             a = "center top";
+             b = "center bottom";
+             break
+             }
+             this.jq.position({
+             my: a,
+             at: b,
+             of: this.target,
+             collision: "flipfit",
+             using: function (p, f) {
+             that.alignUsing.call(that, p, f);
+             }
+             })
+             }
+             };
+             }(PrimeFaces.widget.Tooltip.prototype.align);*/
+        </script>
+        <script type="text/javascript">
+            // Blue : #3E98D3  |  Red : #EF3F61  |  Green : #2BB673  |  Orange : #F15732
+            //
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#3E98D3', '#EF3F61', '#2BB673', '#F15732', '#5dd5de', '#f02480', '#9068be', '#6ed3cf'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBar() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#3E98D3', '#EF3F61', '#2BB673', '#F15732', '#5dd5de', '#f02480', '#9068be', '#6ed3cf'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinArea() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#EF3F61', '#2BB673'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBubble() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#2BB673', '#F15732'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BubbleRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinZoom() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#2BB673', '#F15732'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //
+            function skinPie() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#3E98D3', '#EF3F61', '#2BB673', '#F15732'];
+                //this.cfg.seriesColors = ['#69D2E7', '#DD6161', '#D8DEC3','#CDC1CF','#A7DBD8','#83AF9B','#D68189'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    color: '#000000',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77',
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    renderer: $.jqplot.PieRenderer,
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinDonut() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#3E98D3', '#EF3F61', '#2BB673', '#F15732'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77',
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    renderer: $.jqplot.DonutRenderer,
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBarAndLine() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#3E98D3', '#EF3F61'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 5,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinMeterGauge() {
+                this.cfg.title = '';
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 5,
+                    renderer: $.jqplot.MeterGaugeRenderer,
+                    rendererOptions: {
+                        shadow: false,
+                        min: 100,
+                        max: 800,
+                        intervals: [200, 300, 400, 500, 600, 700, 800],
+                        intervalColors: ['#3E98D3', '#EF3F61', '#2BB673', '#F15732', '#3E98D3', '#EF3F61', '#2BB673']
+                    }
+                }
+            }
+
+            function skinMultiAxis() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#2BB673', '#F15732'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #0F0F10;
+            }
+            .ui-panel .ui-panel-title {
+                color: white !important;
+            }
+            .ui-tooltip {
+                border: 1px solid #ccc;
+                box-shadow: 0 0 10px 0 #ddd;
+                -moz-box-shadow: 0 0 10px 0 #ddd;
+                -webkit-box-shadow: 0 0 10px 0 #ddd;
+                color: #666;
+                background: #f8f8f8;
+                opacity: 1;
+            }
+            .colored {
+                background-color: orange !important ; 
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <ui:include src="topbar.xhtml" />
+
+        <ui:include src="leftmenu.xhtml" />
+
+        <p:growl globalOnly="true" showDetail="true" autoUpdate="true" >
+            <!--<p:autoUpdate />-->
+        </p:growl>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <center>
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes btnStyle" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no btnStyle" icon="ui-icon-close" />
+            </center>
+        </p:confirmDialog>
+
+        <div id="layout-portlets-cover" class="fontRegular">
+
+            <ui:insert name="content">
+                Template
+            </ui:insert>
+            <!--            <div align="center">
+                            <p:outputPanel>
+                                <h:outputText value="ICL SOLUCIONES S.A." style="font-weight: bolder;font-size: small">
+                                </h:outputText>
+                                <br/>
+                                <h:outputText value="Todos los derechos reservados para ICL  SOLUCIONES S.A." style="font-weight: bolder;font-size: small"/>
+                                <br/>
+                            </p:outputPanel>
+
+
+                        </div>-->
+        </div>
+
+        <p:ajaxStatus id="status" onstart="PF('dlgStatus').show()" oncomplete="PF('dlgStatus').hide()"/>
+
+        <p:dialog id="dlgStatus" widgetVar="dlgStatus" modal="true" draggable="false"  closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+        </p:dialog>
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+
+        <style type="text/css">
+            .ui-panel .ui-panel-title{color: white !important; }
+        </style>
+    </h:body>
+
+</html>

@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h2> Listado de Restricciones </h2>
+
+        <h:form id="frmRestricciones">
+            <p:tabView id="tvRest">
+                <p:tab title="Restriciones a Predios" id="RestriccionesPredios">
+                    <div dir="rtl">
+                        <p:commandButton value="Agregar Restricción Predio" actionListener="#{restriccionesView.nuevaRestriccion(null)}" >
+                            <p:ajax event="dialogReturn" listener="#{restriccionesView.procesarReturnDialog}" update="frmRestricciones:tvRest:dtRestricciones" />
+                        </p:commandButton>
+                    </div>
+                    <p:dataTable id="dtRestricciones" reflow="true" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="pts1"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 value="#{restriccionesView.restricionPredios}" var="restPred1" emptyMessage="No se encontró ningún Item">
+                        <p:column headerText="Clave Catastral" style="text-align: center;width: 15%" filterBy="#{restPred1.restricionPredioPK.codCatastralPredio}" filterStyle="width: 80%;">
+                            <h:outputText value="#{restPred1.restricionPredioPK.codCatastralPredio}"  style="text-align: center; font-size: 12px"/>
+                        </p:column>
+                        <p:column headerText="Número Trámite" style="text-align: center;width: 15%" filterBy="#{restPred1.numeroTramite}" filterStyle="width: 80%;">
+                            <h:outputText value="#{restPred1.numeroTramite}" style="text-align: center; font-size: 12px"/>
+                        </p:column>
+                        <p:column width="10" headerText="Descripción Restricción" style="text-align: center" filterBy="#{restPred1.restricciones.descripcionRestriccion}" filterStyle="width: 80%;">
+                            <h:outputText value="#{restPred1.restricciones.descripcionRestriccion}"/>
+                        </p:column>
+                        <p:column width="10" headerText="Fecha Inicial" style="text-align: center" filterStyle="width: 80%;">
+                            <h:outputText value="#{restPred1.fechaInicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="10" headerText="Fecha Final" style="text-align: center" filterStyle="width: 80%;" >
+                            <h:outputText value="#{restPred1.fechaFinal}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                            <p:commandLink title="Ver datos de restriccion del predio" actionListener="#{restriccionesView.setVer(true)}" action="#{restriccionesView.nuevaRestriccion(restPred1)}" >
+                                <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Editar restriccion de predio" actionListener="#{restriccionesView.nuevaRestriccion(restPred1)}" >
+                                <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:commandLink title="Editar restriccion de predio" actionListener="#{restriccionesView.eliminar(restPred1)}" 
+                                           update="frmRestricciones, frmRestricciones:tvRest:dtRestricciones" ajax="true" immediate="true">
+                                <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                <p:tab title="Catalogo de Restricciones" id="CatalogoRestricciones" rendered="#{userSession.isAdmin}">
+                    <div dir="rtl">
+                        <p:commandButton value="Agregar Restricción" actionListener="#{restriccionesView.nuevo(null)}" >
+                            <p:ajax event="dialogReturn" listener="#{restriccionesView.procesarReturnDialog}" update="frmRestricciones:tvRest:dtCatalogo" />
+                        </p:commandButton>
+                    </div>
+                    <p:dataTable id="dtCatalogo" reflow="true" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="pts"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 value="#{restriccionesView.restriccionesLazy}" var="catRest" emptyMessage="No se encontró ningún Item">
+                        <p:column headerText="Código" style="text-align: center;width: 20%" filterBy="#{catRest.codigoRestriccion}" filterStyle="width: 80%;">
+                            <h:outputText value="#{catRest.codigoRestriccion}" style="text-align: center; font-size: 12px"/>
+                        </p:column>
+                        <p:column headerText="Descripción" style="text-align: center" filterBy="#{catRest.descripcionRestriccion}" filterStyle="width: 80%;">
+                            <h:outputText value="#{catRest.descripcionRestriccion}"/>
+                        </p:column>
+                        <p:column headerText="Estado" style="text-align: center" filterBy="#{catRest.estadoRestricion}" filterStyle="width: 80%;">
+                            <h:outputText value="#{catRest.estadoRestricion}"/>
+                        </p:column>
+                        <p:column headerText="Comentario" style="text-align: center" filterBy="#{catRest.exoComentario}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{catRest.exoComentario}"/>
+                        </p:column>
+                        <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                            <p:commandLink title="Ver Infirmación" actionListener="#{restriccionesView.setVer(true)}" action="#{restriccionesView.nuevo(catRest)}" >
+                                <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Editar Información" actionListener="#{restriccionesView.nuevo(catRest)}" >
+                                <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+

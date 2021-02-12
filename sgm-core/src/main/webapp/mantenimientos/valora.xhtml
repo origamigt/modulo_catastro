@@ -1,0 +1,496 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+    <ui:define name="content">
+        <h2> Listado de Valora por Claves </h2>
+
+        <h:form id="frmValoraClaves">
+            <p:tabView id="container">
+                <p:tab title="Valora Manzana">
+                    <div dir="rtl">
+                        <p:commandButton value="Agregar Valora Manzana" actionListener="#{valoraClavesView.nuevoMz(null)}" action="#{valoraClavesView.setVer(false)}" update="dglEdicionManzana,frmValoraManzana" >
+                            <!--<p:ajax event="dialogReturn" listener="# {valoraClavesView.procesarReturnDialog}" update="frmValoraClaves:tvRest:dtCatalogo" />-->
+                        </p:commandButton>
+                    </div>
+
+                    <p:dataTable id="dtValoraManzana" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="vmz"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 value="#{valoraClavesView.valoraMzLazy}" var="vmz" emptyMessage="No se encontró ningún Item">
+
+                        <p:column headerText="Clave Total" style="text-align: center;width: 20%" filterBy="#{vmz.claveTotal}" filterStyle="width: 80%;">
+                            <h:outputText id="claveCat" value="#{vmz.claveTotal}" style="text-align: center; font-size: 12px" title="#{vmz.claveTotal}"/>
+                        </p:column>
+                        <p:column headerText="Número de zona" style="text-align: center" filterBy="#{vmz.nZona}" filterStyle="width: 80%;">
+                            <h:outputText value="#{vmz.NZona}"/>
+                        </p:column>
+                        <p:column headerText="Costo" style="text-align: center" filterBy="#{vmz.costo}" filterStyle="width: 80%;">
+                            <h:outputText value="#{vmz.costo}"/>
+                        </p:column>
+                        <p:column headerText="Costo de Zona " style="text-align: center" filterBy="#{vmz.costoZona}" filterStyle="width: 80%;">
+                            <h:outputText value="#{vmz.costoZona}"/>
+                        </p:column>
+                        <p:column headerText="Parroquia" style="text-align: center" filterBy="#{vmz.parroquia}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{vmz.parroquia}"/>
+                        </p:column>
+                        <p:column headerText="Zona" style="text-align: center" filterBy="#{vmz.zona}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{vmz.zona}"/>
+                        </p:column>
+                        <p:column headerText="Sector" style="text-align: center" filterBy="#{vmz.sector}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{vmz.sector}"/>
+                        </p:column>
+                        <p:column headerText="Manzana" style="text-align: center" filterBy="#{vmz.manzana}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{vmz.manzana}"/>
+                        </p:column>
+
+                        <p:column headerText="Total" style="text-align: center" filterBy="#{vmz.total}" filterStyle="width: 80%;"
+                                  sortBy="#{vmz.total}">
+                            <h:outputText value="#{vmz.total}"/>
+                        </p:column>
+                        <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                            <p:commandLink title="Ver Infirmación" action="#{valoraClavesView.setVer(true)}" 
+                                           actionListener="#{valoraClavesView.nuevoMz(vmz)}" update="dglEdicionManzana,frmValoraManzana" >
+                                <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Editar Información" actionListener="#{valoraClavesView.nuevoMz(vmz)}" 
+                                           action="#{valoraClavesView.setVer(false)}" update="dglEdicionManzana,frmValoraManzana">
+                                <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Eliminar" actionListener="#{valoraClavesView.eliminarMz(vmz)}" 
+                                           update="frmValoraClaves:container:dtValoraManzana">
+                                <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                <!-- Valora Afectacion Predio -->
+                <p:tab title="Valora Afectacion Predio">
+                    <div dir="rtl">
+                        <p:commandButton value="Agregar Valora Afectacion" actionListener="#{valoraClavesView.nuevoAfect(null)}" 
+                                         action="#{valoraClavesView.setVer(false)}" update="dglEditarAfectaciones,frmValoraAfectaciones" >
+                            <!--<p:ajax event="dialogReturn" listener="# {valoraClavesView.procesarReturnDialog}" update="frmValoraClaves:tvRest:dtCatalogo" />-->
+                        </p:commandButton>
+                    </div>
+
+                    <p:dataTable id="dtValoraAfectaciones" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="VAfect"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 value="#{valoraClavesView.valoraAfectacionsLazy}" var="vafectaciones1" emptyMessage="No se encontró ningún Item" >
+
+                        <p:column headerText="Clave Catastral" style="text-align: center;width: 20%" filterBy="#{vafectaciones1.codCatastralPredio}" filterStyle="width: 80%;">
+                            <h:outputText id="claveCat" value="#{vafectaciones1.codCatastralPredio}" style="text-align: center; font-size: 12px" title="#{vafectaciones1.codCatastralPredio}"/>
+                        </p:column>
+                        <p:column headerText="Afectación" style="text-align: center" filterBy="#{vafectaciones1.afectacion}" filterStyle="width: 80%;">
+                            <h:outputText value="#{vafectaciones1.afectacion}"/>
+                        </p:column>
+                        <p:column headerText="Parroquia" style="text-align: center" filterBy="#{vafectaciones1.parroquia}" filterStyle="width: 80%;">
+                            <h:outputText value="#{vafectaciones1.parroquia}"/>
+                        </p:column>
+                        <p:column headerText="Zona" style="text-align: center" filterBy="#{vafectaciones1.zona}" filterStyle="width: 80%;">
+                            <h:outputText value="#{vafectaciones1.zona}"/>
+                        </p:column>
+                        <p:column headerText="Sector" style="text-align: center" filterBy="#{vafectaciones1.sector}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{vafectaciones1.sector}"/>
+                        </p:column>
+                        <p:column headerText="Manzana" style="text-align: center" filterBy="#{vafectaciones1.manzana}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{vafectaciones1.manzana}"/>
+                        </p:column>
+                        <p:column headerText="Costo" style="text-align: center" filterBy="#{vafectaciones1.costo}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{vafectaciones1.costo}"/>
+                        </p:column>
+                        <p:column headerText="Valor Calculado" style="text-align: center" filterBy="#{vafectaciones1.valorCalculado}" filterStyle="width: 80%;" >
+                            <h:outputText value="#{vafectaciones1.valorCalculado}"/>
+                        </p:column>
+                        <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                            <p:commandLink title="Ver Información" action="#{valoraClavesView.setVer(true)}" 
+                                           actionListener="#{valoraClavesView.nuevoAfect(vafectaciones1)}" update="dglEditarAfectaciones,frmValoraAfectaciones">
+                                <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Editar Información" actionListener="#{valoraClavesView.nuevoAfect(vafectaciones1)}" 
+                                           action="#{valoraClavesView.setVer(false)}" update="dglEditarAfectaciones,frmValoraAfectaciones">
+                                <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Eliminar" actionListener="#{valoraClavesView.eliminarAfect(vafectaciones1)}" 
+                                           update="frmValoraClaves:container:dtValoraAfectaciones">
+                                <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                <p:tab title="Valora Eje Comerciales">
+                    <div dir="rtl">
+                        <p:commandButton value="Agregar Eje Comercial" actionListener="#{valoraClavesView.nuevoEje(null)}" 
+                                         action="#{valoraClavesView.setVer(false)}" update="dglEditarEjeComerciales,frmValoraEjeComerciales" >
+                            <!--<p:ajax event="dialogReturn" listener="# {valoraClavesView.procesarReturnDialog}" update="frmValoraClaves:tvRest:dtCatalogo" />-->
+                        </p:commandButton>
+                    </div>
+
+                    <p:dataTable id="dtValoraEjeComerciales" reflow="true" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="VEje"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 value="#{valoraClavesView.ejeComercialPrediosLazy}" var="ejeComr1" emptyMessage="No se encontró ningún Item" >
+
+                        <p:column headerText="Clave catastral" style="text-align: center;width: 20%" filterBy="#{ejeComr1.codCatastralPredio}" filterStyle="width: 80%;">
+                            <h:outputText id="claveCat" value="#{ejeComr1.codCatastralPredio}" style="text-align: center; font-size: 12px" title="#{ejeComr1.codCatastralPredio}"/>
+                        </p:column>
+                        <p:column headerText="Codigo Eje Comercial" style="text-align: center" filterBy="#{ejeComr1.codigoEjeComercial}" filterStyle="width: 80%;">
+                            <h:outputText value="#{ejeComr1.codigoEjeComercial}"/>
+                        </p:column>
+
+                        <p:column headerText="Afectacion del Predio" style="text-align: center" filterBy="#{ejeComr1.afectacionPredio}" filterStyle="width: 80%;">
+                            <h:outputText value="#{ejeComr1.afectacionPredio}"/>
+                        </p:column>
+                        <p:column headerText="Estado" style="text-align: center" filterBy="#{ejeComr1.estado}" filterStyle="width: 80%;">
+                            <h:outputText value="#{ejeComr1.estado}"/>
+                        </p:column>
+                        <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                            <p:commandLink title="Ver Información" action="#{valoraClavesView.setVer(true)}" process="@form"
+                                           actionListener="#{valoraClavesView.nuevoEje(ejeComr1)}" update="dglEditarEjeComerciales,frmValoraEjeComerciales">
+                                <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Editar Información" actionListener="#{valoraClavesView.nuevoEje(ejeComr1)}" process="@form"
+                                           action="#{valoraClavesView.setVer(false)}" update="dglEditarEjeComerciales, frmValoraEjeComerciales">
+                                <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Eliminar" actionListener="#{valoraClavesView.eliminarEje(ejeComr1)}" 
+                                           update="frmValoraClaves:container:dtValoraEjeComerciales">
+                                <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                <p:tab title="Catalogos Eje Comerciales">
+                    <div dir="rtl">
+                        <p:commandButton value="Agregar" actionListener="#{valoraClavesView.nuevoEjeComerc(null)}" 
+                                         action="#{valoraClavesView.setVer(false)}" update="dglCatalogoEjeComercial,frmCatalogoEjeComerciales" >
+                            <!--<p:ajax event="dialogReturn" listener="# {valoraClavesView.procesarReturnDialog}" update="frmValoraClaves:tvRest:dtCatalogo" />-->
+                        </p:commandButton>
+                    </div>
+                    <p:dataTable id="dtCatalogEjeComerciales" reflow="true" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="ejeComer"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 value="#{valoraClavesView.ejeComercialLazy}" var="eje1" emptyMessage="No se encontró ningún Item" >
+
+                        <p:column headerText="Codigo" style="text-align: center;width: 10%" filterBy="#{eje1.codigo}" filterStyle="width: 80%;">
+                            <h:outputText id="claveCat" value="#{eje1.codigo}" style="text-align: center; font-size: 12px" title="#{eje1.codigo}" />
+                        </p:column>
+                        <p:column headerText="Valor" style="text-align: center;width: 10%" filterBy="#{eje1.valor}" filterStyle="width: 80%;">
+                            <h:outputText value="#{eje1.valor}"/>
+                        </p:column>
+                        <p:column headerText="Descripción" style="text-align: center" filterBy="#{eje1.descripcion}" filterStyle="width: 80%;">
+                            <h:outputText value="#{eje1.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Estado" style="text-align: center;width: 10%" filterBy="#{eje1.estado}" filterStyle="width: 80%;">
+                            <h:outputText value="#{eje1.estado}"/>
+                        </p:column>
+                        <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                            <p:commandLink title="Ver Información" action="#{valoraClavesView.setVer(true)}" 
+                                           actionListener="#{valoraClavesView.nuevoEjeComerc(eje1)}" update="dglCatalogoEjeComercial,frmCatalogoEjeComerciales">
+                                <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Editar Información" action="#{valoraClavesView.nuevoEjeComerc(eje1)}" 
+                                           actionListener="#{valoraClavesView.setVer(false)}" update="dglCatalogoEjeComercial,frmCatalogoEjeComerciales">
+                                <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            </p:commandLink>
+                            <p:spacer width="5" />
+                            <p:commandLink title="Eliminar" action="#{valoraClavesView.eliminarEjeComerc(eje1)}" 
+                                           update="frmValoraClaves:container:dtCatalogEjeComerciales">
+                                <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+        <p:dialog id="dglEdicionManzana" widgetVar="dglEdicionManzana" modal="true" closeOnEscape="true" 
+                  closable="true" header="Valora Manzana" width="750" appendTo="@(body)"   >
+            <h:form id="frmValoraManzana">
+                <p:panelGrid  columns="2">
+                    <p:panelGrid  columns="2">
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Clave Total" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.claveTotal}"  class="Wid65" readonly ="true" maxlength="12"/>                        
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Número de zona" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.NZona}"  class="Wid65" readonly="#{valoraClavesView.ver}" maxlength="2">
+                                <p:ajax update="frmValoraManzana" />
+                            </p:inputText>                         
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Costo" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.costo}"  class="Wid65" readonly="#{valoraClavesView.ver}" >
+                                <p:ajax update="frmValoraManzana" />
+                            </p:inputText>                        
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Costo de Zona" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.costoZona}"  class="Wid65" readonly= "#{valoraClavesView.ver}" >
+                                <p:ajax update="frmValoraManzana" />
+                            </p:inputText>                         
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Parroquia" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.parroquia}"  class="Wid65" readonly="#{valoraClavesView.ver}" maxlength="2">
+                                <p:ajax listener="#{valoraClavesView.generarClaveMZ()}" update="frmValoraManzana" />
+                            </p:inputText>                         
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Zona" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.zona}"  class="Wid65" readonly= "#{valoraClavesView.ver}" maxlength="2" >
+                                <p:ajax listener="#{valoraClavesView.generarClaveMZ()}" update="frmValoraManzana" />
+                            </p:inputText>                         
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Sector" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.sector}"  class="Wid65" readonly= "#{valoraClavesView.ver}" maxlength="2">
+                                <p:ajax listener="#{valoraClavesView.generarClaveMZ()}" update="frmValoraManzana" />
+                            </p:inputText>                        
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Manzana" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.manzana}"  class="Wid65" readonly= "#{valoraClavesView.ver}"  maxlength="2" >
+                                <p:ajax listener="#{valoraClavesView.generarClaveMZ()}" update="frmValoraManzana" />
+                            </p:inputText> 
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Total" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraMzTemp.total}"  class="Wid65"  readonly= "#{valoraClavesView.ver}" >
+                                <p:ajax update="frmValoraManzana" />
+                            </p:inputText>                         
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" rendered="#{!valoraClavesView.ver}">  
+                            <p:outputLabel value="Observacion" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputTextarea id="obsMz" value="#{valoraClavesView.observacion}" class="Wid90" />
+                            <h:panelGroup layout="block" rendered="#{!valoraClavesView.ver}">  
+                                <p:commandButton value="Agregar" actionListener="#{valoraClavesView.agregarObservaciones(1)}" update="dtObsMz, obsMz" />
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <h:panelGroup>
+                        <p:dataTable id="dtObsMz" value="#{valoraClavesView.observaciones}" var="obs1" rows="10">
+                            <p:column headerText="Observacion">
+                                #{obs1}
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGroup>
+                </p:panelGrid>
+            </h:form>
+            <f:facet name="footer">
+                <center>
+                    <p:commandButton id="btGuardarMz" value="Guardar" rendered="#{!valoraClavesView.ver}" 
+                                     actionListener="#{valoraClavesView.guardar()}" update="frmValoraManzana" />
+                    <p:commandButton id="btSalirMz" value="Salir" onclick="PF('dglEdicionManzana').hide()"/>
+                </center>
+
+            </f:facet>
+        </p:dialog>
+
+        <p:dialog id="dglEditarAfectaciones" widgetVar="dglEditarAfectaciones" modal="true" closeOnEscape="true" 
+                  closable="true" header="Valora Afectaciones"  width="750" appendTo="@(body)" >
+            <h:form id="frmValoraAfectaciones">
+                <!--Actualizar valor del terrenos el momento de guardar-->
+                <p:panelGrid columns="2">
+                    <p:panelGrid columns="2">
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Codigo Catastral" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraAfectacionTemp.codCatastralPredio}"  class="Wid65" >
+                                <p:ajax update="frmValoraAfectaciones" />
+                            </p:inputText>                       
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Afectacion" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraAfectacionTemp.afectacion}"  class="Wid65" readonly="true" />                       
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Parroquia" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraAfectacionTemp.parroquia}"  class="Wid65" >
+                                <p:ajax  listener="#{valoraClavesView.generarClaveaAF()}" update="frmValoraAfectaciones" />
+                            </p:inputText>                         
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Zona" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraAfectacionTemp.zona}"  class="Wid65">
+                                <p:ajax listener="#{valoraClavesView.generarClaveaAF()}" update="frmValoraAfectaciones" /> 
+                            </p:inputText> 
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Sector" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraAfectacionTemp.sector}"  class="Wid65">
+                                <p:ajax listener="#{valoraClavesView.generarClaveaAF()}" update="frmValoraAfectaciones" /> 
+                            </p:inputText> 
+                        </h:panelGroup>
+                        <h:panelGroup layout="block"> 
+                            <h:outputText value="Manzana" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraAfectacionTemp.manzana}"  class="Wid65">
+                                <p:ajax listener="#{valoraClavesView.generarClaveaAF()}" update="frmValoraAfectaciones" />  
+                            </p:inputText> 
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Valor Calculado" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraAfectacionTemp.valorCalculado}"  class="Wid65" >
+                                <p:ajax listener="#{valoraClavesView.calcularAfectacion()}" update= "frmValoraAfectaciones"/> 
+                            </p:inputText> 
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">  
+                            <h:outputText value="Costo" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputText value="#{valoraClavesView.valoraAfectacionTemp.costo}"  class="Wid65" >
+                                <p:ajax listener="#{valoraClavesView.calcularAfectacion()}" update= "frmValoraAfectaciones"/> 
+                            </p:inputText> 
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" rendered="#{!valoraClavesView.ver}">  
+                            <p:outputLabel value="Observacion" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                            <p:inputTextarea id="obsAfecta" value="#{valoraClavesView.observacion}" class="Wid90" />
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" rendered="#{!valoraClavesView.ver}">  
+                            <p:commandButton value="Agregar" actionListener="#{valoraClavesView.agregarObservaciones(2)}" update="frmValoraAfectaciones:dtObsAfectacion, frmValoraAfectaciones:obsAfecta" />
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <h:panelGroup>
+                        <p:dataTable id="dtObsAfectacion" value="#{valoraClavesView.observaciones}" var="obs2" rows="10">
+                            <p:column headerText="Observacion">
+                                #{obs2}
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGroup>
+                </p:panelGrid>
+            </h:form>
+            <f:facet name="footer">
+                <center>
+                    <p:commandButton id="btGuardarAfectaciones" value="Guardar" rendered="#{!valoraClavesView.ver}"
+                                     actionListener="#{valoraClavesView.guardarValoraAfetacion()}" oncomplete="PF('dglEditarAfectaciones').hide()" />
+                    <p:commandButton id="btSalirA" value="Salir" onclick = "PF('dglEditarAfectaciones').hide()"  />
+                </center>
+            </f:facet>
+        </p:dialog>
+
+        <p:dialog id="dglEditarEjeComerciales" widgetVar="dglEditarEjeComerciales" modal="true" closeOnEscape="true" 
+                  closable="true" header="Valora Eje Comerciales"  width="750" appendTo="@(body)" >
+            <h:form id="frmValoraEjeComerciales">
+                <p:panelGrid  columns="2">
+                    <h:panelGroup layout="block">  
+                        <h:outputText value="Clave Catastral" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:inputText value="#{valoraClavesView.ejeComercialPredioTemp.codCatastralPredio}"  class="Wid65">
+                            <p:ajax update=" frmValoraEjeComerciales"/> 
+                        </p:inputText>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">  
+                        <h:outputText value="codigo Eje Comercial" class="FontBold DispBlock Wid100" style="font-weight: bold;"/>
+
+                        <p:selectOneMenu id="catEjeComer" value="#{valoraClavesView.ejeComercialPredioTemp.codigoEjeComercial}" class="Wid65" 
+                                         filterMatchMode="contains" filter="true" panelStyle=" width: 120px !important">
+                            <f:selectItem itemLabel="Selecionar Eje" itemValue="#{null}" />
+                            <f:selectItems value="#{serviceLists.catalogoEjes}" var="ejeComer1" itemLabel="#{ejeComer1.codigo} - #{ejeComer1.descripcion}" 
+                                           itemValue="#{ejeComer1.codigo}" />
+                            <p:ajax  update="frmValoraEjeComerciales"/>  
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">  
+                        <h:outputText value="Estado" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:selectOneMenu id="estadoPredio" value="#{valoraClavesView.ejeComercialPredioTemp.estado}" class="Wid65">
+                            <f:selectItem itemLabel="Selecionar Estado" itemValue="#{null}" />
+                            <f:selectItem itemLabel="Inactivo" itemValue="#{0}" />
+                            <f:selectItem itemLabel="Activo" itemValue="#{1}" />
+                            <p:ajax  update="frmValoraEjeComerciales"/>  
+                            <!--<f:selectItems value="# {valoraClavesView.estados}" var="est1" itemLabel="# {est1}" itemValue="#{est1}"/>-->
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">  
+                        <h:outputText value="Afectacion del Predio" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:inputText value="#{valoraClavesView.ejeComercialPredioTemp.afectacionPredio}"  class="Wid65">
+                            <p:ajax update=" frmValoraEjeComerciales"/> 
+                        </p:inputText> 
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{!valoraClavesView.ver}">  
+                        <p:outputLabel value="Observacion" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:inputTextarea id="obsEjeCP" value="#{valoraClavesView.observacion}" class="Wid90" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{!valoraClavesView.ver}">  
+                        <p:commandButton value="Agregar" actionListener="#{valoraClavesView.agregarObservaciones(3)}" update="dtObsEjeCP, obsEjeCP" />
+                    </h:panelGroup>
+                </p:panelGrid>
+                <h:panelGroup>
+                    <p:dataTable id="dtObsEjeCP" value="#{valoraClavesView.observaciones}" var="obs3" rows="10">
+                        <p:column headerText="Observacion">
+                            #{obs3}
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+            <f:facet name="footer">
+                <center>
+                    <p:commandButton id="btGuardarEjeComerciales" value="Guardar" rendered="#{!valoraClavesView.ver}"
+                                     actionListener="#{valoraClavesView.guardarEjeComercial()}" oncomplete="PF('dglEditarEjeComerciales').hide()" />
+                    <p:commandButton id="btSalirEjeComerciales" value="Salir" onclick="PF('dglEditarEjeComerciales').hide()" />
+                </center>
+            </f:facet>
+        </p:dialog>
+
+        <p:dialog id="dglCatalogoEjeComercial" widgetVar="dglCatalogoEjeComercial" modal="true" closeOnEscape="true" 
+                  closable="true" header="Catálogo Eje Comerciales"  width="850" appendTo="@(body)">
+            <h:form id="frmCatalogoEjeComerciales">
+                <p:panelGrid  columns="2" class="Wid90">
+                    <h:panelGroup layout="block">  
+                        <h:outputText value="Código" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:inputText value="#{valoraClavesView.ejeComercialTemp.codigo}"  class="Wid50">
+                            <p:ajax update="frmCatalogoEjeComerciales"/> 
+                        </p:inputText>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">  
+                        <h:outputText value="Descripción " class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:inputText value="#{valoraClavesView.ejeComercialTemp.descripcion}" class="Wid100">
+                            <p:ajax  update=" frmCatalogoEjeComerciales"/>  
+                        </p:inputText> 
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">  
+                        <h:outputText value="Valor" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:inputText value="#{valoraClavesView.ejeComercialTemp.valor}"  class="Wid50">
+                            <p:ajax update="frmCatalogoEjeComerciales"/> 
+                        </p:inputText> 
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">  
+                        <h:outputText value="Estado" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:selectOneMenu value="#{valoraClavesView.ejeComercialTemp.estado}" class="Wid50">
+                            <f:selectItem itemLabel="Selecionar Estado" itemValue="#{null}" />
+                            <f:selectItem itemLabel="Inactivo" itemValue="#{0}" />
+                            <f:selectItem itemLabel="Activo" itemValue="#{1}" />
+                            <p:ajax update="frmCatalogoEjeComerciales"/> 
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{!valoraClavesView.ver}">  
+                        <p:outputLabel value="Observacion" class="FontBold DispBlock Wid100" style="font-weight: bold"/>
+                        <p:inputTextarea id="obsEjeC" value="#{valoraClavesView.observacion}" class="Wid90" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{!valoraClavesView.ver}">  
+                        <p:commandButton value="Agregar" actionListener="#{valoraClavesView.agregarObservaciones(4)}" update="dtObsEjeC, obsEjeC" />
+                    </h:panelGroup>
+                </p:panelGrid>
+                <h:panelGroup>
+                    <p:dataTable id="dtObsEjeC" value="#{valoraClavesView.observaciones}" var="obs4" rows="10">
+                        <p:column headerText="Observacion">
+                            #{obs4}
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+            <f:facet name="footer">
+                <center>
+                    <p:commandButton id="btGuardarCatalogoEjeComerciales" value="Guardar" rendered="#{!valoraClavesView.ver}"
+                                     actionListener="#{valoraClavesView.guardarCatalogoEjeComerciales()}" oncomplete="PF('dglCatalogoEjeComercial').hide()" />
+                    <p:commandButton id="btSalirEje" value="Salir" onclick="PF('dglCatalogoEjeComercial').hide()" />
+                </center>
+            </f:facet>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>
+

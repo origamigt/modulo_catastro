@@ -1,0 +1,449 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <f:metadata >
+        <f:event type="preRenderView" listener="#{mantCiudadano.initView()}"/>
+        <f:viewParam name="idCiudadano" value="#{mantCiudadano.idCiudadano}"/>
+        <f:viewParam name="ver" value="#{mantCiudadano.ver}"/>
+        <f:viewParam name="transitorio" value="#{mantCiudadano.noPersist}"/>
+    </f:metadata>
+
+    <h:head>
+        <title>Listado de Ciudadanos</title>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+        <script src="#{appConfig.urlbase}resources/js/app.js"></script>
+
+        <h:form id="frmCiudadano">
+            <p:growl autoUpdate="true" showDetail="true"/>
+            <p:tabView id="tvCiudadano" cache="false">
+                <p:tab title="Datos personales">
+                    <h:panelGrid columns="2">
+                        <h:panelGroup layout="block">
+                            <h:outputText value="Tipo Identificación:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                            <p:selectOneMenu value="#{mantCiudadano.ciudadano.ciuTipoIdentificacion}" effect="fade" >
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <f:selectItems value="#{serviceLists.getListado('cliente.identificacion')}" var="ci1" itemLabel="#{ci1.valor}" itemValue="#{ci1.codename}"/>
+                                <p:ajax event="change" update="@this"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Número de Identificación:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.ciudadano.ciuCedRuc}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" >
+                                <p:ajax listener="#{mantCiudadano.verificarCiudadano()}" update="frmCiudadano:tvCiudadano:pgapellidos, frmCiudadano:tvCiudadano:pgnombres, frmCiudadano:tvCiudadano:pgnacimiento" />
+                            </p:inputText>
+                        </h:panelGroup>  
+                        <h:panelGroup id="pgapellidos"  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Apellidos:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.ciudadano.ciuApellidoPat}" placeholder="Apellido Paterno" />
+                            <p:inputText value="#{mantCiudadano.ciudadano.ciuApellidoMat}" placeholder="Apellido Materno" />
+                        </h:panelGroup> 
+                        <h:panelGroup  id="pgnombres" layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Nombres:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.ciudadano.ciuPrimerNombre}" placeholder="Primer Nombre" />
+                            <p:inputText value="#{mantCiudadano.ciudadano.ciuSegundoNombre}" placeholder="Segundo NOmbre" />
+                        </h:panelGroup> 
+
+                        <h:panelGroup id="pgnacimiento" layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Fecha de Nacimiento:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:calendar value="#{mantCiudadano.ciudadano.ciuFechaNacimiento}" placeholder="DÍA-MES-AÑO" maxdate="sysdate"
+                                        pattern="dd-MM-yyyy" mask="true" navigator="true" styleClass="calendarClass" />
+                        </h:panelGroup> 
+                        <h:panelGroup layout="block">
+                            <h:outputText value="Tipo Ciudadano:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                            <p:selectOneMenu value="#{mantCiudadano.ciudadano.ciuTipo}" effect="fade" >
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <f:selectItems value="#{serviceLists.getListado('cliente.tipo')}" var="tipc" itemLabel="#{tipc.valor}" itemValue="#{tipc.codename}"/>
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Datos adicionales" id="tabadicionales">
+                    <p:panel visible="#{mantCiudadano.showtab}" id="panadicionales" >
+                        <p:panelGrid columns="2" >
+                            <h:panelGroup layout="block">
+                                <h:outputText value="Sexo:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                                <p:selectOneMenu value="#{mantCiudadano.ciudadano.ciuSexo}" effect="fade" >
+                                    <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                    <f:selectItems value="#{serviceLists.getListado('cliente.sexualidad')}" var="sc1" itemLabel="#{sc1.valor}" itemValue="#{sc1.codename}"/>
+                                    <p:ajax event="change" update="@this"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block">
+                                <h:outputText value="Estado Civil:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                                <p:selectOneMenu value="#{mantCiudadano.ciudadano.ciuEstadoCivil}" effect="fade" >
+                                    <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                    <f:selectItems value="#{serviceLists.getListado('cliente.estado_civil')}" var="estC1" itemLabel="#{estC1.valor}" itemValue="#{estC1.codename}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                        </p:panelGrid>
+                        <p:panel header="Referencias">
+                            <div dir="rtl">
+                                <p:commandButton value="Agregar Referencia" actionListener="#{mantCiudadano.nuevaReferencia()}" oncomplete="PF('dlgReferencias').show()" update="frmreferencias"/> 
+                            </div>
+                            <p:dataTable id="dtreferencia" value="#{mantCiudadano.refFiltered}" var="rf1" rowIndexVar="index" scrollable="true" scrollHeight="200">
+                                <p:column headerText="Nombre" >
+                                    <p:outputLabel value="#{rf1.rpNombre}"/>
+                                </p:column>
+                                <p:column headerText="Dirección" >
+                                    <p:outputLabel value="#{rf1.rpDireccion}"/>
+                                </p:column>
+                                <p:column headerText="Movil" >
+                                    <p:outputLabel value="#{rf1.rpMovil}"/>
+                                </p:column>
+                                <p:column headerText="Telefono" >
+                                    <p:outputLabel value="#{rf1.rpTelefono}"/>
+                                </p:column>
+                                <p:column headerText="Opciones" width="8%" >
+                                    <p:commandLink title="Editar"  actionListener="#{mantCiudadano.editarReferencia(rf1,index)}" update="frmreferencias" >
+                                        <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                                    </p:commandLink>
+                                    <p:commandLink title="Quitar" actionListener="#{mantCiudadano.removerReferencia(rf1,index)}" >
+                                        <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                                    </p:commandLink>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Dirección" id="tabdireccion">
+                    <p:panel visible="#{mantCiudadano.showtab}" id="pandireccion" >
+                        <div dir="rtl">
+
+                            <p:commandButton value="Agregar Dirección" actionListener="#{mantCiudadano.nuevaDireccion()}" 
+                                             oncomplete="PF('dlgDireccion').show()" update="frmdireccion"/> 
+                        </div>
+                        <p:dataTable id="dtdireccion" value="#{mantCiudadano.ciudadano.ciuDireccionList}" var="dir1" scrollable="true" scrollHeight="200">
+
+                            <p:column headerText="Calle Principal" >
+                                <p:outputLabel value="#{dir1.diCallePrincipal}"/>
+                            </p:column>
+                            <p:column headerText="Calle Secundaria" >
+                                <p:outputLabel value="#{dir1.diCalleSecundaria}"/>
+                            </p:column>
+                            <p:column headerText="Numero" >
+                                <p:outputLabel value="#{dir1.diNumero}"/>
+                            </p:column>
+                            <p:column headerText="Descripcion" >
+                                <p:outputLabel value="#{dir1.diDescripcion}"/>
+                            </p:column>                       
+                            <p:column headerText="Tipo" >
+    <!--                            <p:outputLabel value="#{dir1.diTipo}"/>-->
+                                <p:selectOneMenu value="#{dir1.diTipo}" effect="fade" style="width: 100%" disabled="true">
+                                    <f:selectItem itemLabel=" " itemValue="#{null}"/>
+                                    <f:selectItems value="#{serviceLists.getListado('direccion.tipo')}" var="dir" itemLabel="#{dir.valor}" itemValue="#{dir.codename}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column headerText="Opciones" width="8%" >
+                                <p:commandLink title="Editar"  actionListener="#{mantCiudadano.editarDireccion(dir1,index)}"
+                                               update="frmdireccion">
+                                    <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                                </p:commandLink>
+                                <!--                                <p:commandLink title="Quitar" actionListener="# {mantCiudadano.removerDireccion(dir1)}" >
+                                                                    <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                                                                </p:commandLink>-->
+
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Relaciones" id="tabrelaciones">
+                    <p:panel visible="#{mantCiudadano.showtab}" id="panrelaciones" >
+                        <div dir="rtl">
+                            <p:commandButton value="Agregar Relaciones" actionListener="#{mantCiudadano.nuevaRelacion()}" 
+                                             oncomplete="PF('dlgRelaciones').show()" update="frmrelaciones"/> 
+                        </div>
+                        <p:dataTable  id="dtrelacion" value="#{mantCiudadano.ciudadano.ciuRelacionesList}" var="rl1" scrollable="true" scrollHeight="200">                                          
+                            <p:column headerText="Nombres" >
+                                <p:outputLabel value="#{rl1.rlfNombre}"/>
+                            </p:column>
+                            <p:column headerText="Dirección" >
+                                <p:outputLabel value="#{rl1.rlfDireccion}"/>
+                            </p:column>
+                            <p:column headerText="Telefono" >
+                                <p:outputLabel value="#{rl1.rlfTelefono}"/>
+                            </p:column>
+                            <p:column headerText="Opciones" width="8%" >                    
+                                <p:commandLink title="Editar"  actionListener="#{mantCiudadano.editarRelacion(rl1,index)}" update="frmrelaciones" >
+                                    <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                                </p:commandLink>                       
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Telefonos" id="tabtelefonos">
+                    <p:panel visible="#{mantCiudadano.showtab}" id="pantelefonos">
+                        <div dir="rtl">               
+                            <p:commandButton value="Agregar Telefono" actionListener="#{mantCiudadano.nuevoTelefono()}" 
+                                             oncomplete="PF('dlgTelefonos').show()" update="frmtelefonos"/> 
+
+                        </div>
+                        <p:dataTable id="dttelefono" value="#{mantCiudadano.ciudadano.ciuTelefonoList}" var="tel1" scrollable="true" scrollHeight="200">
+                            <p:column headerText="Operadora" >                            
+                                <p:selectOneMenu value="#{tel1.teOperadora}" style="width: 100%" disabled="true" >
+                                    <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                    <f:selectItems value="#{serviceLists.getListado('telefono.operadora')}" var="op" itemLabel="#{op.valor}" itemValue="#{op.codename}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column headerText="Tipo" >                          
+                                <p:selectOneMenu value="#{tel1.teTipo}" style="width: 100%" disabled="true" >
+                                    <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                    <f:selectItems value="#{serviceLists.getListado('telefono.tipo')}" var="tip" itemLabel="#{tip.valor}" itemValue="#{tip.codename}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column headerText="Numero" >
+                                <p:outputLabel value="#{tel1.teNumero}"/>
+                            </p:column>
+
+                            <p:column headerText="Estado" >
+                                <p:outputLabel value="#{tel1.teEstado}"/>
+                            </p:column>
+                            <p:column headerText="Opciones" width="8%" >
+                                <p:commandLink title="Editar"  actionListener="#{mantCiudadano.editarTelefono(tel1,index)}" update="frmtelefonos" >
+                                    <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                                </p:commandLink>   
+                                <p:commandLink title="Quitar" actionListener="#{mantCiudadano.removerTelefono(tel1,index)}" >
+                                    <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:tab>
+            </p:tabView>
+
+            <center>
+                <p:commandButton value="Guardar" actionListener="#{mantCiudadano.guardarCiudadano()}" />
+                <p:spacer width="10" />
+                <p:commandButton value="Cerrar" actionListener="#{mantCiudadano.cerrar()}"/>
+            </center>
+        </h:form>
+
+        <p:dialog id="dlgrls" header="Relaciones" widgetVar="dlgRelaciones"  resizable="false" modal="true" height="290"  width="70%" appendTo="@(body)">
+            <h:form id="frmrelaciones">
+                <p:panel>
+                    <p:panelGrid columns="2" layout="grid">
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Número de Identificación:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.rlCiuCed}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" maxlength="13"/>
+                        </h:panelGroup>  
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Edad:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.relacion.rlfEdad}" placeholder="Edad" />
+                        </h:panelGroup>           
+
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Nombre:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.relacion.rlfNombre}" placeholder="Nombre" maxlength="70" />
+                        </h:panelGroup>                       
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Apellido Paterno: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.relacion.rlfApellidoPat}" placeholder="Apellido" maxlength="70" />
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Apellido Materno " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.relacion.rlfApellidoMat}" placeholder="Apellido" maxlength="70" />
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Relación: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:selectOneMenu value="#{mantCiudadano.relacion.rlfRelacion}" effect="fade" >
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <f:selectItems value="#{serviceLists.getListado('relacion.tipo')}" var="rla" itemLabel="#{rla.valor}" itemValue="#{rla.orden}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Dirección: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.relacion.rlfDireccion}" placeholder="Dirección" maxlength="70"/>
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Teléfono:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.relacion.rlfTelefono}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" placeholder="Teléfono" maxlength="20"/>
+                        </h:panelGroup>  
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Móvil: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.relacion.rlfMovil}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" placeholder="Móvil" maxlength="13"/>
+                        </h:panelGroup>  
+                        <h:outputText value="" />
+                    </p:panelGrid >
+
+                    <f:facet name="footer">
+                        <div align="center">
+                            <p:commandButton value="Guardar" actionListener="#{mantCiudadano.guardarRelacion()}" 
+                                             oncomplete="PF('dlgRelaciones').hide()" update="frmCiudadano:tvCiudadano:dtrelacion"/>
+                            <p:commandButton value="Cerrar" onclick="PF('dlgRelaciones').hide()"
+                                             update="frmCiudadano:tvCiudadano:dtrelacion"/>
+                        </div>
+                    </f:facet>
+                </p:panel>
+            </h:form> 
+        </p:dialog>
+
+        <p:dialog id="dlgtlf" header="Teléfonos" widgetVar="dlgTelefonos" resizable="false" modal="true" height="230"  width="50%" appendTo="@(body)" >
+            <h:form id="frmtelefonos">
+                <p:panel>
+                    <p:panelGrid columns="2" layout="grid">
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Operadora:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:selectOneMenu value="#{mantCiudadano.telefono.teOperadora}" effect="fade" >
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <f:selectItems value="#{serviceLists.getListado('telefono.operadora')}" var="op" itemLabel="#{op.valor}" itemValue="#{op.codename}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Tipo: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:selectOneMenu value="#{mantCiudadano.telefono.teTipo}" effect="fade" >
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <f:selectItems value="#{serviceLists.getListado('telefono.tipo')}" var="tip" itemLabel="#{tip.valor}" itemValue="#{tip.codename}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>                      
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Número: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.telefono.teNumero}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" maxlength="15"/>
+                        </h:panelGroup>                     
+                        <h:outputText value=""/>
+
+                    </p:panelGrid >
+                    <f:facet name="footer">
+                        <div align="center">
+                            <p:commandButton value="Guardar" actionListener="#{mantCiudadano.guardarTelefono()}" 
+                                             oncomplete="PF('dlgTelefonos').hide()" update="frmCiudadano:tvCiudadano:dttelefono"/>
+                            <p:commandButton value="Cerrar" onclick="PF('dlgTelefonos').hide()"
+                                             update="frmCiudadano:tvCiudadano:dttelefono"/>
+                        </div>
+                    </f:facet>
+                </p:panel>
+            </h:form> 
+        </p:dialog>
+        <p:dialog id="dlgrefs" header="Referencias" widgetVar="dlgReferencias" resizable="false"  width="70%" modal="true" height="270" appendTo="@(body)">
+            <h:form id="frmreferencias">
+                <p:panel>
+                    <p:panelGrid columns="2" layout="grid">
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Número de Identificación:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.refCiuCed}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" maxlength="13"/>
+                        </h:panelGroup>                  
+
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Nombre:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.referencia.rpNombre}" placeholder="Nombres" maxlength="70"/>                      
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Dirección:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.referencia.rpDireccion}" placeholder="Dirección" maxlength="70"/>
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Teléfono:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.referencia.rpTelefono}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" placeholder="Teléfono" maxlength="20" />
+                        </h:panelGroup>  
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Móvil: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.referencia.rpMovil}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" placeholder="Móvil" maxlength="13"/>
+                        </h:panelGroup>                     
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Relación: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:selectOneMenu value="#{mantCiudadano.referencia.rpRelacion}" effect="fade" >
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <f:selectItems value="#{serviceLists.getListado('relacion.tipo')}" var="rl" itemLabel="#{rl.valor}" itemValue="#{rl.codename}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+                    </p:panelGrid >
+                    <f:facet name="footer">
+                        <div align="center">
+                            <p:commandButton value="Guardar"  actionListener="#{mantCiudadano.guardarReferencia()}" 
+                                             update="frmCiudadano:tvCiudadano:dtreferencia"/>
+                            <p:commandButton value="Cerrar" onclick="PF('dlgReferencias').hide()"
+                                             update="frmCiudadano:tvCiudadano:dtreferencia"/>
+                        </div>
+                    </f:facet>
+                </p:panel>
+
+            </h:form> 
+        </p:dialog>
+        <p:dialog id="dlgdir" header="Direccion" widgetVar="dlgDireccion" width="90%" resizable="false" modal="true" height="330" appendTo="@(body)">
+            <h:form id="frmdireccion">
+                <p:panel>
+                    <p:panelGrid columns="2" layout="grid">              
+
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Provincia: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:selectOneMenu value="#{mantCiudadano.provincia}" effect="fade" converter="entityConverter" filter="true" filterMatchMode="contains" style="width: 50%">
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <p:ajax update="frmdireccion:cmbCanton" />
+                                <f:selectItems value="#{serviceLists.getProvincias()}" var="prov" itemLabel="#{prov.descripcion}" itemValue="#{prov}"/>                       
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Ciudad: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:selectOneMenu id="cmbCanton" value="#{mantCiudadano.ciudad}" converter="entityConverter" effect="fade" filter="true" filterMatchMode="contains" style="width: 50%">
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <p:ajax update="frmdireccion:cmbParroquia" />                              
+                                <f:selectItems value="#{mantCiudadano.provincia.catCantonCollection}" var="ciud" itemLabel="#{ciud.nombre}" itemValue="#{ciud}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>            
+
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Parroquia: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:selectOneMenu id="cmbParroquia" value="# {mantCiudadano.direccion.diParroquia}" effect="fade" filter="true" filterMatchMode="contains" style="width: 50%">
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <f:selectItems value="#{mantCiudadano.ciudad.catParroquiaCollection}" var="par" itemLabel="#{par.descripcion}" itemValue="#{par.id}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Tipo: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:selectOneMenu value="#{mantCiudadano.direccion.diTipo}" effect="fade" style="width: 50%">
+                                <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                                <f:selectItems value="#{serviceLists.getListado('direccion.tipo')}" var="dir" itemLabel="#{dir.valor}" itemValue="#{dir.codename}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Número: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.direccion.diNumero}" style="width: 50%" placeholder="Número" maxlength="10" />                      
+                        </h:panelGroup> 
+                        <h:outputText value=""/>
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Calle Principal: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.direccion.diCallePrincipal}" style="width: 80%" placeholder="Calle Principal" maxlength="100"/>                      
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Calle Secundaria: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.direccion.diCalleSecundaria}"  style="width: 80%" placeholder="Calle Secundaria"  maxlength="100"/>                      
+                        </h:panelGroup> 
+
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Referencia: " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.direccion.diReferencia}" style="width: 80%" placeholder="Referencia"  maxlength="250"/>                      
+                        </h:panelGroup> 
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Descripción " style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{mantCiudadano.direccion.diDescripcion}" style="width: 80%" placeholder="Descripción"  maxlength="150"/>                      
+                        </h:panelGroup> 
+
+                    </p:panelGrid >
+
+                    <f:facet name="footer">
+                        <div align="center">
+                            <p:commandButton value="Guardar" actionListener="#{mantCiudadano.guardarDireccion()}"
+                                             update="frmCiudadano:tvCiudadano:dtdireccion"/>
+                            <p:commandButton value="Cerrar" onclick="PF('dlgDireccion').hide()"
+                                             update="frmCiudadano:tvCiudadano:dtdireccion"/>
+                        </div>
+                    </f:facet>
+                </p:panel>
+
+            </h:form> 
+        </p:dialog>
+
+        <p:ajaxStatus id="status" onstart="PF('dlgStatus').show()" oncomplete="PF('dlgStatus').hide()"/>
+        <p:dialog id="dlgStatus" widgetVar="dlgStatus" modal="true" draggable="false"  closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+        </p:dialog>
+    </h:body>
+</html>
+

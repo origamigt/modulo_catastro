@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:dlg="http://xmlns.jcp.org/jsf/composite/dialog">
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{fichaPredial.load()}"/>
+        <f:viewParam name="predio" value="#{fichaPredial.predioId}"/>
+        <f:viewParam name="claveCat" value="#{fichaPredial.claveCat}"/>
+    </f:metadata>
+
+    <ui:define name="head">
+    </ui:define>
+
+    <ui:define name="content">
+        <center>
+            <h1>Ficha Predial</h1>
+        </center>
+        <div class="ContainerIndent">
+            <p:panel rendered="#{not empty fichaPredial.observacionRestricciones}">
+                <ui:repeat value="#{fichaPredial.observacionRestricciones}" var="d1" rendered="#{fichaPredial.observacionRestricciones ne null}">
+                    <p:outputLabel value="#{d1}" class="Fs18 FontBold icon-lock" style="color: darkred; text-transform: uppercase" escape="false"  /><br/>
+                </ui:repeat>
+            </p:panel>
+        </div>
+        <div align="left">
+            <p:panelGrid id="datosGenerales" layout="grid" columns="3" style="width: 100%">
+                <h:outputText value="No. Predio/Código Único : #{fichaPredial.predio.numPredio}" style="font-weight: bolder"/>
+                <h:outputText id="labelClavaCat" value="Clave Catastral: #{fichaPredial.claveCatastralCompleta()}" style="font-weight: bolder; font-size: 18px; "/>
+                <h:panelGroup>
+                    <p:commandButton value="Completar Edición" action="#{fichaPredial.showDialogObservaciones(3)}"  rendered="#{fichaPredial.esTarea}"  update="compObsv:dlgObs,confirmId"/>
+
+                    <p:commandButton value="Aprobar" action="#{fichaPredial.showDialogObservaciones(2)}"  rendered="#{fichaPredial.esTareaAp}"  update="compObsv:dlgObs,confirmId" />
+
+                    <p:commandButton value="Rechazar" action="#{fichaPredial.showDialogObservaciones(1)}"  rendered="#{fichaPredial.esTareaAp}" update="compObsv:dlgObs,confirmId"  />
+                </h:panelGroup>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" id="confirmId">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+                <dlg:observaciones observaciones="#{fichaPredial.observaciones}" id="compObsv"
+                                   actionButton="#{fichaPredial.guardarObservaciones()}"
+                                   confirm="true"
+                                   confirmMessages=" Esta seguro de #{fichaPredial.tipoTarea eq 3 ? 'COMPLETAR LA EDICION ALFANUMERICA DEL PREDIO ?' : (fichaPredial.tipoTarea eq 1 ? 'RECHAZAR LA REVISION ? ':'APROBAR LA REVISION ?' ) }"
+                                   titulo="Observaciones DE #{fichaPredial.tipoTarea eq 3 ? 'LA EDICION ALFANUMERICA' : 'LA REVISION' }"
+                                   requerido="#{fichaPredial.tipoTarea eq 1 ? true : false }"/>
+
+            </p:panelGrid>
+        </div>
+        <p:accordionPanel id="tdatos" style="width: 100%">
+            <p:tab id="s1" title="1. Identificacion y ubicación predial" rendered="#{fichaDefaultView.seccion1Render}">
+                <ui:include src="_ibarra_seccion01.xhtml" />
+            </p:tab>
+            <p:tab id="s3" title="2. Características del Predio" rendered="#{fichaDefaultView.seccion3Render}">
+                <ui:include  src="_ibarra_seccion03.xhtml" />
+            </p:tab>
+            <p:tab id="s6" title="3. Servicios Básicos del Predio - Valor Agregado" rendered="#{fichaDefaultView.seccion6Render}">
+                <ui:include src="_ibarra_seccion06.xhtml" />
+            </p:tab>
+            <p:tab id="s2" title="4. Identificación legal" rendered="#{fichaDefaultView.seccion2Render}">
+                <ui:include src="_ibarra_seccion02.xhtml" />
+            </p:tab>
+            <p:tab id="s4" title="5. Caracterización y elementos constructivos de la edificación" rendered="#{fichaDefaultView.seccion4Render}">
+                <ui:include src="_ibarra_seccion04.xhtml" />
+            </p:tab>
+            <p:tab id="s11" title="6. Vivienda" rendered="true">
+                <ui:include src="_vivienda.xhtml" />
+            </p:tab>
+            <p:tab id="s5" title="7. Gráfico y linderos del predio" rendered="#{fichaDefaultView.seccion5Render}">
+                <ui:include src="_ibarra_seccion05.xhtml" />
+            </p:tab>
+            <p:tab id="s7" title="8. Responsables Y Descripción del Predio" rendered="#{fichaDefaultView.seccion7Render}">
+                <ui:include src="_ibarra_seccion07.xhtml" />
+            </p:tab>
+            <p:tab id="s10" title="9. Documentos Adjuntos" rendered="#{fichaDefaultView.seccion8Render}">
+                <ui:include src="_ibarra_seccion08.xhtml" />
+            </p:tab>
+
+        </p:accordionPanel>
+        <ui:include src="_dialogs.xhtml" />
+
+    </ui:define>
+</ui:composition>

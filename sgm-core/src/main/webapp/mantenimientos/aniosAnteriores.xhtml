@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      template="/template/template.xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <f:metadata >
+        <f:event type="preRenderView" listener="#{aniosAnterioresView.initView()}"/>
+        <f:viewParam name="clave" value="#{aniosAnterioresView.clave}"/>
+        <f:viewParam name="anio" value="#{aniosAnterioresView.anio}"/>
+    </f:metadata>
+
+    <h:head>
+        <title>Valores Año #{aniosAnterioresView.anio}</title>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+        <script src="#{appConfig.urlbase}resources/js/app.js"></script>
+
+        <h:form id="frmMain">
+            <p:growl autoUpdate="true" showDetail="true" />
+            <p:panel class="Container100 Hei100" >
+                <h:panelGroup layout="block">
+                    <h:outputText value="Año:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                    <p:selectOneMenu value="#{aniosAnterioresView.anio}" effect="fade" style="width: 150px; " >
+                        <p:ajax update="frmMain" listener="#{aniosAnterioresView.cargarDatosAnio()}"/>
+                        <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                        <f:selectItems value="#{aniosAnterioresView.anios}" var="ci1" itemLabel="#{ci1}" itemValue="#{ci1}" />
+                    </p:selectOneMenu>
+                </h:panelGroup>
+                <p:fieldset legend="Areas" >
+                    <h:panelGrid columns="3" style="width: 100%">
+                        <h:panelGroup layout="block">
+                            <h:outputText value="Area Solar:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.areaTotalPredio}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup>
+                        <h:panelGroup id="predioArea" layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Area Construcción:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.areaConstPredio}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup>  
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Area Obras Complementarias:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.areaConstPredio}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend="Avaluos" >
+                    <h:panelGrid columns="3" style="width: 100%">
+                        <h:panelGroup layout="block">
+                            <h:outputText value="Avaluo Solar:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.valorTerrenoPredio}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup>
+                        <h:panelGroup id="predioAvlCons" layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Avaluo Construcción:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.valorComercialPredio}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup>  
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Avaluo Obras Complementarias:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.valorElementoValorizable}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup> 
+                        <f:facet name="footer" >
+                            <h:outputText value="Base Imponible:" style="font-weight: bolder"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.valorComercialPredio}" readonly="true" class="FontBold DispBlock" />
+                        </f:facet>
+                    </h:panelGrid>
+                </p:fieldset>
+                <div align="center">
+                    <p:commandButton value="Calcular" actionListener="#{aniosAnterioresView.calcular()}" icon="fa fa-refresh" styleClass="white" />
+                    <p:spacer width="25" />
+                    <p:commandButton value="Cerrar" actionListener="#{aniosAnterioresView.close()}" icon="fa fa-close" styleClass="white" />
+                </div>
+                <p:fieldset legend="Avaluos Calculados" >
+                    <h:panelGrid columns="3" style="width: 100%">
+                        <h:panelGroup layout="block">
+                            <h:outputText value="Avaluo Solar:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.valorTerrenoPredio}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup>
+                        <h:panelGroup id="predioAvlCalCons" layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Avaluo Construcción:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.valorComercialPredio}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup>  
+                        <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                            <h:outputText value="Avaluo Obras Complementarias:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.valorElementoValorizable}" readonly="true" class="FontBold DispBlock" />
+                        </h:panelGroup> 
+                        <f:facet name="footer" >
+                            <h:outputText value="Base Imponible:" style="font-weight: bolder"/>
+                            <p:inputText value="#{aniosAnterioresView.predioAnio.valorComercialPredio}" readonly="true" class="FontBold DispBlock" />
+                        </f:facet>
+                    </h:panelGrid>
+                </p:fieldset>
+            </p:panel>
+        </h:form>
+
+        <p:ajaxStatus id="status" onstart="PF('dlgStatus').show()" oncomplete="PF('dlgStatus').hide()"/>
+        <p:dialog id="dlgStatus" widgetVar="dlgStatus" modal="true" draggable="false"  closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+        </p:dialog>
+
+    </h:body>
+</html>
+

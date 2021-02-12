@@ -1,0 +1,58 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html" 
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <h:form id="frmTopbar">
+        <div id="layout-header" class="Unselectable fontRegular">
+
+            <a href="#" id="layout-logo" target="_blank">
+                <h:graphicImage alt="Logo" value="images/LOGO.svg" name="images/LOGO.svg" styleClass="Fleft" library="sentinel-layout" />
+                <span class="Fs19 FontTitilliumSemiBoldItalic Fleft"><span class="softblue">ORIGAMIGT-</span><span class="hardblue">MÓDULO-</span><span class="softblue">CATASTRO</span></span>
+            </a>
+            <ul id="sm-topmenu" class="layout-header-widgets white Fs14">
+                <li class="Fleft BordRadHalf TexAlCenter"><i class="icon-user-male"></i>
+                    <ul class="layout-header-widgets-submenu BordRad5 shadows white Animated05">
+                        <li class="Animated05">
+                            <a class="white Unselectable">
+                                <i class="icon-user-male Fs26 OvHidden"></i>
+                                <span class="Fs18">
+                                    <h:outputText value="#{userSession.name_user}"/>
+                                    <br/>
+                                    <span class="Fs10">
+                                        <!--<h:outputText value="Última vez - #{userSession.session.ultAcceso}"/>-->
+                                    </span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="Animated05">
+                            <p:commandLink id="btnPreferencias" styleClass="white Unselectable" onclick="parent.location = '#{appConfig.urlbase}/generic/datosUsuario.xhtml'" >
+                                <i class="icon-sliders"></i>
+                                <h:outputText value="Preferencias" style="color: #ffffff" />
+                            </p:commandLink>
+                        </li>
+
+
+
+
+                    </ul>
+                </li>
+                <li class="Fleft BordRadHalf TexAlCenter"><i class="icon-power"></i>
+                    <ul class="layout-header-widgets-submenu BordRad5 shadows white Animated05">
+                        <li class="Animated05">
+                            <p:commandLink id="btnLogOut" actionListener="#{userSession.logout()}" styleClass="white Unselectable" update="@all">
+                                <i class="icon-logout"></i>
+                                <h:outputText value="Cerrar sesion" style="color: #ffffff"/>
+                            </p:commandLink>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- NEVER REMOVE FOLLOWING 'UL' TAG ! BECAUSE THIS CONTAINS RESPONSIVE MODE HEADER MENU OPEN-CLOSE BUTTON -->
+            <ul id="sm-mobiletopmenu" class="layout-header-widgets white Fs14">
+                <li class="Fleft BordRadHalf TexAlCenter Animated05 DisplayOnResponsive"><i class="icon-th-1"></i></li>
+            </ul>
+        </div>
+    </h:form>
+</ui:composition>

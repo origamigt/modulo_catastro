@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:cs="http://xmlns.jcp.org/jsf/composite/dialog">
+    <f:metadata >
+        <f:event type="preRenderView" listener="#{obrasInternas.initView()}"/>
+        <f:viewParam name="idPredio" value="#{obrasInternas.idPredio}"/>
+        <f:viewParam name="idCatPredioObraInterna" value="#{obrasInternas.idCatPredioObraInterna}"/>
+        <f:viewParam name="nuevo" value="#{obrasInternas.esNuevo}"/>
+        <f:viewParam name="ver" value="#{obrasInternas.ver}"/>
+    </f:metadata>
+    <h:head>
+        <title>Tipo de Obra o Inst. Especiales (Obras Complementarias)</title>
+        <style type="text/css">
+            .ui-widget {
+                font-size: 100%;
+            }
+            .ui-column-title{
+                font-size: 11px;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="formProp">
+            <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+            <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+            <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+            <p:growl autoUpdate="true" globalOnly="true" showDetail="true"/>
+            <p:messages autoUpdate="true" globalOnly="true"/>
+            <p:panelGrid columns="3" class="Wid90" layout="grid" >
+                <cs:compInputSelect label="Tipo" bind="#{obrasInternas.obrInterna.tipoGrafico}" catalogo="obra-tipo" defaultValue="1" disabled="#{!obrasInternas.nuevo and obrasInternas.esVer}"/>
+                <cs:compInputSelect label="Tipo de Mejora" bind="#{obrasInternas.obrInterna.tipo}" catalogo="predio_obra_internas"  defaultValue="1" disabled="#{!obrasInternas.nuevo and obrasInternas.esVer}"/>
+                <cs:compInputSelect label="Estado de Conservación" bind="#{obrasInternas.obrInterna.conservacion}" catalogo="obra-estado" defaultValue="1" disabled="#{!obrasInternas.nuevo and obrasInternas.esVer}"/>
+                <cs:compInputSelect label="Etapa de Construcción de la Mejora" bind="#{obrasInternas.obrInterna.etapaConstruccion}" catalogo="obra-etapa_construccion" defaultValue="1" disabled="#{!obrasInternas.nuevo and obrasInternas.esVer}"/>
+                <cs:compInputSelect label="Edad" bind="#{obrasInternas.obrInterna.edad}" catalogo="edad-bloque" defaultValue="1" disabled="#{!obrasInternas.nuevo and obrasInternas.esVer}"/>
+                <h:panelGroup>
+                    <h:outputText value="Dimensión" style="font-weight: bold"/> <br/>
+                    <pe:inputNumber id="area" value="#{obrasInternas.obrInterna.area}" decimalPlaces="2" > 
+                        <p:ajax process="@this" update="cantidad"  />
+                    </pe:inputNumber>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:outputText value="Cantidad(u)" style="font-weight: bold"/> 
+                    <pe:inputNumber id="cantidad" value="#{obrasInternas.obrInterna.cantidad}" decimalPlaces="2"> <br/>
+                        <p:ajax listener="#{obrasInternas.calcularAvaluo()}" update="avaluoObra" process="@this" />
+                    </pe:inputNumber>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:outputText value="Avaluo" style="font-weight: bold"/> <br/>
+                    <pe:inputNumber id="avaluoObra" value="#{obrasInternas.obrInterna.avaluo}" decimalPlaces="2" readonly="true"/>
+                </h:panelGroup>
+            </p:panelGrid>
+            <center style="float: bottom; margin-top: 15px;">
+                <p:commandButton actionListener="#{obrasInternas.agregarObraInterna()}" value="Agregar" rendered="#{obrasInternas.nuevo and !obrasInternas.esVer}" icon="ui-icon-plus" style="height: 30px;" styleClass="btnStyle">
+                    <p:confirm header="Confirmación" message="Estás seguro de guardar?" icon="ui-icon-alert" />
+                </p:commandButton>
+                <p:commandButton actionListener="#{obrasInternas.modificarObraInterna()}" value="Modificar" rendered="#{!obrasInternas.nuevo and !obrasInternas.esVer}" icon="ui-icon-pencil" style="height: 30px;" styleClass="btnStyle">
+                    <p:confirm header="Confirmación" message="Estás seguro de guardar?" icon="ui-icon-alert" />
+                </p:commandButton>
+            </center>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface componentType="seccionesFicha" >
+        <cc:attribute name="headerDialog"/>
+        <cc:attribute name="predio" type="com.origami.sgm.entities.CatPredio" required="true"/>  
+        <cc:attribute name="predioant" type="com.origami.sgm.entities.CatPredio" required="true"/>  
+
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form id="frmCaracSolar">                 
+            <p:fieldset legend="Areas y Dimensiones del lote" toggleable="true">
+                <p:panelGrid columns="4" layout="grid" style="width: 100%">
+                    <h:outputText value="Abastecimiento de Agua" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.abastAgua.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.abastAgua.valor, cc.attrs.predioant.catPredioS6.abastAgua.valor)}" readonly="true"/>   
+                    <h:outputText value="Alcantarillado Sanitario" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.evacAguasServ.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.evacAguasServ.valor, cc.attrs.predioant.catPredioS6.evacAguasServ.valor)}" readonly="true"/>                          
+                    <h:outputText value="Energía Eléctrica" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.abasteElectrico.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.abasteElectrico.valor, cc.attrs.predioant.catPredioS6.abasteElectrico.valor)}" readonly="true" />
+                    <h:outputText value="Recolección Basura :" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.recolBasura.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.recolBasura.valor, cc.attrs.predioant.catPredioS6.recolBasura.valor)}"/>
+                    <h:outputText value="Agua Recibe" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.abastAguaRecibe.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.abastAguaRecibe.valor, cc.attrs.predioant.catPredioS6.abastAguaRecibe.valor)}" readonly="true" />
+                    <h:outputText value="Disponibilidad de Riego :" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.disponiblidadRiego.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.disponiblidadRiego.valor, cc.attrs.predioant.catPredioS6.disponiblidadRiego.valor)}" readonly="true"/>                         
+                    <h:outputText value="Transporte Urbano :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.tpublico}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.tpublico, cc.attrs.predioant.catPredioS6.tpublico)}" disabled="true"/>
+                    <h:outputText value="Aseo calles :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.aseoCalles}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.aseoCalles, cc.attrs.predioant.catPredioS6.aseoCalles)}" disabled="true"/>
+                    <h:outputText value="Red Telefónica :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.tieneTelfFijo}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.tieneTelfFijo, cc.attrs.predioant.catPredioS6.tieneTelfFijo)}" disabled="true"/>
+                    <h:outputText value="Telefonía Satelital :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.telefoniasatelital}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.telefoniasatelital, cc.attrs.predioant.catPredioS6.telefoniasatelital)}" disabled="true"/>                            
+                    <h:outputText value="Tv. Pagada :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.tvPag}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.tvPag, cc.attrs.predioant.catPredioS6.tvPag)}" disabled="true"/>
+                    <h:outputText value="Internet :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.tieneInternet}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.tieneInternet, cc.attrs.predioant.catPredioS6.tieneInternet)}" disabled="true"/>
+                    <h:outputText value="Alarmas Comunitarias :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.alarmas_comunitarias}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.alarmas_comunitarias, cc.attrs.predioant.catPredioS6.alarmas_comunitarias)}" disabled="true"/>
+                    <h:outputText value="Aceras :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.tieneAceras}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.tieneAceras, cc.attrs.predioant.catPredioS6.tieneAceras)}" disabled="true" />
+                    <h:outputText value="Bordillos :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.tieneBordillo}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.tieneBordillo, cc.attrs.predioant.catPredioS6.tieneBordillo)}" disabled="true"/>
+                    <h:outputText value="Alumbrado Público :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.alumbrado}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.alumbrado, cc.attrs.predioant.catPredioS6.alumbrado)}" disabled="true"/>
+                    <h:outputText value="Alumbrado Público :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.alumbrado}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.alumbrado, cc.attrs.predioant.catPredioS6.alumbrado)}" disabled="true"/>
+                    <h:outputText value="Tiene Medidor de Agua :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.tieneAguaPotable}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.tieneAguaPotable, cc.attrs.predioant.catPredioS6.tieneAguaPotable)}" disabled="true"/>
+                    <h:outputText value="Tiene Medidor de Luz :" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS6.medidorEe}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.medidorEe, cc.attrs.predioant.catPredioS6.medidorEe)}" disabled="true"/>
+                    <h:outputText value="Código Único Eléctrico Nacional" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.numMedElect}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.numMedElect, cc.attrs.predioant.catPredioS6.numMedElect)}" readonly="true"/>   
+                </p:panelGrid>
+            </p:fieldset>
+        </h:form>
+    </cc:implementation>
+</html>

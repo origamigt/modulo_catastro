@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="head">
+
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="frmSubirFotos">
+            <h:panelGrid columns="2" style="width: 95%;">
+                <p:panel  style="float:left;overflow-y: auto;height: 250px; min-width: 300px;"  >
+                    <p:fileUpload fileUploadListener="#{subirFotos.handleFileUpload}"
+                                  multiple="true" mode="advanced" update="frmSubirFotos:pngDetalle"
+                                  label="Seleccionar" uploadLabel="Subir" cancelLabel="Cancelar"
+                                  immediate="true" sizeLimit="1350000000" sequential="true"
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" rendered="#{!subirFotos.subidos}" />
+                </p:panel>
+                <p:panelGrid id="pngDetalle" layout="grid" columns="1">
+                    <p:outputLabel value="Total fotos: #{subirFotos.count}"/>
+                    <p:outputLabel value="Fotos subidas: #{subirFotos.countUploads}"/>
+                    <p:outputLabel value="Fotos no subidas: #{subirFotos.prediosError.size()}"/>
+                </p:panelGrid>
+            </h:panelGrid>
+            <br/>
+            <center>
+                <p:commandButton id="btnVincFot" value="Vincular Fotos" actionListener="#{subirFotos.uploadDataBase()}"
+                                 update="frmSubirFotos"
+                                 rendered="#{!subirFotos.subidos}"/>
+                <p:commandButton id="btnNuevasFot" value="Nuevas Fotos" actionListener="#{subirFotos.nuevasFotos()}"
+                                 update="frmSubirFotos"
+                                 rendered="#{subirFotos.subidos}"/>
+            </center>
+            <br/><br/>
+
+            <p:dataTable id="dtFotosError" value="#{subirFotos.prediosError}" var="pe1"
+                         rows="10" rowsPerPageTemplate="10,20,30" paginator="true" paginatorAlwaysVisible="false"
+                         emptyMessage="No hay fotos sin adjuntar...">
+                <f:facet name="header">
+                    Fotos no adjuntadas.
+                </f:facet>
+                <p:column headerText="Archivo">
+                    <p:outputLabel value="#{pe1.nombreFoto}"/>
+                </p:column>
+                <p:column headerText="Observación">
+                    <p:outputLabel value="#{pe1.obs}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

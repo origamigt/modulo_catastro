@@ -1,0 +1,21 @@
+geo-api:
+  predioLayer: mocache:predios_tx
+  wfsUrl: http://192.168.100.2:8088/geoserver/ows
+  wmsUrl: http://192.168.100.2:8088/geoserver/wms
+  claveAttrName: codigo
+  wfsVersion: 1.1.0
+  wmsVersion: 1.1.0
+  envelopeAdd: 40.00
+  croquisLayer: mocache:ficha_mocache
+  croquisLayerPh: mocache:ficha_mocache
+  predioLayerColindantes: mocache:ficha_mocache_colindantes
+  envFilter: clave
+  srid: EPSG:32717
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 2
+    appname: GEO-API-MOCACHE
+  client:
+    serviceUrl:
+      defaultZone: http://186.101.220.187:8761/eureka/

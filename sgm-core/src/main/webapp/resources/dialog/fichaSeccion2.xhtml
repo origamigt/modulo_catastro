@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface componentType="seccionesFicha" >
+        <cc:attribute name="headerDialog"/>
+        <cc:attribute name="predio" type="com.origami.sgm.entities.CatPredio" required="true"/>
+        <cc:attribute name="predioant" type="com.origami.sgm.entities.CatPredio" required="true"/>
+        <cc:attribute name="prestamoPredio" type="com.origami.sgm.entities.FinanPrestamoPredio" required="false"/>
+        <cc:attribute name="prestamoPredioant" type="com.origami.sgm.entities.FinanPrestamoPredio" required="false"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <h:form id="frmTenencia">
+            <h:panelGrid columns="4" columnClasses="ui-cols-grid-2, ui-cols-grid-4, ui-cols-grid-3, ui-cols-grid-10">
+                <h:outputText value="Tenencia" style="font-weight: bolder"/>
+                <p:inputText value="#{cc.attrs.predio.propiedad.valor}" styleClass="#{cc.comparar(cc.attrs.predio.propiedad.valor, cc.attrs.predioant.propiedad.valor)}" style="width: 75%; " readonly="true" />
+                <h:outputText value="Forma de Adquisición o Tenencia" style="font-weight: bolder"/>
+                <p:inputText  value="#{cc.attrs.predio.formaAdquisicion.valor}" styleClass="#{cc.comparar(cc.attrs.predio.formaAdquisicion, cc.attrs.predioant.formaAdquisicion)}" readonly="true"/>
+            </h:panelGrid>
+            <p:fieldset legend="Propietario(s)" toggleable="true">
+                <p:fieldset legend="Condición Municipal" toggleable="true" rendered="#{cc.attrs.predio.propiedad.orden eq 3}" id="fldsMuni">
+                    <p:panelGrid columns="2" layout="grid" style="width: 90%">
+                        <h:outputText value="Condición Municipal" style="font-weight: bolder"/>
+                        <p:inputText value="#{cc.attrs.predio.condicionMunicipal}" styleClass="#{cc.comparar(cc.attrs.predio.condicionMunicipal, cc.attrs.predioant.condicionMunicipal)}" style="width: 75%; " readonly="true" />
+                        <h:outputText value="Tiempo en Años" style="font-weight: bolder"/>
+                        <p:inputText value="#{cc.attrs.predio.condicionMunicipalAnio}" styleClass="#{cc.comparar(cc.attrs.predio.condicionMunicipalAnio, cc.attrs.predioant.condicionMunicipalAnio)}" style="width: 75%; " readonly="true" />
+                    </p:panelGrid>
+                </p:fieldset>
+                <p:dataTable id="dtPropietarios" value="#{cc.attrs.predio.catPredioPropietarioCollection}" var="pp" reflow="true"
+                             paginator="true" rows="5" paginatorPosition="top" style="width: 100%" paginatorAlwaysVisible="false">
+                    <p:column headerText="DNI">
+                        <h:outputText value="#{pp.ciuCedRuc}"  styleClass="#{cc.buscarObjeto(pp,cc.attrs.predioant.catPredioPropietarioCollection)}" />
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{pp.ciudadano.ciuNombreCompleto}"  style="text-transform: uppercase"/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+            <p:fieldset legend="Propietario Anterior" toggleable="true">
+                <h:panelGrid columns="4" columnClasses="ui-cols-grid-3, ui-cols-grid-4, ui-cols-grid-2, ui-cols-grid-10">
+                    <p:outputLabel value="Número de Identificación"/>
+                    <p:inputText value="#{cc.attrs.predio.cedulaPropAnterior}" styleClass="#{cc.comparar(cc.attrs.predio.cedulaPropAnterior, cc.attrs.predioant.cedulaPropAnterior)}" readonly="true" />
+                    <p:outputLabel value="Nombres"/>
+                    <p:inputText value="#{cc.attrs.predio.propAnteriorPredio}" styleClass="#{cc.comparar(cc.attrs.predio.propAnteriorPredio, cc.attrs.predioant.propAnteriorPredio)}" readonly="true" size="50" />
+                </h:panelGrid>
+            </p:fieldset>
+            <p:fieldset legend="Predio Sin Título" toggleable="true">
+                <p:panelGrid columns="2" layout="grid" style="width: 95%">
+                    <h:outputText value="Cédula Posesionario" style="font-weight: bolder"/> 
+                    <p:inputText  value="#{cc.attrs.predio.cedulaPosesionario}" readonly="true"  styleClass="#{cc.comparar(cc.attrs.predio.cedulaPosesionario, cc.attrs.predioant.cedulaPosesionario)}" />
+                    <h:outputText value="Nombre Posesionario" style="font-weight: bolder"/> 
+                    <p:inputText  value="#{cc.attrs.predio.nombrePosesionario}" readonly="true"  styleClass="#{cc.comparar(cc.attrs.predio.nombrePosesionario, cc.attrs.predioant.nombrePosesionario)}" />
+                    <h:outputText value="Año desde cuando está posesionado" style="font-weight: bolder"/> 
+                    <p:inputText  value="#{cc.attrs.predio.aniosSinPerfeccionamiento}" readonly="true"  styleClass="#{cc.comparar(cc.attrs.predio.aniosSinPerfeccionamiento, cc.attrs.predioant.aniosSinPerfeccionamiento)}" />
+                    <h:outputText value="Nombre Pueblo/Etnia:" style="font-weight: bolder"/> 
+                    <p:inputText value="#{cc.attrs.predio.nombrePuebloEtnia}"  styleClass="#{cc.comparar(cc.attrs.predio.nombrePuebloEtnia, cc.attrs.predioant.nombrePuebloEtnia)}" readonly="true"/>  
+                    <h:outputText value="Sin Perfeccionar" style="font-weight: bolder"/>
+                    <p:selectOneMenu value="#{cc.attrs.predio.requierePerfeccionamiento}" styleClass="#{cc.comparar(cc.attrs.predio.requierePerfeccionamiento, cc.attrs.predioant.requierePerfeccionamiento)}" effect="fade" >
+                        <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                        <f:selectItem itemLabel="Si" itemValue="#{true}"/>
+                        <f:selectItem itemLabel="No" itemValue="#{false}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Años en Posesión" style="font-weight: bolder"/>
+                    <p:inputText type="num" value="#{cc.attrs.predio.aniosPosesion}" styleClass="#{cc.comparar(cc.attrs.predio.aniosPosesion, cc.attrs.predioant.aniosPosesion)}">
+                        <pe:keyFilter mask="num"/>
+                    </p:inputText>
+                    <h:outputText value="Tipo de Poseedor :" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.tipoPoseedor.valor}" styleClass="#{cc.comparar(cc.attrs.predio.tipoPoseedor.valor, cc.attrs.predioant.tipoPoseedor.valor)}" readonly="true"/>
+                </p:panelGrid>
+            </p:fieldset>
+            <!-- Escritura -->
+            <p:fieldset legend="Protocolización">
+                <p:dataTable id="dtEscrituras" value="#{cc.attrs.predio.catEscrituraCollection}" var="e" scrollable="true" style="width: 100%"
+                             emptyMessage="No se encontraron registros" paginator="true" paginatorPosition="top"
+                             rows="10"  lazy="true" rowsPerPageTemplate="20,50,100" filterEvent="enter"
+                             paginatorAlwaysVisible="false">
+                    <p:column headerText="No. Repertorio" >
+                        <h:outputText value=" No. Repertorio#{e.numRepertorio}" styleClass="#{cc.buscarObjeto(e,cc.attrs.predioant.catEscrituraCollection)}"/>
+                    </p:column>
+                    <p:column headerText="Notaria">
+                        <h:outputText value="#{e.notaria}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Escritura">
+                        <h:outputText value="#{e.fecEscritura}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>
+                    </p:column>
+                    <p:column headerText="Fecha Inscripción">
+                        <h:outputText value="#{e.fecInscripcion}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>
+                    </p:column>
+                    <p:column headerText="Area">
+                        <h:outputText value="#{e.areaSolar}" ><f:convertNumber pattern="##############.####" locale="us"/></h:outputText>
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{e.estado}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+            <p:fieldset legend="Notificación" toggleable="true">
+                <p:panelGrid columns="4" layout="grid" style="width: 100%">
+                    <h:outputText value="Tipo de Dirección" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.notifTipoDireccion.valor}" styleClass="#{cc.comparar(cc.attrs.predio.notifTipoDireccion, cc.attrs.predioant.notifTipoDireccion)}" readonly="true"/>
+                    <h:outputText value="Correo Electrónico" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.adminCorreo}" styleClass="#{cc.comparar(cc.attrs.predio.adminCorreo, cc.attrs.predioant.adminCorreo)}" readonly="true"/>
+                    <h:outputText value="Celular" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.adminCelular}" styleClass="#{cc.comparar(cc.attrs.predio.adminCelular, cc.attrs.predioant.adminCelular)}" readonly="true"/>
+                    <h:outputText value="Convencional" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.adminTelefono}" styleClass="#{cc.comparar(cc.attrs.predio.adminTelefono, cc.attrs.predioant.adminTelefono)}" readonly="true"/>
+                    <h:outputText value="Provincia" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.provinciaNot.descripcion}" styleClass="#{cc.comparar(cc.attrs.predio.provinciaNot, cc.attrs.predioant.provinciaNot)}" readonly="true"/>
+                    <h:outputText value="Cantón" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.adminCanton.nombre}" styleClass="#{cc.comparar(cc.attrs.predio.adminCanton, cc.attrs.predioant.adminCanton)}" readonly="true"/>
+                    <h:outputText value="Parroquia" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.adminParroquia.descripcion}" styleClass="#{cc.comparar(cc.attrs.predio.adminParroquia, cc.attrs.predioant.adminParroquia)}" readonly="true"/>
+                    <h:outputText value="Dirección" style="font-weight: bolder"/>
+                    <p:inputText  value="#{cc.attrs.predio.adminDireccion}" styleClass="#{cc.comparar(cc.attrs.predio.adminDireccion, cc.attrs.predioant.adminDireccion)}" readonly="true"/>
+                </p:panelGrid>
+            </p:fieldset>
+
+        </h:form>
+    </cc:implementation>
+</html>

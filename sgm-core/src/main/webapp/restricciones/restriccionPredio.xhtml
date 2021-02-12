@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <f:metadata >
+        <f:event type="preRenderView" listener="#{mantRestriccionPredio.initView()}"/>
+        <f:viewParam name="idRestriccion" value="#{mantRestriccionPredio.idRestriccion}"/>
+        <f:viewParam name="ver" value="#{mantRestriccionPredio.ver}"/>
+        <f:viewParam name="transitorio" value="#{mantRestriccionPredio.noPersist}"/>
+    </f:metadata>
+
+    <h:head>
+        <title>Restricción Predio</title>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+        <script src="#{appConfig.urlbase}resources/js/app.js"></script>
+
+        <h:form id="frmRestriccion">
+            <p:growl autoUpdate="true" showDetail="true" />
+            <p:panel class="Container100 Hei100" >
+                <h:panelGrid columns="2" style="width: 100%">
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Codigo restriccion:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:selectOneMenu id="lazy" value="#{mantRestriccionPredio.restriccion.restricciones}" effect="fade" converter="entityConverter"  disabled="#{mantRestriccionPredio.esVer}" style="width: 150px; " >
+                            <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                            <f:selectItems value="#{mantRestriccionPredio.listRestricciones}" var="ci1" itemLabel="#{ci1.descripcionRestriccion}" itemValue="#{ci1}" />
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                    <h:panelGroup id="predio" layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Clave Catastral:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:inputText id="itClavecat" value="#{mantRestriccionPredio.claveCat}" style="width: 200px !important;" onkeypress="return validateIntegerValueAndFocusNext(event, null)" placeholder="Clave Catastral de 24 digitos" readonly="#{mantRestriccionPredio.esVer}" 
+                                     title="#{mantRestriccionPredio.predio.numPredio}">
+                            <p:ajax listener="#{mantRestriccionPredio.verificarPredio()}" async="true" update="frmRestriccion:itClavecat" />
+                        </p:inputText>
+                        <p:commandButton icon="fa fa-navicon" actionListener="#{mantRestriccionPredio.buscarPredio()}" update="frmPredios" oncomplete="PF('dlgPredios').show()" styleClass="white" rendered="#{!mantRestriccionPredio.esVer}" />
+                    </h:panelGroup>  
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Fecha de Inicio:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:calendar value="#{mantRestriccionPredio.restriccion.fechaInicio}" placeholder="DÍA-MES-AÑO" maxdate="sysdate"
+                                    pattern="dd-MM-yyyy" mask="true" navigator="true" styleClass="calendarClass" readonly="#{mantRestriccionPredio.esVer}" readonlyInput="#{mantRestriccionPredio.esVer}" />
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Fecha de Finalización:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:calendar value="#{mantRestriccionPredio.restriccion.fechaFinal}" placeholder="DÍA-MES-AÑO" 
+                                    pattern="dd-MM-yyyy" mask="true" navigator="true" styleClass="calendarClass" readonly="#{mantRestriccionPredio.esVer}" readonlyInput="#{mantRestriccionPredio.esVer}" />
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Número de Trámite:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:inputText value="#{mantRestriccionPredio.restriccion.numeroTramite}" readonly="#{mantRestriccionPredio.esVer}" placeholder="Primer Nombre" maxlength="30" />
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Valor:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:inputText value="#{mantRestriccionPredio.restriccion.valor}" maxlength="19" readonly="#{mantRestriccionPredio.esVer}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" />
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Porcentaje no paga:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:spinner value="#{mantRestriccionPredio.restriccion.porcentajeNopaga}" maxlength="3" min="0" max="100" readonly="#{mantRestriccionPredio.esVer}" />
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Porcentaje paga:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:spinner value="#{mantRestriccionPredio.restriccion.porcentajePaga}" maxlength="3" min="0" max="100" readonly="#{mantRestriccionPredio.esVer}" />
+                    </h:panelGroup> 
+
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Exonerado:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:selectOneMenu id="lazy1" value="#{mantRestriccionPredio.restriccion.exonerado}" effect="fade"  disabled="#{mantRestriccionPredio.esVer}"  style="width: 150px; " >
+                            <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                            <f:selectItems value="#{mantRestriccionPredio.listexonerado}" var="ex" itemLabel="#{ex.valor}" itemValue="#{ex.id}" />
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                    <h:outputText value="Comentario:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                    <p:inputTextarea value="#{mantRestriccionPredio.restriccion.comentario}" style="height: 100px; width: 95%" placeholder="Ingrese las observaciones de la Restricción" 
+                                     rows="7" readonly="#{mantRestriccionPredio.esVer}"/>
+                </h:panelGroup> 
+                <f:facet name="footer">
+                    <center>
+                        <p:commandButton value="#{mantRestriccionPredio.restriccion.id eq null ? 'Guardar' : 'Modificar'}" actionListener="#{mantRestriccionPredio.guardar()}" rendered="#{!mantRestriccionPredio.esVer}"
+                                         styleClass="white" icon="fa fa-save"/>
+                        <p:spacer width="10" />
+                        <p:commandButton value="Cerrar" actionListener="#{mantRestriccionPredio.cerrar()}" icon="fa fa-external-link" styleClass="white" />
+                    </center>
+                </f:facet>
+            </p:panel>
+        </h:form>
+
+        <p:ajaxStatus id="status" onstart="PF('dlgStatus').show()" oncomplete="PF('dlgStatus').hide()"/>
+        <p:dialog id="dlgStatus" widgetVar="dlgStatus" modal="true" draggable="false"  closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+        </p:dialog>
+
+        <p:dialog widgetVar="dlgPredios" id="dlgPredios" modal="true" closable="true" closeOnEscape="true" header="Listado de predios"
+                  height="400" width="80%" position="center">
+            <h:form id="frmPredios">
+                <p:dataTable id="dtPredios" lazy="true" value="#{mantRestriccionPredio.predioLazy}" reflow="true"
+                             var="predio1" rows="5" paginator="true" paginatorPosition="top" filterEvent="enter"
+                             emptyMessage="No tiene datos">
+                    <p:column headerText="Número de predio" filterBy="#{predio1.numPredio}">
+                        <center><h:outputText value="#{predio1.numPredio}"/></center>
+                    </p:column>
+                    <p:column headerText="Clave Catastral" filterBy="#{predio1.claveCat}" style="text-align: center" >
+                        <h:outputText value="#{predio1.claveCat}"/>
+                    </p:column>
+                    <p:column headerText="Clave Anterior 1" filterBy="#{predio1.predialant}" style="text-align: center" >
+                        <h:outputText value="#{predio1.predialant}"/>
+                    </p:column>
+                    <p:column headerText="Sector" style="text-align: center;" filterBy="#{predio1.sector}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.sector}"/>
+                    </p:column>
+                    <p:column headerText="MZ" style="text-align: center;" filterBy="#{predio1.mz}" sortBy="#{predio1.mz}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.mz}"/>
+                    </p:column>
+                    <p:column headerText="Lote" style="text-align: center;" filterBy="#{predio1.solar}"  sortBy="#{predio1.solar}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.solar}"/>
+                    </p:column>
+                    <p:column headerText="Bloque" width="8%" style="text-align: center;" filterBy="#{predio1.bloque}"  sortBy="#{predio1.bloque}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.bloque}"/>
+                    </p:column>
+                    <p:column headerText="Piso" style="text-align: center;" filterBy="#{predio1.piso}"  sortBy="#{predio1.piso}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.piso}"/>
+                    </p:column>
+                    <p:column headerText="Unidad" style="text-align: center;" filterBy="#{predio1.unidad}"  sortBy="#{predio1.unidad}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.unidad}"/>
+                    </p:column>
+                    <p:column headerText="Acción" width="5%" style="text-align: center;" >
+                        <p:commandLink actionListener="#{mantRestriccionPredio.seleccionarPredio(predio1)}" update="frmRestriccion:itClavecat"
+                                       oncomplete="PF('dlgPredios').hide()"  async="true">
+                            <p:graphicImage value="/css/homeIconsImages/selecc.png" width="20" height="20" />
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface componentType="seccionesFicha" >
+        <cc:attribute name="headerDialog"/>
+        <cc:attribute name="predio" type="com.origami.sgm.entities.CatPredio" required="true"/>  
+        <cc:attribute name="predioant" type="com.origami.sgm.entities.CatPredio" required="true"/>  
+
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form id="frmCaracSolar">                 
+            <p:fieldset legend="Areas y Dimensiones del lote" toggleable="true">
+                <p:panelGrid columns="4" layout="grid" style="width: 100%">
+                    <h:outputText value="Area de Predio según Escritura" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.catPredioS6.areaSolar}" decimalPlaces="2" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.areaSolar, cc.attrs.predioant.catPredioS6.areaSolar)}" readonly="true"/>
+                    <h:outputText value="(*)Localizacion en Mz." style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.unidadmAreaSescritura.valor}"  styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.unidadmAreaSescritura.valor, cc.attrs.predioant.catPredioS6.unidadmAreaSescritura.valor)}" readonly="true"/>
+                    <h:outputText value="Área Gráfica" style="font-weight: bolder"/>
+                    <pe:inputNumber id="areaGrafica" value="#{cc.attrs.predio.catPredioS4.areaGraficaLote}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.areaGraficaLote, cc.attrs.predioant.catPredioS4.areaGraficaLote)}" decimalPlaces="2"/>
+                    <h:outputText value="(*)Localizacion en Mz." style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.unidadmAreaGrafica.valor}"  styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.unidadmAreaGrafica.valor, cc.attrs.predioant.catPredioS4.unidadmAreaGrafica.valor)}" readonly="true"/>
+                    <h:outputText value="Frente" style="font-weight: bolder"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.catPredioS4.frente1}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.frente1, cc.attrs.predioant.catPredioS4.frente1)}" decimalPlaces="2" readonly="true"/>
+                    <h:outputText value="Área acceso privado" style="font-weight: bolder"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.catPredioS4.areaAccesoPriv}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.areaAccesoPriv, cc.attrs.predioant.catPredioS4.areaAccesoPriv)}" decimalPlaces="2" readonly="true"/>
+                    <h:outputText value="Fondo Relativo" style="font-weight: bolder"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.catPredioS4.fondo1}" readonly="true" decimalPlaces="2"/>
+                </p:panelGrid>
+            </p:fieldset>
+            <p:fieldset legend="Características" toggleable="true">
+                <p:panelGrid columns="4" layout="grid" style="width: 100%">
+                    <h:outputText value="(*)Localizacion en Mz." style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.locManzana.valor}"  styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.locManzana.valor, cc.attrs.predioant.catPredioS4.locManzana.valor)}" readonly="true"/>                 
+                    <h:outputText value="Cobertura predominante" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.coberturaPredominante.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.coberturaPredominante.valor, cc.attrs.predioant.catPredioS4.coberturaPredominante.valor)}" readonly="true"/>                         
+                    <h:outputText value="Ecosistema Relevante" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.ecosistemaRelevante.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.ecosistemaRelevante.valor, cc.attrs.predioant.catPredioS4.ecosistemaRelevante.valor)}" readonly="true"/>    
+                    <h:outputText value="Nivel del Terreno" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.nivelTerreno.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.nivelTerreno.valor, cc.attrs.predioant.catPredioS4.nivelTerreno.valor)}" readonly="true"/>    
+                    <h:outputText value="Ocupación del Predio" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.estadoSolar.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.estadoSolar.valor, cc.attrs.predioant.catPredioS4.estadoSolar.valor)}" readonly="true"/>  
+                    <h:outputText value="Tipo de Terreno" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.tipoSuelo.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.tipoSuelo.valor, cc.attrs.predioant.catPredioS4.tipoSuelo.valor)}" readonly="true"/>                             
+                    <h:outputText value="Topografia" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.topografiaSolar.valor}" styleClass="#{cc.comparar(cc.attrs.predio.topografiaSolar.valor, cc.attrs.predioant.topografiaSolar.valor)}"  readonly="true"/>  
+                    <h:outputText value="Tipo de Riesgos" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.riesgo.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.riesgo.valor, cc.attrs.predioant.catPredioS4.riesgo.valor)}" readonly="true"/> 
+                    <h:outputText value="Erosión" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.erosion.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.erosion.valor, cc.attrs.predioant.catPredioS4.erosion.valor)}" readonly="true"/> 
+                    <h:outputText value="(*)Forma del predio" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.formaSolar.valor}" styleClass="#{cc.comparar(cc.attrs.predio.formaSolar.valor, cc.attrs.predioant.formaSolar.valor)}" readonly="true"/> 
+                    <h:outputText value="Drenaje" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.drenaje.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.drenaje.valor, cc.attrs.predioant.catPredioS4.drenaje.valor)}" readonly="true"/> 
+                    <h:outputText value="Clasificación del suelo" style="font-weight: bolder" />
+                    <p:inputText value="#{cc.attrs.predio.clasificacionSuelo.valor}" styleClass="#{cc.comparar(cc.attrs.predio.clasificacionSuelo.valor, cc.attrs.predioant.clasificacionSuelo.valor)}" readonly="true"/> 
+                    <h:outputText value="Constructividad" style="font-weight: bolder"/> 
+                    <p:inputText value="#{cc.attrs.predio.constructividad.valor}" styleClass="#{cc.comparar(cc.attrs.predio.constructividad.valor, cc.attrs.predioant.constructividad.valor)}" readonly="true"/> 
+                    <h:outputText value="Vías acceso" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.tipovia.valor}" styleClass="#{cc.comparar(cc.attrs.predio.tipovia.valor, cc.attrs.predioant.tipovia.valor)}" readonly="true"/>                           
+                    <h:outputText value="Material de las Vías" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS4.rodadura.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.rodadura.valor, cc.attrs.predioant.catPredioS4.rodadura.valor)}" readonly="true"/>                            
+                    <h:outputText value="Tiene Permiso Construcción" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS4.tienePermisoConst}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.tienePermisoConst, cc.attrs.predioant.catPredioS4.tienePermisoConst)}" disabled="true"/>
+                    <h:outputText value="Tiene Adosamiento" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS4.tieneAdosamiento}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.tieneAdosamiento, cc.attrs.predioant.catPredioS4.tieneAdosamiento)}" disabled="true"/>
+                    <h:outputText value="Tiene Retiros" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS4.tieneRetiros}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.tieneRetiros, cc.attrs.predioant.catPredioS4.tieneRetiros)}" disabled="true"/>
+                    <h:outputText value="Predio en Conflicto" style="font-weight: bolder"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.predio.catPredioS4.loteEnConflicto}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.loteEnConflicto, cc.attrs.predioant.catPredioS4.loteEnConflicto)}" disabled="true"/>
+                    <h:outputText value="Observacione de Predio en Conflicto" style="font-weight: bolder"/>
+                    <p:inputTextarea value="#{cc.attrs.predio.catPredioS4.opbservLoteEnConflicto}" style="width: 100%" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS4.opbservLoteEnConflicto, cc.attrs.predioant.catPredioS4.opbservLoteEnConflicto)}" readonly="true"/>
+                </p:panelGrid>
+            </p:fieldset> 
+            <p:fieldset legend="Propiedad horizontal" toggleable="true" rendered="#{cc.attrs.predio.propiedadHorizontal}">
+                <p:panelGrid columns="4" layout="grid" style="width: 100%">
+                    <h:outputText value="Alicuota construccion(%)" style="font-weight: bolder"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.alicuotaConst}" styleClass="#{cc.comparar(cc.attrs.predio.alicuotaConst, cc.attrs.predioant.alicuotaConst)}" symbol="%" symbolPosition="r" decimalPlaces="4" />
+                    <h:outputText value="Area declarada const.(m2)" style="font-weight: bolder" />
+                    <pe:inputNumber value="#{cc.attrs.predio.areaDeclaradaConst}" styleClass="#{cc.comparar(cc.attrs.predio.areaDeclaradaConst, cc.attrs.predioant.areaDeclaradaConst)}" readonly="true" decimalPlaces="4" symbol="m2" symbolPosition="r"/>  
+                    <h:outputText value="Area Aumento const.(m2)" style="font-weight: bolder"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.areaAumentoCons}" symbol="m2" symbolPosition="r" decimalPlaces="4" styleClass="#{cc.comparar(cc.attrs.predio.areaAumentoCons, cc.attrs.predioant.areaAumentoCons)}"/>
+                    <h:outputText value="Area Total Const.(m2)" style="font-weight: bolder"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.areaTotalCons}" styleClass="#{cc.comparar(cc.attrs.predio.areaTotalCons, cc.attrs.predioant.areaTotalCons)}" readonly="true" symbol="m2" symbolPosition="r" decimalPlaces="4"/>
+                    <h:outputText value="Alicuota terreno(%)" style="font-weight: bolder"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.alicuotaTerreno}" styleClass="#{cc.comparar(cc.attrs.predio.alicuotaTerreno, cc.attrs.predioant.alicuotaTerreno)}" decimalPlaces="4" symbol="%" symbolPosition="r" />
+                    <h:outputText value="Area Terreno de Alicuota(m2)" style="font-weight: bolder"/>
+                    <pe:inputNumber value="#{cc.attrs.predio.areaTerrenoAlicuota}" styleClass="#{cc.comparar(cc.attrs.predio.areaTerrenoAlicuota, cc.attrs.predioant.areaTerrenoAlicuota)}" readonly="true" symbol="m2" symbolPosition="r" decimalPlaces="4"/>
+                </p:panelGrid>
+            </p:fieldset>
+            <p:fieldset legend="Clasificación del suelo rural" toggleable="true">
+                <p:dataTable id="dtSueloRural" value="#{cc.attrs.predio.catPredioClasificRuralCollection}" var="clf" reflow="true" 
+                             paginator="true" rows="5" paginatorPosition="top" style="width: 100%" 
+                             emptyMessage="No se encontraron registros" paginatorAlwaysVisible="false">
+                    <p:column headerText="Sector Homogeneo">
+                        <h:outputText value="#{clf.sectorHomogeneo}" styleClass="#{cc.buscarObjeto(clf,cc.attrs.predioant.catPredioClasificRuralCollection)}"/>
+                    </p:column>
+                    <p:column headerText="Calidad del Suelo">
+                        <h:outputText value="#{clf.calidadSuelo.valor}"/>
+                    </p:column>
+                    <p:column headerText="Superficie">
+                        <h:outputText value="#{clf.superficie}"/>
+                    </p:column>
+                    <p:column headerText="Valor del Terreno ">
+                        <h:outputText value="#{clf.valorTerreno}"/>
+                    </p:column>
+                    <p:column headerText="Valor Unitario por Hectarea">
+                        <h:outputText value="#{clf.valorUnitarioHectareaTerreno}"  style="align-content: center"/>
+                    </p:column> 
+                    <p:column headerText="Uso de Suelo">
+                        <h:outputText value="#{clf.usoPredio.valor}"/>
+                    </p:column>                           
+                    <p:column headerText="Opciones">
+                        <p:commandLink actionListener="#{cc.verClasificacionRural(clf)}" process="@this">
+                            <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+            <p:fieldset legend="Cultivos" toggleable="true">                        
+                <p:dataTable id="dtCultivos" value="#{cc.attrs.predio.catPredioCultivoCollection}" var="pc" reflow="true" 
+                             paginator="true" rows="5" paginatorPosition="top" style="width: 100%" 
+                             emptyMessage="No se encontraron registros" paginatorAlwaysVisible="false" rowKey="#{pc.id}" 
+                             rowStyleClass="#{cc.existeObjeto(pc, cc.attrs.predioant.catPredioCultivoCollection) ? null : 'orange'}" >
+                    <p:column headerText="Tipo">
+                        <h:outputText value="#{pc.tipo.valor}" styleClass="#{cc.buscarObjeto(pc,cc.attrs.predioant.catPredioCultivoCollection)}"/>
+                    </p:column>
+                    <p:column headerText="Plantacion">
+                        <h:outputText value="#{pc.plantacion}"/>
+                    </p:column>
+                    <p:column headerText="Area">
+                        <h:outputText value="#{pc.area}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad">
+                        <h:outputText value="#{pc.cantidad}"/>
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{pc.valor}"/>
+                    </p:column>
+                    <p:column headerText="Edad">
+                        <h:outputText value="#{pc.edad}"/>
+                    </p:column>
+                    <p:column headerText="Conservacion">
+                        <h:outputText value="#{pc.conservacion.valor}"/>
+                    </p:column>
+                    <p:column headerText="Opciones">
+                        <p:commandLink actionListener="#{cc.verCultivo(pc)}" process="@this">
+                            <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+
+        </h:form>
+    </cc:implementation>
+</html>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+
+        <!--PRODUCCION -->
+        <!--<property name="hibernate.connection.url">jdbc:postgresql://186.101.220.187:5432/origamigt_catastro</property>-->
+        <property name="hibernate.connection.url">jdbc:postgresql://192.168.100.3:5432/origamigt_catastro</property>
+        <!--<property name="hibernate.connection.url">jdbc:postgresql://127.0.0.1:5432/origamigt_catastro</property>-->
+        <property name="hibernate.connection.password">sisapp98</property>
+        <property name="hibernate.connection.username">sisapp</property>
+        <property name="hibernate.connection.provider_class">org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.max_statements">100</property>
+        <property name="hibernate.c3p0.idle_test_period">1000</property>
+        <property name="c3p0.timeout">2000</property>
+        <property name="c3p0.minPoolSize">2</property>
+        <property name="c3p0.maxPoolSize">65</property>
+        <property name="hibernate.show_sql">false</property>
+<!--        <property name="hibernate.hbm2ddl.auto">update</property>-->
+        <property name="hibernate.cache.use_second_level_cache">false</property>
+        <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+        <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ManagedSessionContext</property>
+        <property name="hibernate.transaction.flush_before_completion">false</property>
+        <property name="hibernate.transaction.auto_close_session">false</property>
+        <property name="hibernate.connection.autocommit">false</property>
+        <property name="hibernate.default_schema">catastro</property>
+        <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
+        <property name="hibernate.enable_lazy_load_no_trans">true</property>
+        <property name="hibernate.classloading.use_current_tccl_as_parent">false</property>
+        <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+        <property name="hibernate.ejb.naming_strategy">org.hibernate.cfg.EJB3NamingStrategy</property>
+
+        <!-- ACL -->
+        <mapping class="com.origami.sgm.acl.entity.AclUrl" />
+        <mapping class="com.origami.sgm.acl.entity.AclUrlHasRol" />
+        <!-- ESQUEMA APP1 -->
+        <mapping class="com.origami.sgm.entities.AclRol" />
+        <mapping class="com.origami.sgm.entities.AclUser" />
+        <mapping class="com.origami.sgm.entities.CatCanton" />
+        <mapping class="com.origami.sgm.entities.CatCategoriasConstruccion" />
+        <mapping class="com.origami.sgm.entities.CatCategoriasConstruccionValores" />
+        <mapping class="com.origami.sgm.entities.CatCiudadela" />
+        <mapping class="com.origami.sgm.entities.CatConfig" />
+        <mapping class="com.origami.sgm.entities.CatEdfCategProp" />
+        <mapping class="com.origami.sgm.entities.CatEdfProp" />
+        <mapping class="com.origami.sgm.entities.CatEnte" />
+        <mapping class="com.origami.sgm.entities.CatEnteSocios" />
+        <mapping class="com.origami.sgm.entities.CatEscritura" />
+        <mapping class="com.origami.sgm.entities.CatEscrituraPropietario" />
+        <mapping class="com.origami.sgm.entities.CatEscrituraRural" />
+        <mapping class="com.origami.sgm.entities.CatNacionalidad" />
+        <mapping class="com.origami.sgm.entities.CatNormasConstruccion" />
+        <mapping class="com.origami.sgm.entities.AvalBandaImpositiva" />
+        <mapping class="com.origami.sgm.entities.AvalDetCobroImpuestoPredios" />
+        <mapping class="com.origami.sgm.entities.AvalImpuestoPredios" />
+        <mapping class="com.origami.sgm.entities.AvalDepreciacionSolar" />
+        <mapping class="com.origami.sgm.entities.CatNormasConstruccionHasRetirosAumento" />
+        <mapping class="com.origami.sgm.entities.CatNormasConstruccionTipo" />
+        <mapping class="com.origami.sgm.entities.CatPais" />
+        <mapping class="com.origami.sgm.entities.CatParroquia" />
+        <mapping class="com.origami.sgm.entities.CatPredio" />
+        <mapping class="com.origami.sgm.entities.CatPredioAlicuotaComponente" />
+        <mapping class="com.origami.sgm.entities.CatClaveReordenada" />
+        <mapping class="com.origami.sgm.entities.CatPredioEdificacion" />
+        <mapping class="com.origami.sgm.entities.CatPredioEdificacionProp" />
+        <mapping class="com.origami.sgm.entities.CatPredioPropietario" />
+        <mapping class="com.origami.sgm.entities.CatPredioFusionDivision" />
+        <mapping class="com.origami.sgm.entities.AvalValorSuelo" />
+        <mapping class="com.origami.sgm.entities.CatPredioAvalHistorico" />
+        <mapping class="com.origami.sgm.entities.CatPredioAvalDetHist" />
+        <mapping class="com.origami.sgm.entities.AclLogin" />
+        <mapping class="com.origami.sgm.entities.AvalCoeficientesSuelo" />
+        <mapping class="com.origami.sgm.entities.AvalEdadZonaConst" />
+        <mapping class="com.origami.sgm.entities.CatPredioS12" />
+        <mapping class="com.origami.sgm.entities.CatPredioS4" />
+        <mapping class="com.origami.sgm.entities.CatPredioS6" />
+        <mapping class="com.origami.sgm.entities.CatPropiedadItem" />
+        <mapping class="com.origami.sgm.entities.CatProvincia" />
+        <mapping class="com.origami.sgm.entities.CatResolucionConsejo" />
+        <mapping class="com.origami.sgm.entities.CatSolicitudNormaConstruccion" />
+        <mapping class="com.origami.sgm.entities.CatTablaDepreciacion" />
+        <mapping class="com.origami.sgm.entities.CatTenenciaItem" />
+        <mapping class="com.origami.sgm.entities.CatTipoConjunto" />
+        <mapping class="com.origami.sgm.entities.CatTiposDominio" />
+        <mapping class="com.origami.sgm.entities.CatTransferenciaDetalle" />
+        <mapping class="com.origami.sgm.entities.CatTransferenciaDominio" />
+        <mapping class="com.origami.sgm.entities.CatValoresCiudadela" />
+        <mapping class="com.origami.sgm.entities.CoaAbogado" />
+        <mapping class="com.origami.sgm.entities.CoaEstadoJuicio" />
+        <mapping class="com.origami.sgm.entities.CoaJuicio" />
+        <mapping class="com.origami.sgm.entities.CoaJuicioPredio" />
+        <mapping class="com.origami.sgm.entities.CtlgCargo" />
+        <mapping class="com.origami.sgm.entities.CtlgCatalogo" />
+        <mapping class="com.origami.sgm.entities.CtlgItem" />
+        <mapping class="com.origami.sgm.entities.CtlgTipoParticipacion" />
+        <mapping class="com.origami.sgm.entities.EnteCorreo" />
+        <mapping class="com.origami.sgm.entities.EnteTelefono" />
+        <mapping class="com.origami.sgm.entities.GeCategoriasOnlinea" />
+        <mapping class="com.origami.sgm.entities.GeDepartamento" />
+        <mapping class="com.origami.sgm.entities.GeDocumentos" />
+        <mapping class="com.origami.sgm.entities.GeDocumentosEtiquetas" />
+        <mapping class="com.origami.sgm.entities.GeTipoProcesos" />
+        <mapping class="com.origami.sgm.entities.GeParametrosTramite" />
+        <mapping class="com.origami.sgm.entities.GeRequisitosTramite" />
+        <mapping class="com.origami.sgm.entities.GeTipoConsultas" />
+        <mapping class="com.origami.sgm.entities.GeTipoLegal" />
+        <mapping class="com.origami.sgm.entities.GeTipoTramite" />
+        <mapping class="com.origami.sgm.entities.GeTiposSolicitudesServicio" />
+        <mapping class="com.origami.sgm.entities.GeTramiteBaseLegal" />
+        <mapping class="com.origami.sgm.entities.GeneSecuencia" />
+        <mapping class="com.origami.sgm.entities.PeDetallePermisosAdicionales" />
+        <mapping class="com.origami.sgm.entities.PeDetallePermiso" />
+        <mapping class="com.origami.sgm.entities.PeFirma" />
+        <mapping class="com.origami.sgm.entities.PeInspeccionCabEdificacion" />
+        <mapping class="com.origami.sgm.entities.PeInspeccionFinal" />
+        <mapping class="com.origami.sgm.entities.PeInspeccionFotos" />
+        <mapping class="com.origami.sgm.entities.PePermiso" />
+        <mapping class="com.origami.sgm.entities.PeUnidadMedida" />
+        <mapping class="com.origami.sgm.entities.ReProcesos" />
+        <mapping class="com.origami.sgm.entities.PeDetalleInspeccion" />
+        <mapping class="com.origami.sgm.entities.ProcesoFusionPredios" />
+        <mapping class="com.origami.sgm.entities.ProcesoReporte" />
+        <mapping class="com.origami.sgm.entities.PePermisoCabEdificacion" />
+        <mapping class="com.origami.sgm.entities.PePermisosAdicionales" />
+        <mapping class="com.origami.sgm.entities.PeTipoPermiso" />
+        <mapping class="com.origami.sgm.entities.PeTipoPermisoAdicionales" />
+        <mapping class="com.origami.sgm.entities.GeTareaUsuario" />
+        <mapping class="com.origami.sgm.entities.GeRequisitosTipoTramite" />
+        <mapping class="com.origami.sgm.entities.DisparadorTramites" />
+        <mapping class="com.origami.sgm.entities.ParametrosDisparador" />
+        <mapping class="com.origami.sgm.entities.MatFormulaTramite" />
+        <mapping class="com.origami.sgm.entities.HistoricoReporteTramite" />
+        <mapping class="com.origami.sgm.entities.HistoricoArchivo" />
+        <mapping class="com.origami.sgm.entities.Resolucion" />
+        <mapping class="com.origami.sgm.entities.ServicioExterno" />
+        <mapping class="com.origami.sgm.entities.CatRangoAvaluos" />
+        <mapping class="com.origami.sgm.entities.CtlgSalario" />
+        <mapping class="com.origami.sgm.entities.CtlgDescuentoEmision" />
+        <mapping class="com.origami.sgm.entities.CatEdifInspeccionValores" />
+        <mapping class="com.origami.sgm.entities.CatPredioSumasAnualesUbicacion" />
+        <mapping class="com.origami.sgm.entities.ParametrosValoracionPredio" />
+        <mapping class="com.origami.sgm.entities.CatUbicacion" />
+        <mapping class="com.origami.sgm.entities.CatExcepcionesParam" />
+        <mapping class="com.origami.sgm.entities.CatExcepciones" />
+        <mapping class="com.origami.sgm.entities.CatExcepcionesDet" />
+        <mapping class="com.origami.sgm.entities.FotoPredio" />
+        <mapping class="com.origami.sgm.entities.CatEdificacionPisosDet" />
+        <mapping class="com.origami.sgm.entities.CatPredioClasificRural" />
+        <mapping class="com.origami.sgm.entities.CatPredioObraInterna" />
+        <mapping class="com.origami.sgm.entities.CatPredioCultivo" />
+        <mapping class="com.origami.sgm.entities.CatBloqueObraEspecial" />
+        <mapping class="com.origami.sgm.entities.CatPredioLinderos" />
+
+
+        <!-- ESQUEMA FLOW -->
+        <mapping class="com.origami.sgm.entities.HistoricoTramites" />
+        <mapping class="com.origami.sgm.entities.MsgFormatoNotificacion" />
+        <mapping class="com.origami.sgm.entities.MsgTipoFormatoNotificacion" />
+        <mapping class="com.origami.sgm.entities.OtrosTramites" />
+        <mapping class="com.origami.sgm.entities.PubGuiMenu" />
+        <mapping class="com.origami.sgm.entities.PubGuiMenuRol" />
+        <mapping class="com.origami.sgm.entities.PubGuiMenuTipoAcceso" />
+        <mapping class="com.origami.sgm.entities.PubGuiMenubar" />
+        <mapping  class="com.origami.sgm.entities.RequisitosOtrosTramite" />
+        <mapping class="com.origami.sgm.entities.TipoDepartamento" />
+        <mapping class="com.origami.sgm.entities.UserConTareas" />
+        <mapping class="com.origami.sgm.entities.Observaciones" />
+        <mapping class="com.origami.sgm.entities.HistoricoTramiteDet" />
+        <mapping class="com.origami.sgm.entities.TipoOtrosTramites" />
+        <mapping class="com.origami.sgm.entities.BaseCalculoOtrosTramites" />
+        <mapping class="com.origami.sgm.entities.OtrosTramitesHasPermiso" />
+        <mapping class="com.origami.sgm.entities.SolicitudCorreccionPredio" />
+        <mapping class="com.origami.sgm.entities.CatCertificadoAvaluo" />
+        <mapping class="com.origami.sgm.entities.FormatoReporte" />
+        <!-- ESQUEMA FINANCIERO -->
+       
+        <mapping class="com.origami.sgm.entities.CatCategoriasPredio" />
+        <mapping class="com.origami.sgm.entities.CmMultas" />
+        <mapping class="com.origami.sgm.entities.CmClaseMultas" />
+        <mapping class="com.origami.sgm.entities.CmTipoMultas" />
+        <mapping class="com.origami.sgm.entities.CertificadoExoneracionLocalActivos" />
+        <!-- Secuencia -->
+        <mapping class="com.origami.sgm.entities.SecuenciaTramite" />
+        <mapping class="com.origami.sgm.entities.EnteSecuencia" />
+        <!-- ESQUEMA AGENDA -->
+        <mapping class="com.origami.sgm.entities.Agenda" />
+        <mapping class="com.origami.sgm.entities.AgendaDet" />
+        <mapping class="com.origami.sgm.entities.TipoAviso" />
+        <mapping class="com.origami.sgm.entities.TipoEvento" />
+        <mapping class="com.origami.sgm.entities.Colores" />
+
+        <!-- ESQUEMA MEJORAS -->
+        <mapping class="com.origami.sgm.entities.MejObraUbicacion" />
+        <mapping class="com.origami.sgm.entities.MejTipoObra" />
+        <mapping class="com.origami.sgm.entities.MejObra" />
+        <mapping class="com.origami.sgm.entities.MejValoresObraUbicacion" />
+        <mapping class="com.origami.sgm.entities.MejDetRubroMejoras" />
+        <mapping class="com.origami.sgm.entities.MejPagoRubroMejora" />
+        <!-- ESQUEMA Temporal -->
+        <mapping class="com.origami.sgm.entities.ParteRecaudaciones" />
+        <!-- BANCOS -->
+        <mapping class="com.origami.sgm.entities.bancos.FormatoBanca" />
+        <mapping class="com.origami.sgm.entities.bancos.BancaDiccionario" />
+        <!-- AVALUOS -->
+        <mapping class="com.origami.sgm.entities.avaluos.FactorDepreciacion" />
+        <mapping class="com.origami.sgm.entities.avaluos.SectorValorizacion" />
+        <mapping class="com.origami.sgm.entities.bancos.ConsolidacionBanco" />
+        <!-- HISTORICO -->
+        <mapping class="com.origami.sgm.entities.historic.Predio" />
+        <mapping class="com.origami.sgm.entities.historic.ValoracionPredial" />
+        <mapping class="com.origami.sgm.entities.historic.NovedadValoracionPredial" />
+        <mapping class="com.origami.sgm.entities.historic.ComparativoEmision" />
+        <!-- ORDENES TRABAJO -->
+        <mapping class="com.origami.censocat.entity.ordentrabajo.OrdenDet" />
+        <mapping class="com.origami.censocat.entity.ordentrabajo.OrdenTrabajo" />
+        <!-- APPLICATION -->
+        <mapping class="com.origami.sgm.entities.application.ApplEmpresa" />
+        <mapping class="com.origami.sgm.entities.application.ApplTipoEmpresa" />
+        <mapping class="com.origami.sgm.entities.application.ApplActividadEconomica" />
+        <mapping class="com.origami.sgm.entities.application.ApplAplicacion" />
+        <mapping class="com.origami.sgm.entities.TareasAll" />
+    </session-factory>
+</hibernate-configuration>

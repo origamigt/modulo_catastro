@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <f:metadata >
+        <f:event type="preRenderView" listener="#{mantRestriccion.initView()}"/>
+        <f:viewParam name="idRestriccion" value="#{mantRestriccion.idRestriccion}"/>
+        <f:viewParam name="ver" value="#{mantRestriccion.ver}"/>
+        <f:viewParam name="transitorio" value="#{mantRestriccion.noPersist}"/>
+    </f:metadata>
+
+    <h:head>
+        <title>Restricción</title>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+        <script src="#{appConfig.urlbase}resources/js/app.js"></script>
+
+        <h:form id="frmRestriccion">
+            <p:growl autoUpdate="true" showDetail="true" />
+            <p:panel class="Container100 Hei100">
+                <h:panelGrid columns="2" width="100%">
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Codigo restriccion:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText value="#{mantRestriccion.restriccion.codigoRestriccion}" readonly="true" placeholder="Codigo auto genereado por el sistema" title="Codigo uto genereado por el sistema" onkeypress="return validateIntegerValueAndFocusNext(event, null)" />
+                    </h:panelGroup>
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Descripción:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:inputText value="#{mantRestriccion.restriccion.descripcionRestriccion}" readonly="#{mantRestriccion.esVer}" style="width: 300px;"/>
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Exoneración Bombero:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:inputText value="#{mantRestriccion.restriccion.exoBomberos}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" readonly="#{mantRestriccion.esVer}" />
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Comentario Exoneración:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:inputText value="#{mantRestriccion.restriccion.exoComentario}" style="width: 300px;" readonly="#{mantRestriccion.esVer}"/>
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Exoneración Impuesto:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:inputText value="#{mantRestriccion.restriccion.exoIpu}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" readonly="#{mantRestriccion.esVer}" />
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Exoneración Seguridad:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:inputText value="#{mantRestriccion.restriccion.exoSeguridad}" onkeypress="return validateIntegerValueAndFocusNext(event, null)" readonly="#{mantRestriccion.esVer}"/>
+                    </h:panelGroup> 
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive" rendered="#{mantRestriccion.restriccion.codigoRestriccion ne null}">
+                        <h:outputText value="Estado:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:selectOneMenu value="#{mantRestriccion.restriccion.estadoRestricion}" disabled="#{mantRestriccion.esVer}">
+                            <f:selectItem itemLabel="Activo" itemValue="A"  />
+                            <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup> 
+                    <p:outputLabel value="" rendered="#{mantRestriccion.restriccion.codigoRestriccion ne null}" />
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <center>
+                        <p:commandButton value="#{mantRestriccion.restriccion.codigoRestriccion eq null? 'Guardar' : 'Modificar'}" actionListener="#{mantRestriccion.guardar()}" rendered="#{!mantRestriccion.esVer}" />
+                        <p:spacer width="10" />
+                        <p:commandButton value="Cerrar" actionListener="#{mantRestriccion.cerrar()}" />
+                    </center>
+                </f:facet>
+            </p:panel>
+        </h:form>
+
+        <p:ajaxStatus id="status" onstart="PF('dlgStatus').show()" oncomplete="PF('dlgStatus').hide()"/>
+        <p:dialog id="dlgStatus" widgetVar="dlgStatus" modal="true" draggable="false"  closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+        </p:dialog>
+    </h:body>
+</html>
+

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface componentType="seccionesFicha" >
+        <cc:attribute name="headerDialog" />
+        <cc:attribute name="predio" type="com.origami.sgm.entities.CatPredio" required="true"/>        
+        <cc:attribute name="predioant" type="com.origami.sgm.entities.CatPredio" required="true"/>        
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form id="frmObs" >
+            <p:fieldset legend="LEVANTADO POR" style="font-size: 13px;" >
+                <h:panelGrid columns="2" >
+                    <h:outputText value="CI/RUC"/>  
+                    <p:inputText value="#{cc.attrs.predio.ciuActualizador}" readonly="false" style="width: 250px;"/>
+                    <p:outputLabel value="Nombres Completos:" />
+                    <p:inputText value="#{cc.attrs.predio.ciuNombresActualizador}" readonly="true" style="width: 250px;"/>  
+                </h:panelGrid>
+            </p:fieldset>
+            <p:fieldset toggleable="true" legend="Observaciones" style="width: 95%">
+                <p:inputTextarea id="observaciones" cols="85" value="#{cc.attrs.predio.observaciones}" styleClass="#{cc.comparar(cc.attrs.predio.observaciones, cc.attrs.predioant.observaciones)}" style="width: 95%" readonly="true"/>
+            </p:fieldset>
+        </h:form>
+    </cc:implementation>
+</html>

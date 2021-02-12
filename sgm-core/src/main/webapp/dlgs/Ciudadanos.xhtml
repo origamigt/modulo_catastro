@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h2> Listado de Ciudadanos </h2>
+        <!--        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+                <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+                <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />-->
+
+        <h:form id="frmResponsableDialog">
+            <div dir="rtl">
+                <p:commandButton value="Nuevo Ciudadano" actionListener="#{ciudadanos.nuevo(null)}" >
+                    <p:ajax event="dialogReturn" update="frmResponsableDialog:dtresponsable" />
+                </p:commandButton>
+            </div>
+            <p:dataTable id="dtresponsable" reflow="true" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="pts"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         value="#{ciudadanos.ciudadanosLazy}" var="user" emptyMessage="No se encontró ningún Item">
+                <p:column headerText="C.I./R.U.C." style="text-align: center;width: 20%" filterBy="#{user.ciuCedRuc}" filterStyle="width: 80%;">
+                    <h:outputText value="#{user.ciuCedRuc}" style="text-align: center; font-size: 12px"/>
+                </p:column>
+
+                <p:column headerText="Apellido Paterno" style="text-align: center" filterBy="#{user.ciuApellidoPat}" filterStyle="width: 80%;">
+                    <h:outputText value="#{user.ciuApellidoPat}"/>
+                </p:column>
+                <p:column headerText="Apellido Materno" style="text-align: center" filterBy="#{user.ciuApellidoMat}" filterStyle="width: 80%;">
+                    <h:outputText value="#{user.ciuApellidoMat}"/>
+                </p:column>
+                <p:column headerText="Primer Nombre" style="text-align: center" filterBy="#{user.ciuPrimerNombre}" filterStyle="width: 80%;" >
+                    <h:outputText value="#{user.ciuPrimerNombre}"/>
+                </p:column>
+                <p:column headerText="Segundo Nombre" style="text-align: center" filterBy="#{user.ciuSegundoNombre}"  filterStyle="width: 80%;" >
+                    <h:outputText value="#{user.ciuSegundoNombre}"/>
+                </p:column>
+                <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                    <p:commandLink title="Ver datos de ciudadano" actionListener="#{ciudadanos.setVer(true)}" action="#{ciudadanos.nuevo(user)}" >
+                        <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                    </p:commandLink>
+                    <p:spacer width="5" />
+                    <p:commandLink title="Nuevo ciudadano" actionListener="#{ciudadanos.nuevo(user)}">
+                        <p:graphicImage value="/css/homeIconsImages/agregar.png" width="20" height="20"/>
+                        <p:ajax  listener="#{ciudadanos.procesarCiudadano}" event="dialogReturn"/>
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <!--        <p:ajaxStatus id="status" onstart="PF('dlgStatus').show()" oncomplete="PF('dlgStatus').hide()"/>
+                <p:dialog id="dlgStatus" widgetVar="dlgStatus" modal="true" draggable="false"  closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+                </p:dialog>-->
+    </ui:define>
+</ui:composition>
+

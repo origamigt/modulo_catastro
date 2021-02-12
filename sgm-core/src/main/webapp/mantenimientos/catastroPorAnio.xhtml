@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <ui:define name="head">
+
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="frmMain" enctype="multipart/form-data">
+            <p:panel class="Container100 Hei100 Wid100" >
+                <h:panelGroup layout="block">
+                    <h:outputText value="Año:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                    <p:selectOneMenu value="#{catastroPorAnio.anio}" effect="fade" style="width: 150px; " >
+
+                        <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
+                        <f:selectItems value="#{catastroPorAnio.anios}" var="ci1" itemLabel="#{ci1}" itemValue="#{ci1}" />
+                    </p:selectOneMenu>
+                </h:panelGroup>
+            </p:panel>
+            <br/>
+            <p:panel>
+                <f:facet name="header" class="left">
+                    <p:commandLink ajax="false">
+                        <p:graphicImage name="/resources/images/xlss32.png" width="24"/>
+                        <pe:exporter type="xlsx" target="dtCatastroPorAnio" fileName="prediosanio"/>
+                        <!--<p:dataExporter encoding="UTF-8" type="xlsx" target="dtCatastroPorAnio" fileName="prediosanio"  />-->
+                    </p:commandLink>
+                </f:facet>
+                <p:dataTable id="dtCatastroPorAnio" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="vmz"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             value="#{catastroPorAnio.prediosAnios}" var="vpa" emptyMessage="No se encontró ningún Item">
+
+                    <p:column headerText="Clave Catastral" style="text-align: center;width: 20%" filterBy="#{vpa.codCatastralPredio}" filterStyle="width: 80%;">
+                        <h:outputText id="claveCat" value="#{vpa.codCatastralPredio}" style="text-align: center; font-size: 12px" title="#{vpa.codCatastralPredio}"/>
+                    </p:column>
+                    <p:column headerText="Cédula" style="text-align: center" filterBy="#{vpa.cedIdentProp}" filterStyle="width: 80%;">
+                        <h:outputText value="#{vpa.cedIdentProp}"/>
+                    </p:column>
+                    <p:column headerText="Apellidos" style="text-align: center" filterBy="#{vpa.apellidosCiudadano}" filterStyle="width: 80%;">
+                        <h:outputText value="#{vpa.apellidosCiudadano}"/>
+                    </p:column>
+                    <p:column headerText="Nombres" style="text-align: center" filterBy="#{vpa.nombresCiudadano}" filterStyle="width: 80%;">
+                        <h:outputText value="#{vpa.nombresCiudadano}"/>
+                    </p:column>
+                    <p:column headerText="Otros" style="text-align: center" filterBy="#{vpa.otrosProp}" filterStyle="width: 80%;" >
+                        <h:outputText value="#{vpa.otrosProp}"/>
+                    </p:column>
+                    <p:column headerText="Barrio" style="text-align: center" filterBy="#{vpa.barrioPredio}" filterStyle="width: 80%;" >
+                        <h:outputText value="#{vpa.barrioPredio}"/>
+                    </p:column>
+                    <p:column headerText="Calle" style="text-align: center" filterBy="#{vpa.callePredio}" filterStyle="width: 80%;" >
+                        <h:outputText value="#{vpa.callePredio}"/>
+                    </p:column>
+                    <p:column headerText="Número" style="text-align: center" filterBy="#{vpa.numeroPredio}" filterStyle="width: 80%;" >
+                        <h:outputText value="#{vpa.numeroPredio}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+        </h:form>     
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,75 @@
+[sistema]
+urlServidorAlfrescoPublica = http://172.16.8.125:8144/
+urlServidorAlfrescoInterna = http://172.16.8.125:8144/
+ipPublica = 172.16.8.125
+ipInterna = 172.16.8.125
+ipPublicaAlfresco = 172.16.8.125
+ipInternaAlfresco = 172.16.8.125
+logoReportes = /css/smb/ibarra.png
+rutaReportesDinardap = /servers_files/registroDinardap/
+rutaRepotiorioArchivo = /servers_files/sgm/
+rutaRepositorioUsuarios = /servers_files/sgm/perfil_usuarios/
+rutaRepositorioUsuariosInternos = /servers_files/sgm/perfil_usuarios_internos/
+carpetaAdministrativaAlfresco= documentoMunicipio
+formatoArchivos = /(\\.|\\/)(gif|jpe?g|png|pdf|xlsx|docx|xlsm|dwg|shp|doc|xls|ppt|pptx|tif|txt)$/
+sisLogo = css/smb/ibarra.png
+sisLogo1 = css/smb/ibarra02.png
+varbackground = background2
+
+smtp_Host = smtp.gmail.com
+smtp_Port = 587
+correo = tramites@sanmiguel.gob.ec
+pass= sanmiguel
+ssl = true
+
+ejbRuta = java:global/sgmEE/
+
+urlServidorPublica = /sgmEE
+urlServidorCompleta = http://172.16.8.125:8144/sgmEE
+urlPublica = http://servicios.ibarra.gob.ec/sgmEE
+correoClienteGenerico = no_ingreso_correo@hotmail.com
+
+[wf.notficaciones]
+segundo = 0
+minuto = 0
+hora = 7
+dia = *
+
+[catdb]
+driverClass = org.postgresql.Driver
+url = jdbc:postgresql://172.16.8.91:5432/bddimi
+username = sisapp
+password = sis98
+minPoolConSize = 5
+maxPoolConsize = 30
+maxIdleTime = 1800
+
+[ejbs]
+entityManager = java:module/manager
+bpmBaseEngine = java:module/bpmBaseEngine
+bpmProcessEngine = java:module/bpmProcessEngine
+datasource = java:module/dataSource
+solicitud = java:module/solicitudServ
+
+[zoning]
+region = EC
+
+[sgmdocsdb]
+driverClass = org.postgresql.Driver
+url = jdbc:postgresql://172.16.8.91:5432/quipux
+username = sisapp
+password = sis98
+minPoolConSize = 5
+maxPoolConsize = 30
+maxIdleTime = 1800
+
+[samdoc]
+
+[censocat]
+driverClass = org.postgresql.Driver
+url = jdbc:postgresql://172.16.8.127:5432/fotos
+username = sisapp
+password = Fg22clIeo4M
+minPoolConSize = 5
+maxPoolConsize = 30
+maxIdleTime = 1800

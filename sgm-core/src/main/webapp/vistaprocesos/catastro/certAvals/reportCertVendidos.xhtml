@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:cs="http://xmlns.jcp.org/jsf/composite/dialog">
+    <ui:define name="head">
+        <script src="../../../resources/pfJs/keyPress.js" type="text/javascript"></script>
+        <style type="text/css">
+            .ui-selectoneradio label{
+                font-size: 1.2em;
+                font-weight: bold;
+            }
+            .ui-selectmanycheckbox label{
+                font-size: 1.3em;
+                font-weight: bold;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="content">
+        <center>
+            <h1>Certificados Vendidos</h1>
+        </center>
+        <h:form id="mainForm">
+            <div style="text-align: right">
+                <p:commandButton value="Generar" actionListener="#{reportCertVendidos.parametros()}" update="frmReporte"/>
+                <h:commandLink>
+                    <p:graphicImage name="/css/homeIconsImages/reporte.png" />
+                    <p:dataExporter type="pdf" target="dtUsuariosCertif"  fileName="dtUsuariosCertif-(#{reportCertVendidos.fechaInicio.time}).pdf" />
+                </h:commandLink>
+            </div>
+<!--            <p:dataTable id="dtCiu" value="#{reportCertVendidos.lazyCertificados}" var="pps1" lazy="true">
+                <f:facet name="header">Listado de Certificados</f:facet>
+
+                <p:column headerText="# Identificación" width="10%" >
+            #{pps1.identificacion}
+        </p:column>
+        <p:column headerText="Nro. Certificado" >
+            #{pps1.numCert}
+        </p:column>               
+        <p:column headerText="Usuario" width="8%" style="text-align: center">
+            #{pps1.usuario}
+        </p:column>
+    </p:dataTable>-->
+            <p:dataTable id="dtUsuariosCertif" value="#{reportCertVendidos.model}" var="pps2"
+                         widgetVar="dtUsuariosCertif" >
+                <f:facet name="header">Listado de Certificados</f:facet>
+
+                <p:column headerText="Usuario" width="30%" >
+                    <p:outputLabel value="#{pps2.usuarioReporte}" />
+                </p:column>
+                <p:column headerText="Nros. Certificado" >
+                    <p:outputLabel value="#{pps2.cantidad}" />
+                </p:column>               
+                <p:column headerText="Total" width="15%" style="text-align: right">
+                    <p:outputLabel value="#{pps2.total}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        <p:dialog id="dlgpls" header="Datos de Reporte" widgetVar="dlgReporte" resizable="false" modal="true" height="230"  width="50%"  >
+            <h:form id="frmReporte">
+                <p:panel>
+                    <p:panelGrid columns="2" layout="grid">                    
+                        <h:outputText value="Fecha de inicio :" style="font-weight: bolder"/>
+                        <p:calendar value="#{reportCertVendidos.fechaInicio}">
+                            <p:ajax event="dateSelect" update="mainForm" listener="#{reportCertVendidos.generarReporte()}" />
+                        </p:calendar>
+
+                        <h:outputText value="Fecha fin :" style="font-weight: bolder"/>
+                        <p:calendar value="#{reportCertVendidos.fechaFin}">
+                            <p:ajax event="dateSelect" update="mainForm" listener="#{reportCertVendidos.generarReporte()}" />
+                        </p:calendar>
+
+                        <h:outputText value="Usuario :" style="font-weight: bolder"/>
+                        <p:selectOneMenu value="#{reportCertVendidos.usuario}">
+                            <f:selectItem itemLabel="Seleccione Usuario" itemValue="#{null}"/>
+                            <f:selectItems value="#{reportCertVendidos.usuariosCatastros}" var="usr1" itemLabel="#{usr1.usuario}" itemValue="#{usr1.usuario}"/>
+                            <p:ajax update="mainForm" listener="#{reportCertVendidos.generarReporte()}" />
+                        </p:selectOneMenu>     
+
+                    </p:panelGrid >
+                    <f:facet name="footer">
+                        <div align="center">
+                            <!--<p:commandButton value="Generar" actionListener="# {reportCertVendidos.generarReporte()}"/>-->
+                            <h:commandLink>
+                                <p:graphicImage name="/css/homeIconsImages/reporte.png" />
+                                <p:dataExporter type="pdf" target="mainForm:dtUsuariosCertif"  fileName="dtUsuariosCertif-(#{reportCertVendidos.fechaInicio.time}).pdf" />
+                            </h:commandLink>
+                            <p:commandButton value="Cerrar" onclick="PF('dlgReporte').hide()"  />
+                        </div>
+                    </f:facet>
+                </p:panel>
+            </h:form> 
+        </p:dialog>
+
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:panelGroup layout="block" class="Container Wid100 MarTop10">
+        <div class="ContainerIndent">
+            <p:fieldset legend="Propietario(s) Anterior(es)" toggleable="true">
+                <p:dataTable value="#{transferenciaView.propietarios}" var="pp" reflow="true" paginator="true" rows="5" paginatorPosition="top" style="width: 100%"
+                             rowsPerPageTemplate="5,10,20,50,100" paginatorAlwaysVisible="false"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             selectionMode="single" selection="#{transferenciaView.propietarioSeleccionado}" rowHover="true" rowKey="#{pp.id}">
+                    <f:facet name="header" >
+                        <h4> <p:outputLabel value="Seleccione el propietario que esta realizando la venta de acciones." 
+                                            rendered="#{transferenciaView.propietarios.size() > 1 and !transferenciaView.imprimir}"/>
+                        </h4>
+                    </f:facet>
+                    <p:column headerText="Tipo Propietario">
+                        <p:outputLabel value="#{pp.tipo.valor}"/>
+                    </p:column>
+                    <p:column headerText="DNI">
+                        <p:outputLabel value="#{pp.ciuCedRuc}"/>
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{pp.nombresCompletos}" style="text-transform: uppercase"/>
+                    </p:column>
+                    <p:column headerText="% posesión">
+                        <p:outputLabel value="#{pp.porcentajePosecion}">
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="estado" width="5%" style="text-align: center;">
+                        <p:outputLabel value="#{appConfig.retornarValor(pp.estado)}" style="text-transform: uppercase; text-align: center; "/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </div>
+    </h:panelGroup>
+    <h:panelGroup layout="block" class="Container Wid100 MarTop10">
+        <div class="ContainerIndent">
+            <p:fieldset legend="Nuevo(s) Propietario(s)" toggleable="true">
+                <div align="right" >
+                    <p:commandButton value="Agregar propietario" iconPos="ui-icon-person" actionListener="#{transferenciaView.propietario(null, true)}" styleClass="btnStyle" id="addProp"
+                                     update="transferenciaDominio" style="margin-bottom: 10px;" rendered="#{acesosFicha.esCatastro}">
+                        <p:ajax event="dialogReturn" listener="#{transferenciaView.procesarPropietario}" update="transferenciaDominio"  />
+                    </p:commandButton>
+                </div>
+                <p:dataTable id="dtPropietarios"  value="#{transferenciaView.propietariosNuevos}" var="pp" reflow="true" paginator="true" rows="5" paginatorPosition="top" style="width: 100%"
+                             rowsPerPageTemplate="5,10,20,50,100" paginatorAlwaysVisible="false"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    <p:column headerText="Tipo">
+                        <p:outputLabel value="#{pp.tipo.valor}"/>
+                    </p:column>
+                    <p:column headerText="DNI">
+                        <p:outputLabel value="#{pp.ciuCedRuc}"/>
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{pp.nombresCompletos}" style="text-transform: uppercase"/>
+                    </p:column>
+                    <p:column headerText="% posesión" >
+                        <p:outputLabel value="#{pp.porcentajePosecion}"/>
+                    </p:column>
+                    <p:column headerText="estado" width="6%" style="text-align: center;" >
+                        <p:outputLabel value="#{appConfig.retornarValor(pp.estado)}" style="text-transform: uppercase; text-align: center; "/>
+                    </p:column>
+                    <p:column headerText="Accion" style="text-align: center" rendered="#{acesosFicha.esCatastro}" >
+                        <p:commandLink actionListener="#{transferenciaView.eliminarPropietario(pp)}" update="transferenciaDominio" 
+                                       partialSubmitFilter="true" >
+                            <p:ajax update="transferenciaDominio"/>
+                            <p:graphicImage value="/css/homeIconsImages/delete.png" width="25" height="25"/>
+                        </p:commandLink>
+                        <p:commandLink actionListener="#{transferenciaView.propietario(pp, true)}" update="transferenciaDominio" 
+                                       partialSubmitFilter="true" rendered="#{acesosFicha.esCatastro}" >
+                            <p:ajax event="dialogReturn" listener="#{transferenciaView.procesarPropietario}"  update="transferenciaDominio" />
+                            <p:graphicImage value="/css/homeIconsImages/edicion.png" width="25" height="25"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </div>
+    </h:panelGroup>
+</html>

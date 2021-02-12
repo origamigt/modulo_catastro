@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                template="/template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:xjojc="http://xmlns.jcp.org/jsf/component"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:define name="content">
+        <div >
+            <center><h1 style="color: #3D3D3D">Generador de Reportes</h1></center>
+        </div>
+        <!--<center><h1 style="background-color: #3D3D3D">Generador de Reportes</h1></center>-->
+        <h:form id="frmMainReport">
+            <style>
+                .ui-tree .ui-treenode-parent .ui-treenode-label {
+                    /*background-color: #BFDFFF;*/
+                    background-color: beige;
+                }
+
+                .ui-tree .ui-treenode-children .ui-treenode-label {
+                    background-color: #FFFFFF;
+                }
+                .ui-selectonemenu{
+                    width: 95% !important;
+                }
+                .ui-selectonemenu-label{
+                    width: 95% !important;
+                } 
+            </style>
+            <script>
+                var currentEvent;
+
+                $(document).ready(function () {
+                    PrimeFaces.widget.ContextMenu.prototype.show = function (e) {
+                        //hide other contextmenus if any
+                        $(document.body).children('.ui-contextmenu:visible').hide();
+
+                        if (e) {
+                            currentEvent = e;
+                        }
+
+                        var win = $(window),
+                                left = e.pageX,
+                                top = e.pageY,
+                                width = this.jq.outerWidth(),
+                                height = this.jq.outerHeight();
+
+                        //collision detection for window boundaries
+                        if ((left + width) > (win.width()) + win.scrollLeft()) {
+                            left = left - width;
+                        }
+                        if ((top + height) > (win.height() + win.scrollTop())) {
+                            top = top - height;
+                        }
+
+                        if (this.cfg.beforeShow) {
+                            this.cfg.beforeShow.call(this);
+                        }
+
+                        this.jq.css({
+                            'left': left,
+                            'top': top,
+                            'z-index': ++PrimeFaces.zindex
+                        }).show();
+
+                        e.preventDefault();
+                    };
+                });
+            </script>
+            <script src="#{appConfig.urlbase}resources/js/app.js"></script>
+            <div class="Container100 Hei100" style="float: top">
+                <p:scrollPanel mode="native" styleClass="scroll-panel" style="height: 650px; width: 98% !important; ">
+                    <div class="Container25 MarLeft20 BoxSizeContent" style="float: left;"  >
+                        <p:tree id="rootTable" value="#{reportBuilder.node}" var="table1" selectionMode="checkbox" selection="#{reportBuilder.selectionNodes}" 
+                                class="Wid100" skipChildren="true" cache="false"  >
+                            <p:ajax event="select" update=":frmMainReport:tabContainer:sentencia, :frmMainReport:tabContainer:sentenciaUser, frmMainReport:contextMenu" listener="#{reportBuilder.selectNode}" />
+                            <p:ajax event="unselect" update=":frmMainReport:tabContainer:sentencia, :frmMainReport:tabContainer:sentenciaUser, frmMainReport:contextMenu" listener="#{reportBuilder.unSelectNode}" />
+                            <p:ajax event="contextMenu" listener="#{reportBuilder.selectNode}" update=":frmMainReport:contextMenu" oncomplete="PF('contextMenu').show(currentEvent);" />
+                            <p:treeNode id="nodeTable" icon="fa fa-table" expandedIcon="fa fa-list" collapsedIcon="fa fa-list-alt" >
+                                <p:outputLabel value="#{table1.description}" title="#{table1.sqlName} - #{table1.key} - #{table1.nivel}" />
+                            </p:treeNode>
+                        </p:tree>
+                        <p:contextMenu for="rootTable" id="contextMenu" widgetVar="contextMenu" model="#{reportBuilder.menuModel}"   />
+                    </div>
+                    <div class="Container70 BoxSizeContent" style="float: right">
+                        <p:tabView id="tabContainer" cache="false" >
+                            <p:tab title="Sentencia">
+                                <h:outputLabel id="sentenciaUser" value="#{reportBuilder.selectUser}" escape="false"/>
+                            </p:tab>
+                            <p:tab title="SQL Query" >
+                                <p:inputTextarea id="sentencia" value="#{reportBuilder.selectEdit}" 
+                                                 placeholder="Sentencia SQL" readonly="false" 
+                                                 style="width: 99% !important;"
+                                                 cols="150" rows="20" autoResize="true" 
+                                                 title="Senetecia SQL" scrollHeight="350" />
+                            </p:tab>
+                        </p:tabView>
+                    </div>
+                </p:scrollPanel>
+                <br/>
+                <br/>
+            </div>
+            <div>
+                <center>
+                    <p:commandButton value="Excel" actionListener="#{reportBuilder.exportar()}" icon="fa fa-file-excel-o" iconPos="rigth" class="OrangeButton "  />
+                    <p:spacer width="20"/>
+                    <p:commandButton value="Limpiar" actionListener="#{reportBuilder.clearData()}" icon="fa fa-trash" iconPos="rigth" class="OrangeButton " update="frmMainReport, frmMainReport:rootTable"  />
+                </center>
+            </div>
+        </h:form>
+        <p:dialog id="dlgCnditions" widgetVar="dlgCnditions" modal="true" dynamic="true" height="250" width="300" closeOnEscape="true" >
+            <h:form id="frmCond">
+                <p:panelGrid id="pngCod" columns="1" layout="grid" rendered="#{not empty reportBuilder.selectItem}" style="border: 0px #FFFFFF none;" >
+                    <f:facet name="header">
+                        <p:outputLabel value="#{reportBuilder.selectItem.description} (#{reportBuilder.selectItem.nameClass}})"/>
+                    </f:facet>
+                    <p:selectOneRadio id="tipoCond" value="#{reportBuilder.condition.whereType}" label="Tipo Condicion" rendered="#{reportBuilder.selectItem.isWhere}">
+                        <f:selectItems value="#{reportBuilder.whereTypes}" />
+                        <p:ajax update="@this" />
+                    </p:selectOneRadio>
+                    <h:panelGrid columns="2" class="Wid100 GrayBorderedBox">
+                        <p:outputLabel value="Clausula" />
+                        <p:selectOneMenu value="#{reportBuilder.condition.comparator}" >
+                            <f:selectItems value="#{reportBuilder.whereComparators}" var="itemCom1" itemLabel="#{itemCom1.descripcion}" />
+                            <p:ajax update="frmCond:pngCod" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Valor" rendered="#{reportBuilder.condition.renderedValue1()}"/>
+                        <p:inputText value="#{reportBuilder.condition.value}" rendered="#{reportBuilder.condition.renderedValue1() and reportBuilder.selectItem.typeNumber()}" type="number" 
+                                     placeholder="Ingrese solo numeros">
+                            <p:ajax update="@this" />
+                        </p:inputText>
+                        <p:selectOneMenu value="#{reportBuilder.condition.value}" rendered="#{reportBuilder.condition.renderedValue1() and reportBuilder.selectItem.typeBoolean()}" >
+                            <f:selectItem itemLabel="Verdadero" itemValue="#{true}" /> 
+                            <f:selectItem itemLabel="Falso" itemValue="#{false}" /> 
+                            <f:selectItem itemLabel="Nulo" itemValue="#{null}" /> 
+                            <p:ajax process="@this" />
+                        </p:selectOneMenu>
+                        <poue:inputNumber value="#{reportBuilder.condition.value}" rendered="#{reportBuilder.condition.renderedValue1() and reportBuilder.selectItem.typeDecimal()}" 
+                                          title="Ingrese solo numeros decimales" decimalPlaces="5" >
+                            <p:ajax update="@this" />
+                        </poue:inputNumber>
+                        <p:inputText value="#{reportBuilder.condition.value}" rendered="#{reportBuilder.condition.renderedValue1() and reportBuilder.selectItem.typeText()}"  
+                                     placeholder="#{reportBuilder.condition.detail}" style="width: 100% !important">
+                            <p:ajax update="@this" />
+                        </p:inputText>
+
+                        <p:outputLabel value="AND Valor " rendered="#{reportBuilder.condition.renderedValue2()}" />
+                        <p:inputText value="#{reportBuilder.condition.value1}" rendered="#{reportBuilder.condition.renderedValue2()}" type="number" >
+                            <p:ajax update="@this" />
+                        </p:inputText>
+                    </h:panelGrid>
+                </p:panelGrid>
+            </h:form>
+            <center>
+                <p:commandButton value="Agregar" update=":frmMainReport:tabContainer:sentencia, :frmMainReport:tabContainer:sentenciaUser, frmMainReport, frmMainReport:contextMenu" oncomplete="PF('dlgCnditions').hide();" actionListener="#{reportBuilder.saveWhereConditions()}"  />
+            </center>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>
+

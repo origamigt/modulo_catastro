@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>  
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="content">
+                <h2> Listado de Hipotecas </h2>
+
+                <h:form id="frmHipotecas">
+                    <p:tabView id="tvRest">
+                        <p:tab title="Hipotecas  Predios" id="HipotecasPredios">
+                            <div dir="rtl">
+                                <p:commandButton value="Agregar Hipoteca" actionListener="#{hipotecasView.setVer(false)}" action="#{hipotecasView.nuevo(null)}"  >
+                                    <p:ajax event="dialogReturn" listener="#{hipotecasView.procesarReturnDialog}"  />
+                                </p:commandButton>
+                            </div>
+                            <p:dataTable id="dtRestricciones" reflow="true" paginator="true" lazy="true" rows="20" rowsPerPageTemplate="20,50,100" filterEvent="enter" widgetVar="pts1"
+                                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         value="#{hipotecasView.hipotecasLazy}" var="restPred1" emptyMessage="No se encontró ningún Item">
+                                <p:column headerText="Clave Catastral Ant" style="text-align: center;width: 15%" filterBy="#{restPred1.codCatastralPredio}" filterStyle="width: 80%;">
+                                    <h:outputText value="#{restPred1.codCatastralPredio}"  style="text-align: center; font-size: 12px"/>
+                                </p:column>
+
+                                <p:column headerText="Clave Catastral" style="text-align: center;width: 15%" filterBy="#{restPred1.predio.claveCat}" filterStyle="width: 80%;">
+                                    <h:outputText value="#{restPred1.predio.claveCat}"  style="text-align: center; font-size: 12px"/>
+                                </p:column>
+
+                                <p:column headerText="Monto" style="text-align: center;width: 15%" filterBy="#{restPred1.montoPrestamo}" filterStyle="width: 80%;">
+                                    <h:outputText value="#{restPred1.montoInicialPrestamo}" style="text-align: center; font-size: 12px"/>
+                                </p:column>
+                                <p:column width="10" headerText="Plazo" style="text-align: center" filterBy="#{restPred1.plazoPrestamo}" filterStyle="width: 80%;">
+                                    <h:outputText value="#{restPred1.plazoPrestamo}"/>
+                                </p:column>
+                                <p:column width="10" headerText="Fecha" style="text-align: center" filterStyle="width: 80%;">
+                                    <h:outputText value="#{restPred1.fechaConsecionPrestamo}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </p:column>                 
+                                <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                                    <p:commandLink title="Ver datos de hipoteca del predio" actionListener="#{hipotecasView.setVer(true)}" action="#{hipotecasView.nuevo(restPred1)}" >
+                                        <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                                    </p:commandLink>
+                                    <p:spacer width="5" />
+                                    <p:commandLink title="Editar hipoteca de predio" actionListener="#{hipotecasView.nuevo(restPred1)}" >
+                                        <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                                    </p:commandLink>
+
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Por Cedula" >
+                            <p:panelGrid columns="3">
+                                Nro. de Cedula:
+                                <p:inputText value="#{hipotecasView.cedula}" />
+                                <p:commandButton value="Buscar" icon='ui-icon-search' actionListener="#{hipotecasView.buscarPorCedula()}" />
+                            </p:panelGrid>
+                            <p:panelGrid id="pnlHipoteca" style="width: 90%; margin: 0 auto">
+                                <f:facet name="header">
+                                    <p:row>
+                                        <p:column>Clave Catastral</p:column>
+                                        <p:column>Monto</p:column>
+                                        <p:column>Plazo</p:column>
+                                        <p:column>Fecha</p:column>
+                                        <p:column>Opciones</p:column>
+                                    </p:row>                                     
+                                </f:facet>
+                                <p:row>
+                                    <p:column>#{hipotecasView.fpp.predio.claveCat}</p:column>
+                                    <p:column>#{hipotecasView.fpp.montoInicialPrestamo}</p:column>
+                                    <p:column>#{hipotecasView.fpp.plazoPrestamo}</p:column>
+                                    <p:column>#{hipotecasView.fpp.fechaConsecionPrestamo}</p:column>
+
+                                    <p:column>
+                                        <p:commandLink title="Ver datos de hipoteca del predio" actionListener="#{hipotecasView.visualizar(true)}" >
+                                            <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                                        </p:commandLink>
+                                        <p:spacer width="5" />
+                                        <p:commandLink title="Editar hipoteca de predio" actionListener="#{hipotecasView.visualizar(false)}">
+                                            <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                                        </p:commandLink>
+                                    </p:column>
+                                <p:column headerText="Opciones" style="text-align: center;width: 10%">
+                                    <p:commandLink title="Ver datos de hipoteca del predio" actionListener="#{hipotecasView.setVer(true)}" action="#{hipotecasView.nuevo(restPred1)}" >
+                                        <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                                    </p:commandLink>
+                                    <p:spacer width="5" />
+                                    <p:commandLink title="Editar hipoteca de predio" actionListener="#{hipotecasView.nuevo(restPred1)}" >
+                                        <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                                    </p:commandLink>
+
+                                </p:column>
+                                </p:row> 
+                            </p:panelGrid>
+                        </p:tab> 
+                    </p:tabView>
+
+                </h:form>
+                <p:dialog widgetVar="dlgPredio" header="SELECCIONAR PREDIO" modal="true" width="750">  
+                    <h:form id="dlgFormPredio">
+                        <p:dataTable value="#{hipotecasView.predios}" var="pre" scrollable="true" scrollHeight="250" style="text-align: center;">
+                            <p:column headerText="Clave Catastral" width="200">
+                                <p:outputLabel value="#{pre.claveCat}" />                                
+                            </p:column>
+                            <p:column headerText="Nro. Predio">
+                                <p:outputLabel value="#{pre.numPredio}" />                                
+                            </p:column>
+                            <p:column headerText="Calle Primaria">
+                                <p:outputLabel value="#{pre.calle}" />                                
+                            </p:column>
+                            <p:column headerText="Calle Secundaria">
+                                <p:outputLabel value="#{pre.calleS}" />                                
+                            </p:column>
+                            <p:column headerText="Nro. Casa">
+                                <p:outputLabel value="#{pre.numeroVivienda}" />                                
+                            </p:column>
+                            <p:column headerText="" width="50">
+                                <p:commandLink title="Seleccionar predio..." actionListener="#{hipotecasView.predioSeleccionado(pre)}">
+                                    <p:graphicImage value="/css/homeIconsImages/ir.png" height="15"/>
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>

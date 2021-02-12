@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:cs="http://xmlns.jcp.org/jsf/composite/dialog">
+
+    <h:form id="frmVivienda" >
+        <h:panelGroup layout="block" class="Container Wid100" id="pngInfoVivi">
+            <div align="right" id="div11" >
+                <p:remoteCommand name="rc111" immediate="false" async="true" actionListener="#{fichaPredial.saveCensalService()}" rendered="#{fichaPredial.editable}" action="#{fichaPredial.setServicios(fichaPredial.servicios)}" />
+                <p:commandButton id="btnS11" value="Guardar" rendered="#{fichaPredial.editable}"  icon="ui-icon-disk" actionListener="#{fichaPredial.openDialog}"
+                                 action="#{fichaPredial.setRemotteCommand('rc111')}" update="frmSubirDocumentosDialog" disabled="#{!fichaPredial.estaEdificado()}"  />
+            </div>
+            <p:fieldset legend="Vivienda" toggleable="true" id="fieldNV">
+                <p:fieldset legend="JEFE DEL HOGAR" style="font-size: 13px;" toggleable="true" id="fieldJH" >
+                    <h:panelGroup id="pngJefeHogar" >
+                        <cs:compInputSelect id="ciuTipoIdentJefeH" bind="#{fichaPredial.predio.ciuTipoIdentificacion}" catalogo="cliente-identificacion" 
+                                            label="Tipo de Identificación:" defaultValue="#{null}" next="tdatos:frmVivienda:nombreJefeH-input" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"/>
+                        <p:panelGrid columns="4">
+                            <h:outputText value="CI/RUC"/>
+                            <p:inputText value="#{fichaPredial.predio.ciuHorizontal}" readonly="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}" style="width: 270px;"/>
+                            <p:commandLink id="btnEnteHorizontal" actionListener="#{fichaPredial.buscarCiudadano}" rendered="#{fichaPredial.editable}" disabled="#{!fichaPredial.estaEdificado()}"  >
+                                <p:graphicImage value="/css/homeIconsImages/buscar.png" height="25" width="25"/>
+                            </p:commandLink>
+                            <p:commandLink disabled="#{!fichaPredial.estaEdificado()}" actionListener="#{fichaPredial.limpiarJefeHogar()}" rendered="#{fichaPredial.editable}" update="tdatos:frmVivienda:pngJefeHogar" >
+                                <p:graphicImage value="/css/homeIconsImages/trash.png" height="25" width="25"/>
+                            </p:commandLink>
+                        </p:panelGrid>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Nombres Completos:"/>
+                            <p:inputText value="#{fichaPredial.predio.ciuNombresHorizontal}" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}" readonly="false" style="width: 250px;" id="nombreJefeH"/>
+                        </p:panelGrid>
+                    </h:panelGroup>
+                </p:fieldset>
+            </p:fieldset>
+            <p:fieldset legend="Caracteristicas" toggleable="true">
+                <p:panelGrid columns="4" layout="grid" style="width: 100%" id="pnDtGeneral">
+                    <cs:compInputSelect id="clasfViv" bind="#{fichaPredial.predio.clasificacionVivienda}" catalogo="clasificacion-vivienda" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"
+                                        label="(*) Clasificación" defaultValue="#{2}" next="tdatos:frmVivienda:tipoViv:tipo-vivienda-input" />
+                    <cs:compInputSelect id="tipoViv" bind="#{fichaPredial.predio.tipoVivienda}" catalogo="tipo-vivienda" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"
+                                        label="(*) Tipo" defaultValue="#{2}" next="tdatos:frmVivienda:condViv:condicion-vivienda-input" />
+                    <cs:compInputSelect id="condViv" bind="#{fichaPredial.predio.condicionVivienda}" catalogo="condicion-vivienda" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"
+                                        label="(*) Condición de Ocupación" defaultValue="#{2}" next="tdatos:frmVivienda:acabPiso:predio-bloque-revestpiso-input" />
+                    <cs:compInputSelect id="tenecvivi" bind="#{fichaPredial.predio.tenenciaVivienda}" catalogo="predio-tenencia_vivienda" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"
+                                        label="(*) Propiedad o posesión" defaultValue="#{7}" next="tdatos:frmVivienda:num_habitaciones:num_habitaciones-form"  />                    
+                    <cs:compInputSelect id="usoVia" bind="#{fichaPredial.predio.usoVia}" catalogo="predio-uso_vias" 
+                                        label="Uso de Vía" defaultValue="2" next="tdatos:frmCaracSolar:tpVia:predio-vias-input" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"/>       
+                    <cs:compInputSelect id="cerPoblad" bind="#{fichaPredial.servicios.cercaniaPoblado}" catalogo="cercania_poblados" disabled="#{!fichaPredial.esPredioRural() || !fichaPredial.editable}"
+                                        label="Cercanía Poblados" defaultValue="#{null}" next="tdatos:frmCaracSolar:dispRiego:predio-dispon_riego-input" />
+                    <cs:compInputSelect bind="#{fichaPredial.servicios.metodoRiego}" catalogo="predio-metodo_riego" disabled="#{!fichaPredial.esPredioRural() || !fichaPredial.editable}"
+                                        label="Método de Riego" defaultValue="#{null}" next="tdatos:frmCaracSolar:alcSanit:predio-evac_aguas_serv-input" />
+                    <cs:compInputSelect id="energElect" bind="#{fichaPredial.servicios.abastEnergia}" catalogo="predio-energia_electrica" 
+                                        label="Energía eléctrica" defaultValue="#{null}" next="tdatos:frmCaracSolar:medidoree_input" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"/>
+                    <cs:compInputSelect id="acabPiso" bind="#{fichaPredial.predio.vivCencalAcabadoPiso}" catalogo="predio-bloque-revestpiso" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"
+                                        label="Acabado Piso - Pisos" defaultValue="#{1}" next="tdatos:frmVivienda:estadoAcbPiso:predio-bloque-estadoconservaci-input" />
+                    <cs:compInputSelect id="estadoAcbPiso" bind="#{fichaPredial.predio.vivCencalEstadoAcabadoPiso}" catalogo="predio-bloque-estadoconservaci" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"
+                                        label="Estado Acabado Piso" defaultValue="#{2}" next="tdatos:frmVivienda:aguaProv:predio-abastecimiento_agua-input" />
+                    <cs:decorateForm id="num_habitaciones" label="(*) Número de Habitaciones" bind="#{fichaPredial.predio.numHabitaciones}" integerValidate="true"
+                                     next="tdatos:frmVivienda:numDormitorios:numDormitorios-form" readonly="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}" />
+                    <cs:decorateForm id="numDormitorios" label="(*) Número de Dormitorios" bind="#{fichaPredial.predio.numDormitorios}" integerValidate="true"
+                                     next="tdatos:frmVivienda:numEspaciosDuchas:numEspaciosDuchas-form" readonly="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"/>
+                    <cs:decorateForm id="numEspaciosDuchas" label="(*) Espacios Para Bañarse o Duchas" bind="#{fichaPredial.predio.numEspaciosBanios}" integerValidate="true"
+                                     next="tdatos:frmVivienda:numHabitantes:numHabitantes-form" readonly="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"/>
+                    <cs:decorateForm id="numHabitantes" label="(*) Número de Habitantes" bind="#{fichaPredial.predio.habitantes}" integerValidate="true"
+                                     next="tdatos:frmVivienda:numHogares:numHogares-form" readonly="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"/>
+                    <cs:decorateForm id="numHogares" label="(*) Número de Hogares" bind="#{fichaPredial.predio.numHogares}" integerValidate="true"
+                                     next="tdatos:frmVivienda:numCelus:numCelus-form" readonly="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"/>
+                    <cs:decorateForm id="numCelus" label="(*) Número de Telefonos Celulares" bind="#{fichaPredial.predio.numCelulares}" integerValidate="true"
+                                      readonly="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}"/>
+
+                </p:panelGrid>
+            </p:fieldset>
+            <h:panelGrid columns="1" styleClass="noBorder" id="pngObsVn"  >
+                <h:panelGrid id="informante" columns="2" styleClass="noBorder">
+                    <f:facet name="header">INFORMANTE</f:facet>
+                    <h:outputText value="CI/RUC"/>
+                    <p:inputText value="#{fichaPredial.predio.ciRucInformante}" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}" onkeypress="return isNumber(event)" readonly="false" style="width: 270px;"/>
+                    <p:outputLabel value="Nombres:" />
+                    <p:inputText value="#{fichaPredial.predio.nombreInformante}" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}" readonly="false" style="width: 250px;"/>
+                    <p:outputLabel value="Apellidos:" />
+                    <p:inputText value="#{fichaPredial.predio.apellidosInformante}" disabled="#{!fichaPredial.estaEdificado() || !fichaPredial.editable}" readonly="false" style="width: 250px;"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGroup>
+    </h:form>
+</html>

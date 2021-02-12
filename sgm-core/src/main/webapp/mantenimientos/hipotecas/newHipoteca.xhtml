@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <f:metadata >
+        <f:event type="preRenderView" listener="#{newHipotecasView.initView()}"/>
+        <f:viewParam name="idPredio" value="#{newHipotecasView.idPredio}"/>
+        <f:viewParam name="codigoPrestamo" value="#{newHipotecasView.codigoPrestamo}"/>
+        <f:viewParam name="ver" value="#{newHipotecasView.ver}"/>
+    </f:metadata>
+
+    <h:head>
+        <title>Nueva Hipoteca</title>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+        <script src="#{appConfig.urlbase}resources/js/app.js"></script>
+
+        <h:form id="frmRestriccion">
+            <p:growl autoUpdate="true" showDetail="true" />
+
+            <p:panel id="pnlHipoteca">
+
+                <h:panelGrid id="pngDatosHipotecas" columns="2" style="width: 100%">
+                    <!--<h:panelGroup layout="block">
+                        <h:outputText value="Cedula Propietario:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText readonly="#{newHipotecasView.ver}" maxlength="30" />
+                        <p:commandButton icon="ui-icon-search" actionListener="#{newHipotecasView.buscarPorCedula()}" />
+                        
+                    </h:panelGroup>
+                    <h:panelGroup layout="block"> </h:panelGroup>-->
+                    
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Clave Catastral:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText value="#{newHipotecasView.predio.claveCat}" readonly="#{newHipotecasView.ver}" maxlength="30" id="txtClaveCat" />
+                        <p:commandButton icon="ui-icon-search" actionListener="#{newHipotecasView.buscarPorCedula()}" />
+                        <!--<p:commandButton icon="fa fa-navicon" actionListener="#{newHipotecasView.buscarPredio()}" update="frmPredios" oncomplete="PF('dlgPredios').show()" styleClass="white" rendered="#{!newHipotecasView.ver}" />-->
+                        
+                        <!--                        <p:commandButton icon="fa fa-navicon" actionListener="# {newHipotecasView.buscarPredio1()}" styleClass="white" rendered="# {!newHipotecasView.ver}" >
+                                                        <p:ajax event="dialogReturn" listener="# {newHipotecasView.seleccionarPredio}"></p:ajax>
+                                                </p:commandButton>-->
+                    </h:panelGroup>
+                    <h:panelGroup id="predio" layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Propietario:" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:dataList value="#{newHipotecasView.predio.catPredioPropietarioCollection}" var="prop1" type="ordered">
+                            <f:facet name="header">
+                                Propietarios
+                            </f:facet>
+                            #{prop1.nombresCompletos}
+                        </p:dataList>
+
+                    </h:panelGroup>  
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Fuente de Financiamiento" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+                        <p:selectOneMenu id="lazy" value="#{newHipotecasView.hipoteca.codFinanPrestamo}" style="width:125px" converter="entityConverter">
+                            <f:selectItem itemLabel="Select One" itemValue="#{null}" />
+                            <f:selectItems value="#{newHipotecasView.finanPrestamo}" var="finan1" itemLabel="#{finan1.descripcionFinanPrestamo}" itemValue="#{finan1}"/>
+                        </p:selectOneMenu>         
+                    </h:panelGroup> 
+
+                    <h:panelGroup  layout="block" class="Responsive100 Responsive">
+                        <h:outputText value="Modalidad del prestamo" style="font-weight: bolder" class="FontBold DispBlock Wid100"/>
+
+                        <p:selectOneMenu id="lazy1" value="#{newHipotecasView.hipoteca.modalidadPrestamo}" style="width:125px">
+                            <f:selectItem itemLabel="Select One" itemValue="#{null}" />
+                            <f:selectItems value="#{newHipotecasView.modalidadCredito}" var="mod1" itemLabel="#{mod1.valor}" itemValue="#{mod1.valor}"/>
+
+                        </p:selectOneMenu>         
+                    </h:panelGroup> 
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Monto del Prestamo:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText value="#{newHipotecasView.hipoteca.montoInicialPrestamo}" readonly="#{newHipotecasView.ver}" maxlength="30" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Plazo del Prestamo:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText value="#{newHipotecasView.hipoteca.plazoPrestamo}" readonly="#{newHipotecasView.ver}" maxlength="30" />
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Interes del Prestamo:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText value="#{newHipotecasView.hipoteca.tasaInteresPrestamo}" readonly="#{newHipotecasView.ver}" maxlength="30" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Fecha de Concesion:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:calendar value="#{newHipotecasView.hipoteca.fechaConsecionPrestamo}" readonly="#{newHipotecasView.ver}" placeholder="DÍA-MES-AÑO" 
+                                    pattern="dd-MM-yyyy" mask="true" navigator="true" styleClass="calendarClass" />
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Porcentaje Exoneracion:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText value="#{newHipotecasView.hipoteca.porcentajeExonPrestamo}" readonly="#{newHipotecasView.ver}" maxlength="30" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Num. Tramite:" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText value="#{newHipotecasView.hipoteca.numeroTramite}" readonly="#{newHipotecasView.ver}" maxlength="30" />
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Estado Prestamo" style="font-weight: bolder" class="DispBlock Wid100"/>
+
+                        <p:selectOneMenu id="lazy3" value="#{newHipotecasView.hipoteca.estadoPrestamo}"  style="width:125px">
+                            <f:selectItem itemLabel="ACTIVO" itemValue="#{1}" />
+                            <f:selectItem itemLabel="INACTIVO" itemValue="#{0}" />
+
+
+                        </p:selectOneMenu> 
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:outputText value="Comentario Estado Prestamo" style="font-weight: bolder" class="DispBlock Wid100"/>
+                        <p:inputText value="#{newHipotecasView.hipoteca.comentarioEstadoPrestamo}" readonly="#{newHipotecasView.ver}" maxlength="30" />
+
+                    </h:panelGroup>
+
+                    <p:outputLabel/>
+
+
+                    <f:facet name="footer">
+                        <center>
+                            <p:commandButton value="Generar Amortizacion"  
+                                             styleClass="white" update="frmAmortizacion" icon="fa fa-save" oncomplete="PF('dlgAmortizacion').show()" actionListener="#{newHipotecasView.generarAmortizacion()}"/>
+                            <p:spacer width="10" />
+                            <p:commandButton value="#{newHipotecasView.hipoteca.codigoPrestamo eq null ? 'Guardar' : 'Modificar'}" actionListener="#{newHipotecasView.guardar()}" rendered="#{!newHipotecasView.ver}"
+                                             styleClass="white" icon="fa fa-save"/>
+
+                            <p:spacer width="10" />
+                            <p:commandButton value="Cerrar" actionListener="#{newHipotecasView.cerrar()}" icon="fa fa-external-link" styleClass="white" />
+                        </center>
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <p:ajaxStatus id="status" onstart="PF('dlgStatus').show()" oncomplete="PF('dlgStatus').hide()"/>
+        <p:dialog id="dlgStatus" widgetVar="dlgStatus" modal="true" draggable="false"  closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+        </p:dialog>
+
+        <p:dialog widgetVar="dlgPredios" id="dlgPredios" modal="true" closable="true" closeOnEscape="true" header="Listado de predios"
+                  height="400" width="80%" position="center">
+            <h:form id="frmPredios">
+                <p:dataTable id="dtPredios" lazy="true" value="#{newHipotecasView.predioLazy}" reflow="true"
+                             var="predio1" rows="5" paginator="true" paginatorPosition="top" filterEvent="enter"
+                             emptyMessage="No tiene datos">
+                    <p:column headerText="Número de predio" filterBy="#{predio1.numPredio}">
+                        <center><h:outputText value="#{predio1.numPredio}"/></center>
+                    </p:column>
+                    <p:column headerText="Clave Catastral" filterBy="#{predio1.claveCat}" style="text-align: center" >
+                        <h:outputText value="#{predio1.claveCat}"/>
+
+                    </p:column>
+                    <p:column headerText="Clave Anterior 1" filterBy="#{predio1.predialant}" style="text-align: center" >
+                        <h:outputText value="#{predio1.predialant}"/>
+                    </p:column>
+                    <p:column headerText="Sector" style="text-align: center;" filterBy="#{predio1.sector}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.sector}"/>
+                    </p:column>
+                    <p:column headerText="MZ" style="text-align: center;" filterBy="#{predio1.mz}" sortBy="#{predio1.mz}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.mz}"/>
+                    </p:column>
+                    <p:column headerText="Lote" style="text-align: center;" filterBy="#{predio1.solar}"  sortBy="#{predio1.solar}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.solar}"/>
+                    </p:column>
+                    <p:column headerText="Bloque" width="8%" style="text-align: center;" filterBy="#{predio1.bloque}"  sortBy="#{predio1.bloque}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.bloque}"/>
+                    </p:column>
+                    <p:column headerText="Piso" style="text-align: center;" filterBy="#{predio1.piso}"  sortBy="#{predio1.piso}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.piso}"/>
+                    </p:column>
+                    <p:column headerText="Unidad" style="text-align: center;" filterBy="#{predio1.unidad}"  sortBy="#{predio1.unidad}" filterStyle="width: 50%">
+                        <h:outputText value="#{predio1.unidad}"/>
+                    </p:column>
+                    <p:column headerText="Acción" width="5%" style="text-align: center;" >
+                        <p:commandLink actionListener="#{newHipotecasView.seleccionarPredio(predio1)}" 
+                                       update="frmRestriccion, frmRestriccion:pnlHipoteca, frmRestriccion:pngDatosHipotecas"
+                                       oncomplete="PF('dlgPredios').hide()">
+                            <p:graphicImage value="/css/homeIconsImages/selecc.png" width="20" height="20" />
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="dlgAmortizacion" id="dlgAmortizacion" modal="true" closable="true" closeOnEscape="true" header="Tabla de Amortizacion"
+                  height="400" width="80%" position="center">
+            <h:form id="frmAmortizacion">
+                <p:tabView>
+                    <p:tab title="Tasa Amortizacion">
+                        <p:dataTable var="tasmx" value="#{newHipotecasView.tasaAmortizacions}" rows="10" rowsPerPageTemplate="10, 20" paginator="true">
+                            <p:column headerText="Numero">
+                                <h:outputText value="#{tasmx.num}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{tasmx.fecha}" />
+                            </p:column>
+
+                            <p:column headerText="Capital Variable">
+                                <h:outputText value="#{tasmx.amort_capital_variable}" />
+                            </p:column>
+                            <p:column headerText="Capital Pagado">
+                                <h:outputText value="#{tasmx.capital_pagado_variable}" />
+                            </p:column>
+                            <p:column headerText="Saldo">
+                                <h:outputText value="#{tasmx.interes_saldo}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Saldo Prestamo">
+                        <p:dataTable var="tab3" value="#{newHipotecasView.hipoteca.finanSaldoPrestamos}" rows="10" rowsPerPageTemplate="10, 20"  paginator="true">
+                            <p:column headerText="Id">
+                                <h:outputText value="#{tab3.codigoSaldo}" />
+                            </p:column>
+
+                            <p:column headerText="Anio">
+                                <h:outputText value="#{tab3.anio}" />
+                            </p:column>
+
+                            <p:column headerText="Saldo">
+                                <h:outputText value="#{tab3.saldo}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+
+            </h:form>
+        </p:dialog>
+        <p:dialog widgetVar="dlgPropietarios" header='Buscar por Cedula'>
+            <h:form id="formPropietario">
+                
+                <p:dataTable id="dtPropietario" value="#{newHipotecasView.propietarioLazy}" var="prop" lazy="true"
+                             rows="10" paginator="true" resizableColumns="true" filterEvent="enter">
+                    
+                    <p:column headerText="Cedula" width="120" style="text-align: center" filterBy="#{prop.ciuCedRuc}">
+                                <h:outputLabel value="#{prop.ciuCedRuc}" />
+                            </p:column>
+                    <p:column headerText="Nombre completos">
+                                <h:outputLabel value="#{prop.nombresCompletos}" />
+                            </p:column>
+                    <p:column headerText="Clave Catastral">
+                                <h:outputLabel value="#{prop.predio.claveCat}" />
+                            </p:column>
+                    <p:column headerText="Calle Principal">
+                                <h:outputLabel value="#{prop.predio.calle}" />
+                            </p:column>
+                    <p:column headerText="Nro Vivienda" width="70" style="text-align: center">
+                                <h:outputLabel value="#{prop.predio.numeroVivienda}" />
+                            </p:column>
+                    <p:column headerText="**" width="35"> 
+                     <p:commandLink actionListener="#{newHipotecasView.seleccionarPredio(prop.predio)}" 
+                                       update="frmRestriccion, frmRestriccion:pnlHipoteca, frmRestriccion:pngDatosHipotecas"
+                                       oncomplete="PF('dlgPropietarios').hide()">
+                            <p:graphicImage value="/css/homeIconsImages/ir.png" height="15" />
+                        </p:commandLink>
+                        </p:column>
+                </p:dataTable>
+            </h:form>
+            
+        </p:dialog> 
+        
+    </h:body>
+</html>
+

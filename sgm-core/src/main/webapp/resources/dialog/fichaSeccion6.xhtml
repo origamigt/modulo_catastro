@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface componentType="seccionesFicha" >
+        <cc:attribute name="headerDialog"/>
+        <cc:attribute name="predio" type="com.origami.sgm.entities.CatPredio" required="true"/>        
+        <cc:attribute name="predioant" type="com.origami.sgm.entities.CatPredio" required="true"/>        
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <!--<h:form id="frmSeccion6">-->
+        <style>
+            /*.ui-widget, .ui-widget .ui-widget {width: 98%;}*/
+            .ui-panel {display: grid;}
+            .ui-fieldset {border: solid 1px #d1d3d4;background-color: #FBFCFD; padding: 2px; width: 100% !important;}
+            .ui-panelgrid tbody tr td{border: solid 0px #C0C5C7 !important}
+            .ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {font-weight: normal; width: 100%;}
+        </style>
+        <h:form id="frmViviendaCensal" >
+            <p:fieldset legend="JEFE DEL HOGAR" style="font-size: 13px;" toggleable="true">
+                <h:panelGroup id="pngJefeHogar">
+                    <p:panelGrid columns="2" >
+                        <h:outputText value="CI/RUC"/> 
+                        <p:inputText value="#{cc.attrs.predio.ciuHorizontal}"  styleClass="#{cc.comparar(cc.attrs.predio.ciuHorizontal, cc.attrs.predioant.ciuHorizontal)}" readonly="true" style="width: 270px;"/>                         
+                        <h:outputText value="Tipo de Identificación"/>
+                        <p:inputText value="#{cc.attrs.predio.ciuTipoIdentificacion.valor}"  styleClass="#{cc.comparar(cc.attrs.predio.ciuTipoIdentificacion.valor, cc.attrs.predioant.ciuTipoIdentificacion.valor)}" readonly="true" style="width: 270px;"/>                     
+                        <p:outputLabel value="Nombres Completos:"/>
+                        <p:inputText value="#{cc.attrs.predio.ciuNombresHorizontal}" styleClass="#{cc.comparar(cc.attrs.predio.ciuNombresHorizontal, cc.attrs.predioant.ciuNombresHorizontal)}" readonly="true" />  
+                    </p:panelGrid>
+                </h:panelGroup>
+            </p:fieldset>
+            <p:fieldset legend="Datos Descriptivos" toggleable="true">
+                <p:panelGrid columns="4" layout="grid" style="width: 100%">
+                    <h:outputText value="Clasificación" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.clasificacionVivienda.valor}" styleClass="#{cc.comparar(cc.attrs.predio.clasificacionVivienda.valor, cc.attrs.predioant.clasificacionVivienda.valor)}"  readonly="true"/>                                                   
+                    <h:outputText value="Tipo" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.tipoVivienda.valor}" styleClass="#{cc.comparar(cc.attrs.predio.tipoVivienda.valor, cc.attrs.predioant.tipoVivienda.valor)}" readonly="true"/>                          
+                    <h:outputText value="Condición de Ocupación" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.condicionVivienda.valor}" styleClass="#{cc.comparar(cc.attrs.predio.condicionVivienda.valor, cc.attrs.predioant.condicionVivienda.valor)}" readonly="true"/>                           
+                    <h:outputText value="Propiedad o posesión" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.tenenciaVivienda.valor}" styleClass="#{cc.comparar(cc.attrs.predio.tenenciaVivienda.valor, cc.attrs.predioant.tenenciaVivienda.valor)}" readonly="true"/>                           
+                    <h:outputText value="Uso de Vía" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.usoVia.valor}" styleClass="#{cc.comparar(cc.attrs.predio.usoVia.valor, cc.attrs.predioant.usoVia.valor)}" readonly="true"/>                           
+                    <h:outputText value="Cercanía Poblados" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.cercaniaPoblado.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.cercaniaPoblado.valor, cc.attrs.predioant.catPredioS6.cercaniaPoblado.valor)}" readonly="true"/>
+                    <h:outputText value="Método de Riego" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.metodoRiego.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.metodoRiego.valor, cc.attrs.predioant.catPredioS6.metodoRiego.valor)}" readonly="true"/>                           
+                    <h:outputText value="Energía eléctrica" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.catPredioS6.abastEnergia.valor}" styleClass="#{cc.comparar(cc.attrs.predio.catPredioS6.abastEnergia.valor, cc.attrs.predioant.catPredioS6.abastEnergia.valor)}" readonly="true"/>
+                    <h:outputText value="Acabado Piso - Pisos" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.vivCencalAcabadoPiso.valor}" styleClass="#{cc.comparar(cc.attrs.predio.vivCencalAcabadoPiso.valor, cc.attrs.predioant.vivCencalAcabadoPiso.valor)}" readonly="true" />  
+                    <h:outputText value="Estado Acabado Piso" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.vivCencalEstadoAcabadoPiso.valor}"  styleClass="#{cc.comparar(cc.attrs.predio.vivCencalEstadoAcabadoPiso.valor, cc.attrs.predioant.vivCencalEstadoAcabadoPiso.valor)}" readonly="true" />
+                    <h:outputText value="Número de Habitaciones" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.numHabitaciones}"  styleClass="#{cc.comparar(cc.attrs.predio.numHabitaciones, cc.attrs.predioant.numHabitaciones)}" readonly="true" />
+                    <h:outputText value="Número de Dormitorios" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.numDormitorios}"  styleClass="#{cc.comparar(cc.attrs.predio.numDormitorios, cc.attrs.predioant.numDormitorios)}" readonly="true" />
+                    <h:outputText value="Espacios Para Bañarse o Duchas" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.numEspaciosBanios}"  styleClass="#{cc.comparar(cc.attrs.predio.numEspaciosBanios, cc.attrs.predioant.numEspaciosBanios)}" readonly="true" />
+                    <h:outputText value="Número de Habitantes" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.habitantes}"  styleClass="#{cc.comparar(cc.attrs.predio.habitantes, cc.attrs.predioant.habitantes)}" readonly="true" />
+                    <h:outputText value="Número de Hogares" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.numHogares}"  styleClass="#{cc.comparar(cc.attrs.predio.numHogares, cc.attrs.predioant.numHogares)}" readonly="true" />
+                    <h:outputText value="Número de Telefonos Celulares" style="font-weight: bolder"/>
+                    <p:inputText value="#{cc.attrs.predio.numCelulares}"  styleClass="#{cc.comparar(cc.attrs.predio.numCelulares, cc.attrs.predioant.numCelulares)}" readonly="true" />
+                    
+                </p:panelGrid>
+            </p:fieldset>
+
+            <h:panelGrid columns="1" styleClass="noBorder"  >
+                <h:panelGroup id="informante" style="width: 100%;" >
+                    <h:panelGrid columns="2" styleClass="noBorder" style="width: 100%;">
+                        <f:facet name="header">INFORMANTE</f:facet>
+                        <h:outputText value="CI/RUC"/>
+                        <p:inputText value="#{cc.attrs.predio.ciRucInformante}" styleClass="#{cc.comparar(cc.attrs.predio.ciRucInformante, cc.attrs.predioant.ciRucInformante)}" onkeypress="return isNumber(event)" readonly="true" />
+                        <p:outputLabel value="Nombres:" />
+                        <p:inputText value="#{cc.attrs.predio.nombreInformante}" styleClass="#{cc.comparar(cc.attrs.predio.nombreInformante, cc.attrs.predioant.nombreInformante)}" readonly="true" />
+                        <p:outputLabel value="Apellidos:" />
+                        <p:inputText value="#{cc.attrs.predio.apellidosInformante}" styleClass="#{cc.comparar(cc.attrs.predio.apellidosInformante, cc.attrs.predioant.apellidosInformante)}" readonly="true" />    
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:panelGrid>
+        </h:form>
+    </cc:implementation>
+</html>

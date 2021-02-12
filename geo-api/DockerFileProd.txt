@@ -1,0 +1,5 @@
+FROM adoptopenjdk/openjdk8:alpine-jre
+COPY ./target/geoapi-0.0.1-SNAPSHOT.jar /opt/app/
+WORKDIR /opt/app
+RUN sh -c 'touch geoapi-0.0.1-SNAPSHOT.jar'
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","geoapi-0.0.1-SNAPSHOT.jar"]

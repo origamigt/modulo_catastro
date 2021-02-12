@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:panelGroup layout="block" class="Wid100 MarTop10 Container"  style="margin-bottom: 20px;">
+        <h:panelGroup layout="block" class="Container Wid100">
+            <h1 class="BigTopic Fs16">Listado de bloques #{registrarCuadroAlicuotas.predioMatriz.claveCat}</h1>
+            <hr></hr>
+            <div class="ContainerIndent">
+                <div align="right">
+                    <p:commandButton id="btnAgregarBloque1" value="Agregar Bloque" rendered="#{not empty registrarCuadroAlicuotas.bloqueGis}" 
+                                     actionListener="#{registrarCuadroAlicuotas.bloque(null)}" >
+                        <p:ajax event="dialogReturn" listener="#{registrarCuadroAlicuotas.procesarBloque}" 
+                                update="registroPHForm"  />
+                    </p:commandButton>
+                </div>
+                <p:dataTable value="#{registrarCuadroAlicuotas.bloqueGis}" var="geob" paginator="true" 
+                             rendered="#{not empty registrarCuadroAlicuotas.bloqueGis}"
+                             paginatorAlwaysVisible="false" paginatorPosition="top"  rows="5"
+                             rowsPerPageTemplate="5, 10, 20, 30" id="geoBloques" emptyMessage="No se encontraron registros"
+                             selectionMode="single" selection="#{registrarCuadroAlicuotas.geoBloqueSeleccionado}" rowKey="#{geob.num}">
+                    <f:facet name="header">Bloque Nuevos</f:facet>
+                    <p:column headerText="Clave Catastral"  width="40%">
+                        #{geob.codigo}
+                    </p:column>
+                    <p:column headerText="Num. bloque">
+                        #{geob.num}
+                    </p:column>
+                    <p:column headerText="Num. pisos">
+                        #{geob.numPisos.size()}
+                    </p:column>
+                    <p:column headerText="Área bloque." width="15%">
+                        <h:outputLabel value="#{geob.areaBloque}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputLabel>
+                    </p:column>
+                </p:dataTable>
+                <p:dataTable value="#{registrarCuadroAlicuotas.edificaciones}" var="bq1" paginator="true"
+                             paginatorAlwaysVisible="false" paginatorPosition="top"  rows="10"
+                             rowsPerPageTemplate="5, 10, 20, 30" id="dtBloques" emptyMessage="No se encontraron registros"
+                             rowStyleClass="#{bq1.edicionGrafica? 'colored' : 'white'}">
+                    <p:column headerText="Num. bloque" >
+                        <p:outputLabel value="#{bq1.noEdificacion}"/>
+                    </p:column>
+                    <p:column headerText="Num. pisos">
+                        <p:outputLabel value="#{bq1.numPisos}"/>
+                    </p:column>
+                    <p:column headerText="Condición fisica">
+                        <p:outputLabel value="#{bq1.condicionFisica.valor}"/>
+                    </p:column>
+                    <p:column headerText="Valor Cultural">
+                        <p:outputLabel value="#{bq1.valorCultural.valor}"/>
+                    </p:column>
+                    <p:column headerText="Estado Conservación">
+                        <p:outputLabel value="#{bq1.estadoConservacion.valor}"/>
+                    </p:column>
+                    <p:column headerText="Uso Construc.">
+                        <p:outputLabel value="#{bq1.usoConstructivoPiso.valor}"/>
+                    </p:column>
+                    <p:column headerText="Área bloque.">
+                        <p:outputLabel value="#{bq1.areaBloque}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Avaluo.">
+                        <p:outputLabel value="#{bq1.avaluo}"/>
+                    </p:column>
+                    <p:column headerText="Opciones" style="text-align: center; ">
+                        <p:commandLink title="Editar bloque" actionListener="#{registrarCuadroAlicuotas.bloque(bq1)}"  >
+                            <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            <p:ajax event="dialogReturn" listener="#{registrarCuadroAlicuotas.procesarBloque}" update="registroPHForm"  />
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:panelGroup>
+    </h:panelGroup>
+    <!--    <script>
+            document.getElementById("dtPredios:coltipo:filter").classList.add('dataTableSelect');
+    
+        </script>-->
+</html>

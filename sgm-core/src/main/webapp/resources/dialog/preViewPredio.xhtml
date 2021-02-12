@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="predio" required="true" type="com.origami.sgm.entities.CatPredio" />
+        <cc:attribute name="restriccionesPredio" required="true" type="java.utils.List" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <style type="text/css">
+            .myFieldset .ui-fieldset, .ui-fieldset {
+                background-color: transparent;
+                /*border-color: transparent;*/
+                display: inline-block;
+                width: 92% !important;
+            }
+        </style>
+
+            <p:panel style="max-width: 930px; min-width: 530px;" header="Codigo Catastral: #{cc.attrs.predio.claveCat}" >
+            <p:outputLabel value="Parroquia: #{cc.attrs.predio.catParroquia.descripcion}" class="FontBold Fs14"/> <p:spacer width="25"/>
+            <p:outputLabel value="Codigo Anterior 1 #{cc.attrs.predio.predialant}" class="FontBold Fs14"/>
+            <div class="ContainerIndent">
+                <p:panel rendered="#{not empty cc.attrs.restriccionesPredio}">
+                    <ui:repeat value="#{cc.attrs.restriccionesPredio}" var="d1" rendered="#{cc.attrs.restriccionesPredio ne null}">
+                        <p:outputLabel value="#{d1}" class="Fs18 FontBold icon-lock" style="color: darkred; text-transform: uppercase" escape="false"  /><br/>
+                    </ui:repeat>
+                </p:panel>
+            </div>
+            <p:fieldset legend="Identificacion" styleClass="myFieldset1" >
+                <p:panelGrid layout="grid" columns="3">
+                    <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                        <h:outputText value="Nombre del Predio o Edificacion:" class="Wid100 FontBold"/>
+                        <p:inputText value="#{cc.attrs.predio.nombreEdificio}" readonly="true"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                        <h:outputText value="Mz (Plano Aprobado):" class="Wid100 FontBold"/>
+                        <p:inputText value="#{cc.attrs.predio.urbMz}" readonly="true"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                        <h:outputText value="Lote (Plano Aprobado):" class="Wid100 FontBold"/>
+                        <p:inputText value="#{cc.attrs.predio.urbSolarnew}" readonly="true"/>
+                    </h:panelGroup>
+                </p:panelGrid>
+            </p:fieldset>
+            <div class="Container">
+                <div class="left Container50">
+                    <p:fieldset id="field_area" legend="Área Total" styleClass="myFieldset" >
+                        <!--<p:outputLabel value="Alicuota: # {cc.attrs.predio.alicuotaConst}" rendered="# {cc.attrs.predio.propiedadHorizontal}" />-->
+                        <p:panelGrid columns="2" class="DispBlock" layout="grid" >
+                            <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                                <p:outputLabel value="Terreno :" class="Wid100 FontBold"/>
+                                <pe:inputNumber value="#{cc.attrs.predio.areaSolar}" decimalPlaces="5" readonly="true"/>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock" rendered="#{cc.attrs.predio.propiedadHorizontal}">
+                                <p:outputLabel value="Alicuota :" class="Wid100 FontBold"/>
+                                <pe:inputNumber value="#{cc.attrs.predio.alicuotaConst}" readonly="true"/>
+                            </h:panelGroup>
+                            <p:outputLabel rendered="#{!cc.attrs.predio.propiedadHorizontal}"/>
+                            <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                                <p:outputLabel value="Construcción :" class="Wid100 FontBold"/>
+                                <pe:inputNumber value="#{cc.attrs.predio.areaDeclaradaConst}" decimalPlaces="5" readonly="true"/>
+                            </h:panelGroup>
+                            <p:outputLabel/>
+                        </p:panelGrid>
+                    </p:fieldset>
+                    <p:resizable for="field_area" containment="true" />
+                </div>
+                <div class="right Container50">
+                    <p:fieldset id="field_avaluo" legend="Avalúo" styleClass="myFieldset" >
+                        <p:panelGrid columns="2" layout="grid" style="width: 100%">
+                            <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                                <p:outputLabel value="Terreno :" class="Wid100 FontBold"/>
+                                <pe:inputNumber value="#{cc.attrs.predio.avaluoSolar}" decimalPlaces="2" readonly="true"/>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                                <p:outputLabel value="Construcción :" class="Wid100 FontBold"/>
+                                <pe:inputNumber value="#{cc.attrs.predio.avaluoConstruccion}" decimalPlaces="2"  readonly="true"/>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                                <p:outputLabel value="Valor de la Propiedad :" class="Wid100 FontBold"/>
+                                <pe:inputNumber value="#{cc.attrs.predio.avaluoMunicipal}" decimalPlaces="2" readonly="true"/>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="Responsive100 Responsive DispBlock">
+                                <p:outputLabel value="Base Imponible :" class="Wid100 FontBold"/>
+                                <pe:inputNumber value="#{cc.attrs.predio.baseImponible}" decimalPlaces="2" readonly="true"/>
+                            </h:panelGroup>
+                        </p:panelGrid>
+                    </p:fieldset>
+                    <p:resizable for="field_avaluo" containment="true"/>
+                </div>
+            </div>
+            <br/>
+
+            <p:fieldset legend="Datos de Escritura">
+                <p:dataTable id="dtEscrituras" value="#{cc.attrs.predio.catEscrituraCollection}" var="e" scrollable="true" style="width: 100%"
+                             emptyMessage="No se encontraron registros" paginator="true" paginatorPosition="top" 
+                             rows="5"   rowsPerPageTemplate="20,50,100" filterEvent="enter"
+                             paginatorAlwaysVisible="false"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowKey="#{e.idEscritura}" selectionMode="single" >
+                    <p:column headerText="No. Actualizacion">
+                        <h:outputText value="#{e.numeroActualizacion}"/>
+                    </p:column>  
+                    <p:column headerText="Notaria">
+                        <h:outputText value="#{e.notaria}"/>
+                    </p:column>  
+                    <p:column headerText="Fecha Escritura">
+                        <h:outputText value="#{e.fecEscritura}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>
+                    </p:column> 
+                    <p:column headerText="Fecha Actualización">
+                        <h:outputText value="#{e.fechaAutorizacion}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>
+                    </p:column> 
+                    <p:column headerText="Fecha Inscripción">
+                        <h:outputText value="#{e.fecInscripcion}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>
+                    </p:column> 
+                    <p:column headerText="Area">
+                        <h:outputText value="#{e.areaSolar}" ><f:convertNumber pattern="##############.####" locale="us"/></h:outputText>
+                    </p:column>                     
+                </p:dataTable>
+            </p:fieldset>
+            <p:fieldset legend="Propietarios" >
+                <p:dataTable id="toolProp" value="#{cc.attrs.predio.catPredioPropietarioCollection}" var="pp1" emptyMessage="No se encontrarón Propietarios" 
+                             rows="3" class="Wid100" >
+                    <p:column headerText="Tipo Propietario" width="15%">
+                        <p:outputLabel value="#{pp1.tipo.valor}"/>
+                    </p:column>
+                    <p:column headerText="DNI" width="14%">
+                        <p:outputLabel value="#{pp1.ciuCedRuc}"/>
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{pp1.nombresCompletos}" style="text-transform: uppercase"/>
+                    </p:column>
+                    <p:column headerText="% posesión" width="10%">
+                        <p:outputLabel value="#{pp1.porcentajePosecion}">
+                        </p:outputLabel>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+            
+            <br />
+            <br/>
+            <p:panel header="Clasificación del suelo rural" rendered="#{cc.attrs.predio.tipoPredio eq 'R'}">
+                <p:dataTable id="dtSueloRural" value="#{cc.attrs.predio.catPredioClasificRuralCollection}" var="clf" reflow="true" 
+                             paginator="true" rows="5" paginatorPosition="top" style="width: 100%" 
+                             emptyMessage="No se encontraron registros" paginatorAlwaysVisible="false"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="Sector Homogeneo">
+                        <h:outputText value="#{clf.sectorHomogeneo.valor}"/>
+                    </p:column>
+                    <p:column headerText="Calidad del Suelo">
+                        <h:outputText value="#{clf.calidadSuelo.orden}"/>
+                    </p:column>
+                    <p:column headerText="Superficie">
+                        <h:outputText value="#{clf.superficie}"/>
+                    </p:column>
+                    <p:column headerText="Valor del Terreno ">
+                        <h:outputText value="#{clf.valorTerreno}"/>
+                    </p:column>
+                    <p:column headerText="Valor Unitario por Hectarea">
+                        <h:outputText value="#{clf.valorUnitarioHectareaTerreno}"  style="align-content: center"/>
+                    </p:column> 
+                    <p:column headerText="Uso de Suelo">
+                        <h:outputText value="#{clf.usoPredio.valor}"/>
+                    </p:column> 
+                </p:dataTable>
+            </p:panel>
+        </p:panel>
+    </cc:implementation>
+</html>

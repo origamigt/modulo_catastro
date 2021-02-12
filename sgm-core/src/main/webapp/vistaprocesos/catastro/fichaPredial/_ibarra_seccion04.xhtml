@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:form id="frmEdificaciones" >
+        <style  type="text/css">
+            .ui-datatable-even {
+                background: white !important ;
+            }
+
+            .colored {
+                background-color: orange  !important ; 
+            }
+        </style>
+        <p:tabView id="tvEdificaciones" cache="false">
+            <p:tab id="edif" title="Caracteristicas de la construccion/Bloques">
+                <div align="right">
+                    <p:commandButton id="btnAgregarBloque" value="Agregar Bloque" actionListener="#{fichaPredial.bloque(null)}"  
+                                     rendered="false" disabled="#{(fichaPredial.esPh() and !fichaPredial.predio.tieneAumentoph) and not empty fichaPredial.bloqueGis}" >
+                        <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarBloque}" 
+                                update="tdatos:frmEdificaciones:tvEdificaciones:dtBloques, tdatos:frmDatosPredio:tvUbicacion:fdsAreas, tdatos:frmDatosPredio:tvUbicacion:fdsAvaluos"  />
+                    </p:commandButton>
+                    <!-- INGRESO DE BLOQUENUEVO-->
+                    <p:commandButton id="btnAgregarBloque1" value="Agregar Bloque" actionListener="#{fichaPredial.bloque(null)}"  
+                                      disabled="#{fichaPredial.esPh() and !fichaPredial.predio.tieneAumentoph}" >
+                        <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarBloque}" 
+                                update="tdatos:frmEdificaciones:tvEdificaciones:dtBloques, tdatos:frmEdificaciones:tvEdificaciones:geoBloques, tdatos:frmDatosPredio:tvUbicacion:fdsAreas, tdatos:frmDatosPredio:tvUbicacion:pgAvaluos"  />
+                    </p:commandButton>
+                </div>
+
+                <p:dataTable value="#{fichaPredial.bloqueGis}" var="geob" paginator="true" 
+                             rendered="#{not empty fichaPredial.bloqueGis}"
+                             paginatorAlwaysVisible="false" paginatorPosition="top"  rows="5"
+                             rowsPerPageTemplate="5, 10, 20, 30" id="geoBloques" emptyMessage="No se encontraron registros"
+                             selectionMode="single" selection="#{fichaPredial.geoBloqueSeleccionado}" rowKey="#{geob.num}">
+                    <f:facet name="header">Bloque Nuevos</f:facet>
+                    <p:column headerText="Clave Catastral"  width="40%">
+                        <h:outputText value="#{geob.codigo}" rendered="#{!fichaPredial.esPh()}" />
+                        <h:outputText value="#{geob.codigoPh}" rendered="#{fichaPredial.esPh()}" />
+                    </p:column>
+                    <p:column headerText="Num. bloque">
+                        #{geob.num}
+                    </p:column>
+                    <p:column headerText="Num. pisos">
+                        #{geob.numPisos.size()}
+                    </p:column>
+                    <p:column headerText="Área bloque." width="15%">
+                        <h:outputLabel value="#{geob.areaBloque}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputLabel>
+                    </p:column>
+                </p:dataTable>
+                <p:dataTable value="#{fichaPredial.bloques}" var="bq1" paginator="true"
+                             paginatorAlwaysVisible="false" paginatorPosition="top"  rows="10"
+                             rowsPerPageTemplate="5, 10, 20, 30" id="dtBloques" emptyMessage="No se encontraron registros"
+                             rowStyleClass="#{bq1.edicionGrafica? 'colored' : 'white'}">
+                    <p:column headerText="Num. bloque" >
+                        <p:outputLabel value="#{bq1.noEdificacion}"/>
+                    </p:column>
+                    <p:column headerText="Num. pisos">
+                        <p:outputLabel value="#{bq1.numPisos}"/>
+                    </p:column>
+                    <p:column headerText="Condición fisica">
+                        <p:outputLabel value="#{bq1.condicionFisica.valor}"/>
+                    </p:column>
+                    <p:column headerText="Valor Cultural">
+                        <p:outputLabel value="#{bq1.valorCultural.valor}"/>
+                    </p:column>
+                    <p:column headerText="Estado Conservación">
+                        <p:outputLabel value="#{bq1.estadoConservacion.valor}"/>
+                    </p:column>
+                    <p:column headerText="Uso Construc.">
+                        <p:outputLabel value="#{bq1.usoConstructivoPiso.valor}"/>
+                    </p:column>
+                    <p:column headerText="Área bloque.">
+                        <p:outputLabel value="#{bq1.areaBloque}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Avaluo.">
+                        <p:outputLabel value="#{bq1.avaluo}"/>
+                    </p:column>
+                    <p:column headerText="Opciones">
+                        <p:commandLink title="Editar bloque" actionListener="#{fichaPredial.bloque(bq1)}" rendered="#{fichaPredial.editable}">
+                            <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarBloque}" update="tdatos:frmEdificaciones:tvEdificaciones:dtBloques, tdatos:frmDatosPredio:tvUbicacion:fdsAvaluos, tdatos:frmDatosPredio:tvUbicacion:pgAvaluos"  />
+                        </p:commandLink>
+                        <p:commandLink title="Ver bloque" action="#{fichaPredial.bloque(bq1)}" actionListener="#{fichaPredial.setVer(true)}">
+                            <p:graphicImage value="/css/homeIconsImages/abrir.png" width="20" height="20"/>
+                        </p:commandLink>
+                        <p:commandLink title="Eliminar bloque" action="#{fichaPredial.setObjectoEliminar(bq1)}" rendered="#{fichaPredial.editable}" 
+                                       update="tdatos:frmEdificaciones:tvEdificaciones:dtBloques,tdatos:frmCaracSolar:fieldCaract, tdatos:frmDatosPredio:tvUbicacion:fdsAvaluos, tdatos:frmDatosPredio:tvUbicacion:pgAvaluos" 
+                                       actionListener="#{fichaPredial.observacionesEliminar(4)}">
+                            <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+            <p:tab title="Tipo de Obra o Inst. Especiales (Obras complementarias)">
+                <p:commandButton value="Agregar Obras" iconPos="ui-icon-person" actionListener="#{fichaPredial.obraInterna(null)}" styleClass="btnStyle" 
+                                 rendered="#{fichaPredial.editable}"  >
+                    <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarObraInterna}" update="tdatos:frmEdificaciones:tvEdificaciones:dtObrasInternas"  />
+                </p:commandButton>
+                <p:dataTable id="dtObrasInternas" value="#{fichaPredial.obrasInternas}" var="obin" reflow="true" paginator="true" rows="5" paginatorPosition="top" style="width: 100%" emptyMessage="No se encontraron registros">
+                    <p:column headerText="Tipo Obra">
+                        <h:outputText value="#{obin.tipo.valor}"/>
+                    </p:column>
+                    <p:column headerText="Material">
+                        <h:outputText value="#{obin.material.valor}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad">
+                        <h:outputText value="#{obin.cantidad}"/>
+                    </p:column>
+                    <p:column headerText="Estado Conservación">
+                        <h:outputText value="#{obin.conservacion.valor}"/>
+                    </p:column>
+                    <p:column headerText="Edad">
+                        <h:outputText value="#{obin.edad.valor}"/>
+                    </p:column>
+                    <p:column headerText="Acción" style="text-align: center">
+                        <p:commandLink  actionListener="#{fichaPredial.obraInterna(obin)}" rendered="#{fichaPredial.editable}" >
+                            <p:graphicImage value="/css/homeIconsImages/edicion.png" width="20" height="20"/>
+                            <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarObraInterna}" 
+                                    update="tdatos:frmEdificaciones:tvEdificaciones:dtObrasInternas, tdatos:frmDatosPredio:tvUbicacion:fdsAvaluos"/>
+                        </p:commandLink>
+                        <p:spacer width="10"/>
+                        <p:commandLink action="#{fichaPredial.setObjectoEliminar(obin)}" rendered="#{fichaPredial.editable}"  
+                                       update="tdatos:frmEdificaciones:tvEdificaciones:dtObrasInternas, tdatos:frmDatosPredio:tvUbicacion:fdsAvaluos" 
+                                       actionListener="#{fichaPredial.observacionesEliminar(5)}">
+                            <p:graphicImage value="/css/homeIconsImages/delete.png" width="20" height="20"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+        </p:tabView>
+    </h:form>
+</html>
