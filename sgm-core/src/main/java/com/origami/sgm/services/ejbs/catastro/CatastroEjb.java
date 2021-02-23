@@ -2347,105 +2347,14 @@ public class CatastroEjb implements CatastroServices {
 
     @Override
     public CatEnte buscarCliente(String identificacion) {
-        CatEnte resultado = null;
-        Boolean persona = (identificacion.length() == 10) ? true : (identificacion.length() != 13);
-//        try {
-//            Boolean result = false;
-//            String code = (identificacion.length() == 10) ? "C" : (identificacion.length() == 13 ? "RUC" : "P");
-//            CtlgItem tipoPersona = catalogoList.getItemByCatalagoOrder("tipo_identificacion_beneficiario", 1);
-//            if (!result) {
-//                RestTemplate restTemplate = new RestTemplate(Utils.getClientHttpRequestFactory("", ""));
-//                URI uri = new URI(String.format("", identificacion));
-//                try {
-//                    ResponseEntity<PubPersona> contribuyente = restTemplate.getForEntity(uri, PubPersona.class);
-//                    if (contribuyente != null && contribuyente.getBody() != null) {
-//                        PubPersona p = contribuyente.getBody();
-//                        if (p != null) {
-//                            if (p.getIdentificacion() != null && !p.getIdentificacion().isEmpty()) {
-//                                resultado = new CatEnte();
-//                                resultado.setCiRuc(p.getIdentificacion());
-//                                resultado.setEsPersona(persona);
-//                                resultado.setApellidos(p.getApellidos().toUpperCase());
-//                                resultado.setNombres(p.getNombres().toUpperCase());
-//                                resultado.setTipoDocumento(tipoPersona);
-//                                resultado.setDireccion(p.getDireccion());
-////                                resultado.setEmail(p.getCorreo());
-////                                if (p.getTelefono() != null) {
-////                                    if (p.getTelefono().contains(",")) {
-////                                        String[] tlfs = p.getTelefono().split(",");
-////                                        for (String tlf : tlfs) {
-////                                            if (tlf.length() < 10) {
-////                                                resultado.setTelefono(tlf);
-////                                            } else {
-////                                                resultado.setCelular(tlf);
-////                                            }
-////                                        }
-////                                    } else {
-////                                        if (p.getTelefono().length() < 10) {
-////                                            resultado.setTelefono(p.getTelefono());
-////                                        } else {
-////                                            resultado.setCelular(p.getTelefono());
-////                                        }
-////                                    }
-////                                }
-//                                resultado.setFechaCre(new Date());
-//                                resultado.setUserCre(session.getName_user());
-//                                if (p.getFechaNacimiento() != null) {
-//                                    resultado.setFechaNacimiento(new SimpleDateFormat("yyyy-MM-dd").parse(p.getFechaNacimiento()));
-//                                }
-//                                if (p.getFechaExpedicion() != null) {
-//                                    resultado.setFechaNacimiento(new SimpleDateFormat("yyyy-MM-dd").parse(p.getFechaExpedicion()));
-//                                }
-////                                resultado.setEstadoCivil(catalogoList.getItemByCatalagoOrder("tipo_identificacion_beneficiario", p.getEstadoCivil()));
-////                                resultado.setActaDefuncion(p.getActaDefuncion());
-////                                resultado.setCondicionCiudadano(p.getCondicionCiudadano());
-//                                resultado.setFechaDefuncion(new SimpleDateFormat("yyyy-MM-dd").parse(p.getFechaDefuncion()));
-////                                resultado.setFechaInscripcionDefuncion(p.getFechaInscripcionDefuncion());
-////                                resultado.setEdad(p.getEdad());
-////                                resultado.setFechaExpedicion(p.getActaDefuncion());
-////                                resultado.setRepresentanteLegal(p.getRepresentanteLegal());
-////                                resultado.setIdentificacionRepresentanteLegal(p.getIdentificacionRepresentanteLegal());
-////                                resultado.setApellidosRepresentanteLegal(p.getApellidosRepresentanteLegal());
-////                                resultado.setNombresRepresentanteLegal(p.getNombresRepresentanteLegal());
-////                                resultado.setCargoRepresentanteLegal(p.getCargoRepresentanteLegal());
-////                                resultado.setIdentificacionContador(p.getIdentificacionContador());
-////                                resultado.setApellidosContador(p.getApellidosContador());
-////                                resultado.setNombresContador(p.getNombresContador());
-////                                resultado.setCalificacionArtesanal(p.getCalificacionArtesanal());
-////                                resultado.setObligadoContabilidad(p.getObligadoContabilidad());
-////                                resultado.setNombreAgenteRetencion(p.getNombreAgenteRetencion());
-////                                resultado.setFechaAltaParaEspecial(p.getFechaAltaParaEspecial());
-////                                resultado.setFechaCalificacionArtesanal(p.getFechaCalificacionArtesanal());
-////                                resultado.setFechaCambioObligado(p.getFechaCambioObligado());
-////                                resultado.setActividadGeneral(p.getActividadGeneral());
-//
-////                                if (p.getCanton() != null) {
-////                                    try {
-////                                        Canton canton = cantonService.findByNamedQuery1("Canton.findByCodigo", p.getCanton().getCodigo());
-////                                        if (canton != null) {
-////                                            resultado.setCanton(canton);
-////                                        }
-////                                    } catch (Exception e) {
-////                                        Logger.getLogger(ClienteService.class.getName()).log(Level.SEVERE, "Find Canton Cliente", e);
-////                                    }
-////                                }
-//                            }
-//                        }
-//                    }
-//                } catch (RestClientException | ParseException rce) {
-//                    Logger.getLogger(ClienteService.class.getName()).log(Level.SEVERE, null, rce);
-//                    return null;
-//                }
-//            } else {
-//                if (tipoPersona != null) {
-//                    resultado = findByNamedQuery1("Cliente.findByIdCliente_2", identificacion.substring(0, 10), tipoPersona);
-//                }
-//            }
-//            return resultado;
-//        } catch (URISyntaxException | RestClientException e) {
-//            Logger.getLogger(ClienteService.class.getName()).log(Level.SEVERE, "Busqueda de cliente", e);
-//        }
-        return resultado;
+        if (identificacion == null) {
+            return null;
+        }
+        if (identificacion.length() < 13) {
+            return catalogoList.buscarClienteDinardap(identificacion, Boolean.TRUE);
+        } else {
+            return catalogoList.buscarClienteDinardap(identificacion, Boolean.FALSE);
+        }
     }
 
     public List<FotoPredio> getFotosPredio(CatPredio predio) {

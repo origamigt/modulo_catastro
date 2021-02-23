@@ -10,27 +10,27 @@
 
     <h:form id="frmEscrituras">
         <div align="right">
-            <p:commandButton value="Agregar propietario" iconPos="ui-icon-person" actionListener="#{fichaPredial.propietario(null)}" 
+            <p:commandButton value="Agregar propietario" iconPos="ui-icon-person" actionListener="#{fichaPredial.propietario(null)}"
                              rendered="#{fichaPredial.editable}" update="tdatos:frmEscrituras:dtPropietarios"
                              icon="ui-icon-plusthick" >
                 <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarPropietario}" update="tdatos:frmEscrituras:dtPropietarios"  />
             </p:commandButton>
             <p:remoteCommand name="rc2" immediate="false" async="true" actionListener="#{fichaPredial.guardarDatosPredio('ACTUALIZACION DE IDENTIFICACION LEGAL', fichaPredial.informante)}" rendered="#{fichaPredial.editable}" />
-            <p:commandButton id="btnS2" value="Guardar" rendered="#{fichaPredial.editable}"  
-                             icon="ui-icon-disk"  actionListener="#{fichaPredial.openDialog}" 
+            <p:commandButton id="btnS2" value="Guardar" rendered="#{fichaPredial.editable}"
+                             icon="ui-icon-disk"  actionListener="#{fichaPredial.openDialog}"
                              action="#{fichaPredial.setRemotteCommand('rc2')}" update="frmSubirDocumentosDialog" />
         </div>
         <cs:compInputSelect bind="#{fichaPredial.predio.propiedad}" catalogo="predio-tenencia" update="tdatos:frmEscrituras"
                             label="Tenencia" defaultValue="1" disabled="#{!fichaPredial.editable}" next="tdatos:frmEscrituras:ciRucPropAnt:ciRucPropAnt-form"/>
         <cs:compInputSelect bind="#{fichaPredial.predio.formaAdquisicion}" catalogo="predio-formaadquisicion" update="tdatos:frmEscrituras"
-                                    label="Forma de Adquisición o Tenencia" defaultValue="2" disabled="#{!fichaPredial.editable and !userSession.isAdmin}"/>
-        
+                            label="Forma de Adquisición o Tenencia" defaultValue="2" disabled="#{!fichaPredial.editable and !userSession.isAdmin}"/>
+
         <p:fieldset legend="Propietario(s)" toggleable="true" id="fldsProp">
             <p:fieldset legend="Condición Municipal" toggleable="true" rendered="#{fichaPredial.predio.propiedad.orden eq 3}" id="fldsMuni">
                 <p:panelGrid columns="2" layout="grid" style="width: 90%">
                     <cs:compInputSelect bind="#{fichaPredial.predio.condicionMunicipal}" catalogo="predio-condicionMunicipal"
                                         label="Condición Municipal" defaultValue="1" disabled="#{!fichaPredial.editable}"/>
-                    <cs:decorateForm id="tiempoComodato" label="Tiempo en Años" bind="#{fichaPredial.predio.condicionMunicipalAnio}" 
+                    <cs:decorateForm id="tiempoComodato" label="Tiempo en Años" bind="#{fichaPredial.predio.condicionMunicipalAnio}"
                                      readonly="#{!fichaPredial.editable}" integerValidate="true" />
                 </p:panelGrid>
             </p:fieldset>
@@ -41,7 +41,7 @@
                 <p:column headerText="No." width="3%">
                     #{index + 1}
                 </p:column>
-                <p:column headerText="Tipo Propietario">
+                <p:column headerText="Tipo Propietario" width="12%">
                     <p:cellEditor >
                         <f:facet name="output"><h:outputText value="#{pp.tipo.valor}"/></f:facet>
                         <f:facet name="input"  >
@@ -51,13 +51,13 @@
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
-                <p:column headerText="DNI">
+                <p:column headerText="DNI" width="15%">
                     <h:outputText value="#{pp.ciuCedRuc}"/>
                 </p:column>
                 <p:column headerText="Descripcion">
-                    <h:outputText value="#{pp.ciudadano.ciuNombreCompleto} #{pp.otros}"  style="text-transform: uppercase"/>
+                    <h:outputText value="#{pp.ente.nombreCompleto}"  style="text-transform: uppercase"/>
                 </p:column>
-                <p:column headerText="Porcentaje Posesión (#{fichaPredial.porcentajePosession})" style="text-align:right">
+                <p:column headerText="Porcentaje Posesión (#{fichaPredial.porcentajePosession})" style="text-align:right" width="12%">
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{pp.porcentajePosecion}%" style="text-transform: uppercase; text-align:right "/></f:facet>
                         <f:facet name="input" >
@@ -68,18 +68,19 @@
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
-                <p:column headerText="Acción" style="text-align: center" rendered="#{fichaPredial.editable}">
+                <p:column headerText="Acción" style="text-align: center" rendered="#{fichaPredial.editable}" width="8%">
                     <p:commandLink title="Editar" actionListener="#{fichaPredial.propietario(pp)}" >
                         <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarPropietario}" update="tdatos:frmEscrituras"/>
-                        <p:graphicImage value="/css/homeIconsImages/edicion.png" width="25" height="25"/>                              
+                        <p:graphicImage value="/css/homeIconsImages/edicion.png" width="25" height="25"/>
                     </p:commandLink>
                     <p:spacer width="10"/>
-                    <p:commandLink title="Quitar" 
+                    <p:commandLink title="Quitar"
                                    update="tdatos:frmEscrituras:dtPropietarios" process="tdatos:frmEscrituras"
                                    actionListener="#{fichaPredial.observacionesEliminar(1)}" action="#{fichaPredial.setObjectoEliminar(pp)}">
-                        <p:graphicImage value="/css/homeIconsImages/delete.png" width="25" height="25"/>                              
+                        <p:graphicImage value="/css/homeIconsImages/delete.png" width="25" height="25"/>
                     </p:commandLink>
                     <p:commandLink value="Ver" actionListener="#{fichaPredial.propietario(pp)}" >
+                        <p:graphicImage value="/css/homeIconsImages/abrir.png" width="25" height="25"/>
                     </p:commandLink>
                 </p:column>
             </p:dataTable>
@@ -87,19 +88,19 @@
 
         <p:fieldset legend="Propietario Anterior">
             <h:panelGrid columns="2" columnClasses="ui-cols-grid-3, ui-cols-grid-6" class="Wid100">
-                <cs:decorateForm id="ciRucPropAnt" label="Número de Identificación:" bind="#{fichaPredial.predio.cedulaPropAnterior}" 
+                <cs:decorateForm id="ciRucPropAnt" label="Número de Identificación:" bind="#{fichaPredial.predio.cedulaPropAnterior}"
                                  readonly="#{!userSession.isAdmin}" next="tdatos:frmEscrituras:nomPropAnt:nomPropAnt-form" />
-                <cs:decorateForm id="nomPropAnt" label="Nombres:" bind="#{fichaPredial.predio.propAnteriorPredio}" 
+                <cs:decorateForm id="nomPropAnt" label="Nombres:" bind="#{fichaPredial.predio.propAnteriorPredio}"
                                  readonly="#{!userSession.isAdmin}" next="tdatos:frmEscrituras:nomPropAnt:nomPropAnt-form" />
             </h:panelGrid>
         </p:fieldset>
         <p:fieldset legend="Predio Sin Título" toggleable="true" rendered="#{fichaPredial.predio.formaAdquisicion.id eq 7}" >
             <p:panelGrid columns="3" layout="grid" style="width: 100%">
-                
+
                 <cs:decorateForm id="nombPoss" label="Cédula Posesionario" bind="#{fichaPredial.predio.cedulaPosesionario}" readonly="#{!fichaPredial.editable}" integerValidate="true" />
                 <cs:decorateForm id="cedlPoss" label="Nombre Posesionario" bind="#{fichaPredial.predio.nombrePosesionario}" readonly="#{!fichaPredial.editable}" integerValidate="true" />
                 <cs:decorateForm id="anio_sinPerf" label="Año desde cuando está posesionado" bind="#{fichaPredial.predio.aniosSinPerfeccionamiento}" readonly="#{!fichaPredial.editable}" integerValidate="true" />
-                <cs:decorateForm id="puebloEtnia" label="Nombre Pueblo/Etnia:" bind="#{fichaPredial.predio.nombrePuebloEtnia}" readonly="#{!fichaPredial.editable}" />  
+                <cs:decorateForm id="puebloEtnia" label="Nombre Pueblo/Etnia:" bind="#{fichaPredial.predio.nombrePuebloEtnia}" readonly="#{!fichaPredial.editable}" />
 
                 <h:panelGroup layout="block">
                     <h:outputText value="Sin Perfeccionar" style="font-weight: bolder" class="DispBlock Wid100"/>
@@ -110,7 +111,7 @@
                         <p:ajax update="tdatos:frmEscrituras:dtEscrituras, tdatos:frmEscrituras:btnAddEscritura" />
                     </p:selectOneMenu>
                 </h:panelGroup>
-                <cs:decorateForm id="anioPoss" label="Años en Posesión:" bind="#{fichaPredial.predio.aniosPosesion}" 
+                <cs:decorateForm id="anioPoss" label="Años en Posesión:" bind="#{fichaPredial.predio.aniosPosesion}"
                                  readonly="#{!fichaPredial.editable}" integerValidate="true" />
                 <cs:compInputSelect bind="#{fichaPredial.predio.tipoPoseedor}" catalogo="predio-tipo_poseedor"
                                     label="Tipo de Poseedor" defaultValue="15" next="tdatos:frmEscrituras:puebloEtnia:puebloEtnia-form" disabled="#{!fichaPredial.editable}"/>
@@ -118,47 +119,47 @@
         </p:fieldset>
         <p:fieldset legend="Protocolización">
             <div align="right">
-                <p:commandButton id="btnAddEscritura" value="Agregar Escritura" rendered="#{fichaPredial.editable and fichaPredial.predio.requierePerfeccionamiento}" actionListener="#{fichaPredial.saveEscrituraControl(null)}" >
-                    <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarEscritura}" 
+                <p:commandButton id="btnAddEscritura" value="Agregar Escritura" rendered="#{fichaPredial.editable}" actionListener="#{fichaPredial.saveEscrituraControl(null)}" >
+                    <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarEscritura}"
                             update="tdatos:frmEscrituras:dtEscrituras"  />
                 </p:commandButton>
             </div>
             <p:dataTable id="dtEscrituras" value="#{fichaPredial.predio.catEscrituraCollection}" var="e" scrollable="true" style="width: 100%"
-                         emptyMessage="No se encontraron registros" paginator="true" paginatorPosition="top" 
+                         emptyMessage="No se encontraron registros" paginator="true" paginatorPosition="top"
                          rows="20"   rowsPerPageTemplate="20,50,100" filterEvent="enter"
                          paginatorAlwaysVisible="false"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowKey="#{e.idEscritura}" selectionMode="single" >
                 <p:column headerText="No. Actualizacion">
                     <h:outputText value="#{e.numeroActualizacion}"/>
-                </p:column>  
+                </p:column>
                 <p:column headerText="Notaria">
                     <h:outputText value="#{e.notaria}"/>
-                </p:column>  
+                </p:column>
                 <p:column headerText="Fecha Escritura">
                     <!--<h:outputText value="#{e.fechaAutorizacion}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>-->
                     <h:outputText value="#{e.fechaAutorizacion}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>
-                </p:column> 
+                </p:column>
                 <p:column headerText="Fecha Actualización">
                     <!--<h:outputText value="#{e.fechaAutorizacion}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>-->
                     <h:outputText value="#{e.fechaAutorizacion}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>
-                </p:column> 
+                </p:column>
                 <p:column headerText="Fecha Inscripción">
                     <h:outputText value="#{e.fecInscripcion}"><f:convertDateTime pattern="dd-MM-yyyy " /></h:outputText>
-                </p:column> 
+                </p:column>
                 <p:column headerText="Area">
                     <h:outputText value="#{e.areaSolar}" ><f:convertNumber pattern="##############.####" locale="us"/></h:outputText>
-                </p:column>                         
+                </p:column>
                 <p:column headerText="Estado">
                     <h:outputText value="#{e.estado}"/>
                 </p:column>
                 <p:column headerText="Accion" style="text-align: center" rendered="#{fichaPredial.editable}">
-                    <p:commandLink title="Editar" actionListener="#{fichaPredial.saveEscrituraControl(e)}" 
+                    <p:commandLink title="Editar" actionListener="#{fichaPredial.saveEscrituraControl(e)}"
                                    rendered="#{fichaPredial.editable and fichaPredial.predio.requierePerfeccionamiento}">
                         <p:ajax event="dialogReturn" listener="#{fichaPredial.procesarEscritura}" update="tdatos:frmEscrituras:dtEscrituras"  />
                         <p:graphicImage value="/css/homeIconsImages/edicion.png" width="25" height="25"/>
                     </p:commandLink>
-                </p:column>                        
+                </p:column>
             </p:dataTable>
         </p:fieldset>
         <p:fieldset legend="Notificación" toggleable="true">
@@ -166,10 +167,10 @@
                 <cs:compInputSelect bind="#{fichaPredial.predio.notifTipoDireccion}" catalogo="predio-notifTipoDireccion" label="Tipo de Dirección" defaultValue="1" disabled="#{!fichaPredial.editable}"/>
                 <cs:decorateForm id="notifCorreo" label="Correo Electrónico" bind="#{fichaPredial.predio.adminCorreo}" readonly="#{!fichaPredial.editable}" />
                 <cs:decorateForm id="notifCelular" label="Celular" bind="#{fichaPredial.predio.adminCelular}" readonly="#{!fichaPredial.editable}" />
-                <cs:decorateForm id="notifConvencional" label="Convencional" bind="#{fichaPredial.predio.adminTelefono}" readonly="#{!fichaPredial.editable}" />                
+                <cs:decorateForm id="notifConvencional" label="Convencional" bind="#{fichaPredial.predio.adminTelefono}" readonly="#{!fichaPredial.editable}" />
                 <h:panelGroup layout="block" class="Container Wid100" >
                     <h:outputText value="Provincia" class="DispBlock Wid100 FontBold"/>
-                    <p:selectOneMenu id="cmbProv" value="#{fichaPredial.predio.provinciaNot}" effect="fade" converter="entityConverter" filter="true" filterMatchMode="contains" 
+                    <p:selectOneMenu id="cmbProv" value="#{fichaPredial.predio.provinciaNot}" effect="fade" converter="entityConverter" filter="true" filterMatchMode="contains"
                                      style="width: 97%; box-sizing: border-box;" disabled="#{!fichaPredial.editable}">
                         <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
                         <p:ajax update="frmEscrituras:cmbCanton" />
@@ -178,7 +179,7 @@
                 </h:panelGroup>
                 <h:panelGroup layout="block" class="Container Wid100" >
                     <h:outputText value="Cantón" class="DispBlock Wid100 FontBold"/>
-                    <p:selectOneMenu id="cmbCanton" value="#{fichaPredial.predio.adminCanton}" effect="fade" converter="entityConverter" filter="true" filterMatchMode="contains" 
+                    <p:selectOneMenu id="cmbCanton" value="#{fichaPredial.predio.adminCanton}" effect="fade" converter="entityConverter" filter="true" filterMatchMode="contains"
                                      style="width: 97%; box-sizing: border-box;"  disabled="#{!fichaPredial.editable}" >
                         <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
                         <f:selectItems value="#{serviceLists.getCantones(fichaPredial.predio.provinciaNot)}" var="cx" itemLabel="#{cx.nombre}" itemValue="#{cx}"/>
@@ -187,7 +188,7 @@
                 </h:panelGroup>
                 <h:panelGroup layout="block" class="Container Wid100" >
                     <h:outputText value="Parroquia" class="DispBlock Wid100 FontBold"/>
-                    <p:selectOneMenu id="cmbParroquia" value="#{fichaPredial.predio.adminParroquia}" effect="fade" converter="entityConverter" filter="true" filterMatchMode="contains" 
+                    <p:selectOneMenu id="cmbParroquia" value="#{fichaPredial.predio.adminParroquia}" effect="fade" converter="entityConverter" filter="true" filterMatchMode="contains"
                                      style="width: 97%; box-sizing: border-box;"  disabled="#{!fichaPredial.editable}" >
                         <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}"/>
                         <f:selectItems value="#{serviceLists.getParroquiasxCanton(fichaPredial.predio.adminCanton)}" var="cx1" itemLabel="#{cx1.descripcion}" itemValue="#{cx1}"/>

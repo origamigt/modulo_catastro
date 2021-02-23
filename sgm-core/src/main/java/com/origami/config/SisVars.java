@@ -132,5 +132,8 @@ public abstract class SisVars {
     public static String URL_REPORTES;
 
     public static String sitioWebMunicipio;
+    public static String SERVICE_URL = "http://192.168.100.6:8785/api/dinardap/aplicacion/MOCACHE/persona/identificacion/%s";
+    public static String SERVICE_USER = "Em0T-D1n4rD4p";
+    public static String SERVICE_PASS = "IbBTF;e;Fomj0du4H@M5";
 
 }

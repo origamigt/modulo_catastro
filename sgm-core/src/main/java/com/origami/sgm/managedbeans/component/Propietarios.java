@@ -150,8 +150,11 @@ public class Propietarios implements Serializable {
                     esTitular = pro.getTipo().getOrden() == 1;
 //                    pro.setPredio((CatPredio) EntityBeanCopy.clone(pro.getPredio()));
                     CiuCiudadano ciudadanoEnte = (CiuCiudadano) dataBaseIb.getCiudadano(pro.getCiuCedRuc());
-                    pro.setCiudadano(ciudadanoEnte);
-                    ciuCedRuc = ciudadanoEnte.getCiuCedRuc();
+                    this.ejb.buscarCliente(pro.getCiuCedRuc());
+                    if (ciudadanoEnte != null) {
+                        pro.setCiudadano(ciudadanoEnte);
+                        ciuCedRuc = ciudadanoEnte.getCiuCedRuc();
+                    }
                     pro.setPorcentajeAvalDivision(pro.getPorcentajePosecion());
                     porcenjPart = BigDecimal.valueOf(100l);
                     this.porcenjEdicionInicial = this.pro.getPorcentajePosecion();
@@ -193,7 +196,7 @@ public class Propietarios implements Serializable {
                 Map paramt = new HashMap<>();
                 paramt.put("ciRuc", temp);
                 CatEnte newEnt = ejb.propiedadHorizontal().getCatEnteByParemt(paramt);
-                if (newEnt != null) {
+                if (newEnt.getId() != null) {
                     if (tipo != 1) {
                         if (ejb.existePropietarioPredioCiudadano(pro.getPredio(), temp, pro.getTipo())) {
                             JsfUti.messageInfo(null, "Cliente ya fue agregado al predio", "");
@@ -202,19 +205,26 @@ public class Propietarios implements Serializable {
                         if (!persistir) {
                             if (Utils.isNotEmpty(this.propietariosPredio)) {
                                 for (CatPredioPropietario p : this.propietariosPredio) {
-                                    if (p.getCiuCedRuc().compareTo(pro.getCiuCedRuc()) == 0) {
-                                        JsfUti.messageInfo(null, "Cliente ya fue agregado al predio", "");
-                                        return;
+                                    if (p.getCiuCedRuc() != null) {
+                                        if (p.getCiuCedRuc().compareTo(pro.getCiuCedRuc()) == 0) {
+                                            JsfUti.messageInfo(null, "Cliente ya fue agregado al predio", "");
+                                            return;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    JsfUti.messageInfo(null, "Info", "Cliente Encontrado");
                     switch (tipo) {
                         case 1:
                             conyuge = newEnt;
                         default:
+                            if (newEnt.getTipoDocumento() == null) {
+                                newEnt.setTipoDocumento(pro.getEnte().getTipoDocumento());
+                            }
                             pro.setEnte(newEnt);
+                            pro.setCiuCedRuc(newEnt.getCiRuc());
                             buscarConyuge(newEnt);
                             pro.setCiuCedRuc(temp);
                     }
@@ -254,8 +264,11 @@ public class Propietarios implements Serializable {
                     + (pro.getOtros() == null ? "" : " " + pro.getOtros());
             pro.setNombresCompletos(nombres);
             pro.setFecha(new Date());
-            if (conyuge != null) {
-                pro.getEnte().setConyuge(BigInteger.valueOf(conyuge.getId()));
+            pro.setCiuCedRuc(pro.getEnte().getCiRuc());
+            if (conyuge != null && conyuge.getId() != null) {
+                if (pro.getEnte() != null) {
+                    pro.getEnte().setConyuge(BigInteger.valueOf(conyuge.getId()));
+                }
             }
             if (datosTemp) {
                 pro.setEstado(EstadosPredio.TEMPORAL);
@@ -294,6 +307,7 @@ public class Propietarios implements Serializable {
                     + (pro.getOtros() == null ? "" : " " + pro.getOtros());
             pro.setNombresCompletos(nombres);
             pro.setFecha(new Date());
+            pro.setCiuCedRuc(pro.getEnte().getCiRuc());
             if (datosTemp) {
                 pro.setEstado(EstadosPredio.TEMPORAL);
             } else {
@@ -485,13 +499,15 @@ public class Propietarios implements Serializable {
                             return true;
                         }
                     } else {
-                        if (!prop.getCiuCedRuc().equalsIgnoreCase(pro.getCiuCedRuc())) {
-                            if (prop.getTipo().getOrden() == 1) {
-                                porcenjPart = prop.getPorcentajePosecion();
-                                if (!nuevo) {
-                                    porcenjPart = porcenjPart.add(porcenjEdicionInicial);
+                        if (prop.getCiuCedRuc() != null) {
+                            if (!prop.getCiuCedRuc().equalsIgnoreCase(pro.getCiuCedRuc())) {
+                                if (prop.getTipo().getOrden() == 1) {
+                                    porcenjPart = prop.getPorcentajePosecion();
+                                    if (!nuevo) {
+                                        porcenjPart = porcenjPart.add(porcenjEdicionInicial);
+                                    }
+                                    return true;
                                 }
-                                return true;
                             }
                         }
                     }

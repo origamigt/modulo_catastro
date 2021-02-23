@@ -6,6 +6,8 @@
 package com.origami.sgm.services.ejbs;
 
 import com.origami.catastroextras.entities.ibarra.EjeComercial;
+import com.origami.config.SisVars;
+import com.origami.session.UserSession;
 import com.origami.sgm.database.Querys;
 import com.origami.sgm.entities.CatCanton;
 import com.origami.sgm.entities.CatCiudadela;
@@ -16,9 +18,15 @@ import com.origami.sgm.entities.CatTipoConjunto;
 import com.origami.sgm.entities.CtlgCatalogo;
 import com.origami.sgm.entities.CtlgItem;
 import com.origami.sgm.entities.GeDepartamento;
+import com.origami.sgm.entities.models.PubPersona;
 import com.origami.sgm.services.interfaces.catastro.CatastroServices;
 import com.origami.transactionalcore.entitymanager.Entitymanager;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +36,11 @@ import javax.ejb.Singleton;
 import javax.faces.bean.ApplicationScoped;
 import javax.inject.Named;
 import javax.interceptor.Interceptors;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import util.EntityBeanCopy;
+import util.Utils;
 
 /**
  * Ejb para realizar consulta solo a los diferentes catalogos o lista que sean
@@ -48,6 +60,8 @@ public class ServiceLists {
     private Entitymanager manager;
     @javax.inject.Inject
     private CatastroServices catas;
+    @javax.inject.Inject
+    private UserSession session;
 
     //**********************************//
     //********Listas de Catastro********//
@@ -176,11 +190,23 @@ public class ServiceLists {
         return manager.findObjectByParameter(CtlgItem.class, map);
     }
 
-    public CtlgItem getItemByCatalagoOrder(String prediobloquerevestpiso, Integer orden) {
+    public CtlgItem getItemByCatalagoOrder(String catalogo, Integer orden) {
         try {
             Map<String, Object> paramt = new HashMap<>();
             paramt.put("orden", orden);
-            paramt.put("catalogo", this.getCatalogoNombre(prediobloquerevestpiso));
+            paramt.put("catalogo", this.getCatalogoNombre(catalogo));
+            return this.manager.findObjectByParameter(CtlgItem.class, paramt);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, null, e);
+        }
+        return null;
+    }
+
+    public CtlgItem getItemByCatalagoOrder(String catalogo, String valor) {
+        try {
+            Map<String, Object> paramt = new HashMap<>();
+            paramt.put("valor", valor);
+            paramt.put("catalogo", this.getCatalogoNombre(catalogo));
             return this.manager.findObjectByParameter(CtlgItem.class, paramt);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, null, e);
@@ -210,7 +236,69 @@ public class ServiceLists {
     }
 
     public CatEnte getCatEnteByParemt(Map paramt) {
-        return (CatEnte) manager.findObjectByParameter(CatEnte.class, paramt);
+        CatEnte ente = (CatEnte) manager.findObjectByParameter(CatEnte.class, paramt);
+        if (ente != null) {
+            return ente;
+        } else {
+            String ident = (String) paramt.get("ciRuc");
+            if (ident.length() < 13) {
+                return buscarClienteDinardap(ident, Boolean.TRUE);
+            } else {
+                return buscarClienteDinardap(ident, Boolean.FALSE);
+            }
+        }
+    }
+
+    public CatEnte buscarClienteDinardap(String identificacion, Boolean esPersona) {
+        CatEnte resultado = new CatEnte();
+        if (identificacion != null) {
+            try {
+                if (!identificacion.isEmpty()) {
+                    RestTemplate restTemplate = new RestTemplate(Utils.getClientHttpRequestFactory(SisVars.SERVICE_USER, SisVars.SERVICE_PASS));
+                    URI uri = new URI(String.format(SisVars.SERVICE_URL, identificacion));
+                    try {
+                        ResponseEntity<PubPersona> contribuyente = restTemplate.getForEntity(uri, PubPersona.class);
+                        if (contribuyente != null && contribuyente.getBody() != null) {
+                            PubPersona p = contribuyente.getBody();
+                            if (p.getIdentificacion() != null && !p.getIdentificacion().isEmpty()) {
+                                resultado = new CatEnte();
+                                resultado.setCiRuc(identificacion);
+                                resultado.setApellidos(p.getApellidos().toUpperCase());
+                                resultado.setNombres(p.getNombres().toUpperCase());
+                                if (p.getTipoDocumento() != null) {
+                                    resultado.setTipoDocumento(this.getItemByCatalagoOrder("cliente.identificacion", p.getTipoDocumento()));
+                                }
+                                if (p.getEstadoCivil() != null) {
+                                    resultado.setEstadoCivil(this.getItemByCatalagoOrder("cliente.estado_civil", p.getEstadoCivil()));
+                                }
+                                resultado.setDireccion(p.getDireccion());
+                                resultado.setCorreo(p.getCorreo());
+                                resultado.setFechaCre(new Date());
+                                resultado.setUserCre(session.getName_user());
+                                resultado.setEsPersona(esPersona);
+                                if (p.getFechaNacimiento() != null) {
+                                    try {
+                                        SimpleDateFormat dateInstance = new SimpleDateFormat("yyyy-MM-dd");
+                                        resultado.setFechaNacimiento(dateInstance.parse(p.getFechaNacimiento()));
+                                    } catch (ParseException parseException) {
+                                        System.out.println("Error al parsear fecha Nacimiento");
+                                    }
+                                }
+                                resultado = (CatEnte) this.manager.persist(resultado);
+                            }
+                        }
+                    } catch (RestClientException restClientException) {
+                        return resultado;
+                    }
+                }
+                return resultado;
+            } catch (URISyntaxException | RestClientException e) {
+                LOG.log(Level.SEVERE, "Busqueda de cliente", e);
+            }
+            return resultado;
+        } else {
+            return null;
+        }
     }
 
 }
